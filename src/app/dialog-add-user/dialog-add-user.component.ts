@@ -4,7 +4,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule} from '@angular/material/dialog';
+import { MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -32,7 +33,9 @@ import {
   providers: [provideNativeDateAdapter()],
   imports: [
     MatDialogModule,
+    // MatDialogClose,
     MatFormFieldModule,
+    
     MatInputModule,
     MatDatepickerModule,
     MatButtonModule,
@@ -47,7 +50,9 @@ export class DialogAddUserComponent {
   birthDate: Date = new Date();
   
   firestore: Firestore = inject(Firestore);
-  constructor() {}
+
+
+  constructor(public dialogRef: MatDialogRef<DialogAddUserComponent>) {}
 
   saveNewUser() {
     this.user.birthDate = this.birthDate.getTime(); 
@@ -62,6 +67,11 @@ export class DialogAddUserComponent {
       .catch((error) => {
         console.error('Error adding user:', error);
       });
+      this.closeDialog();
+  }
+
+  closeDialog(): void {
+    this.dialogRef.close(); 
   }
   
 }
