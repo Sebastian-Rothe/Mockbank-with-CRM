@@ -1,6 +1,31 @@
-<p>user works!</p>
+<div class="card-container">
+  <mat-card>
+    <table>
+      <tr>
+        <td>firstName</td>
+        <td>lastName</td>
+        <td>birthDate</td>
+        <td>streetAddress.</td>
+        <td>zipCode</td>
+        <td>city</td>
+      </tr>
+      @for(user of (user$ | async ); track $index){
+      <tr>
+        <td>{{ user.lastName }}</td>
+        <td>{{ user.firstName }}</td>
+        <td>{{ user.birthDate }}</td>
+        <td>{{ user.streetAddress }}</td>
+        <td>{{ user.zipCode }}</td>
+        <td>{{ user.city }}</td>
+      </tr>
+      }
+    </table>
+    <!-- <mat-card-content>Simple card</mat-card-content> -->
+  </mat-card>
+</div>
+
 <button
-(click)="openDialog()"
+  (click)="openDialog()"
   class="add-user-btn"
   mat-fab
   color="primary"
