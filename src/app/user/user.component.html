@@ -10,9 +10,10 @@
         <td>city</td>
       </tr>
       @for(user of (user$ | async ); track $index){
-      <tr>
-        <td>{{ user.lastName }}</td>
+        
+      <tr routerLink="user.id">
         <td>{{ user.firstName }}</td>
+        <td>{{ user.lastName }}</td>
         <td>{{ user.birthDate }}</td>
         <td>{{ user.streetAddress }}</td>
         <td>{{ user.zipCode }}</td>

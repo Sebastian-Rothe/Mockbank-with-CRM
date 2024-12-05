@@ -1,4 +1,5 @@
 export class User {
+  id?: string;
   firstName: string = '';
   lastName: string = '';
   birthDate: number = 0;
@@ -14,6 +15,7 @@ export class User {
   
     toPlainObject(): Record<string, any> {
       return {
+        id: this.id,
         firstName: this.firstName,
         lastName: this.lastName,
         birthDate: this.birthDate,

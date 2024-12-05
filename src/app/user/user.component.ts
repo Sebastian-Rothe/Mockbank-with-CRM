@@ -23,11 +23,12 @@ import {
 
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [MatIcon, MatCardModule, CommonModule],
+  imports: [MatIcon, MatCardModule, CommonModule, RouterLink],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss',
 })
@@ -45,4 +46,5 @@ export class UserComponent {
   openDialog() {
     this.dialog.open(DialogAddUserComponent);
   }
+ 
 }
