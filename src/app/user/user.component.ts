@@ -6,24 +6,11 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DialogAddUserComponent } from '../dialog-add-user/dialog-add-user.component';
 import { User } from '../../models/user.class';
 import { MatCardModule } from '@angular/material/card';
-import {
-  collectionData,
-  Firestore,
-  collection,
-  doc,
-  onSnapshot,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  limit,
-  orderBy,
-  where,
-} from '@angular/fire/firestore';
 
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { FirebaseService } from '../services/firebase.service';
 
 @Component({
   selector: 'app-user',
@@ -35,12 +22,9 @@ import { RouterLink } from '@angular/router';
 export class UserComponent {
   user: User = new User();
   user$: Observable<User[]>;
-  firestore: Firestore = inject(Firestore);
-
-  constructor(public dialog: MatDialog) {
-    const userCollection = collection(this.firestore, 'users');
-    this.user$ = collectionData(userCollection, { idField: 'id' }) as Observable<User[]>;
-
+ 
+  constructor(public dialog: MatDialog, private firebaseService: FirebaseService) {
+    this.user$ = this.firebaseService.getUsers();
   }
 
   openDialog() {

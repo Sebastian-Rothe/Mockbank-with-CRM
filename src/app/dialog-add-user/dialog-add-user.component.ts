@@ -11,21 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { User } from '../../models/user.class';
-
-import {
-  collectionData,
-  Firestore,
-  collection,
-  doc,
-  onSnapshot,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  query,
-  limit,
-  orderBy,
-  where
-} from '@angular/fire/firestore';
+import { FirebaseService } from '../services/firebase.service';
 
 @Component({
   selector: 'app-dialog-add-user',
@@ -48,27 +34,24 @@ import {
 export class DialogAddUserComponent {
   user = new User();
   birthDate: Date = new Date();
-  
-  firestore: Firestore = inject(Firestore);
 
-
-  constructor(public dialogRef: MatDialogRef<DialogAddUserComponent>) {}
+  constructor(private firebaseService: FirebaseService, public dialogRef: MatDialogRef<DialogAddUserComponent>) {}
 
   saveNewUser() {
-    this.user.birthDate = this.birthDate.getTime(); 
-    const usersCollection = collection(this.firestore, 'users');
-    
-    const userData = this.user.toPlainObject();
-  
-    addDoc(usersCollection, userData)
-      .then((result) => {
-        console.log('User added successfully:', result);
+    this.user.birthDate = this.birthDate.getTime();
+    this.firebaseService
+      .addUser(this.user)
+      .then((docRef) => {
+        console.log('User added successfully with ID:', docRef.id);
+        this.user.id = docRef.id;
+        
       })
       .catch((error) => {
         console.error('Error adding user:', error);
       });
-      this.closeDialog();
+    this.closeDialog();
   }
+  
 
   closeDialog(): void {
     this.dialogRef.close(); 
