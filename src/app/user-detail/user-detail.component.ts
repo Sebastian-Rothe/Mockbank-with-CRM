@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FirebaseService } from '../services/firebase.service';
 import { User } from '../../models/user.class';
+import { MatCard, MatCardContent } from '@angular/material/card';
 @Component({
   selector: 'app-user-detail',
   standalone: true,
-  imports: [],
+  imports: [MatCard, MatCardContent],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss',
 })
