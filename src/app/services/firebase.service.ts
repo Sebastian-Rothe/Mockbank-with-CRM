@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, DocumentReference, DocumentData, collection, collectionData, addDoc, doc, updateDoc, deleteDoc } from '@angular/fire/firestore';
+import { Firestore, DocumentReference, DocumentData, collection, collectionData, addDoc, doc, updateDoc, deleteDoc, getDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { User } from '../../models/user.class';
 @Injectable({
@@ -31,4 +31,27 @@ export class FirebaseService {
     });
     return addDoc(this.userCollection, userData);
   }
+  async getUser(userId: string): Promise<User | null> {
+    try {
+      // Zugriff auf das spezifische Dokument in der "users"-Sammlung
+      const userDocRef = doc(this.firestore, 'users', userId);
+      const userDocSnap = await getDoc(userDocRef);
+      
+      // Prüfen, ob das Dokument existiert
+      if (userDocSnap.exists()) {
+        // Wenn das Dokument existiert, gebe es als User-Objekt zurück und setze die ID
+        const userData = userDocSnap.data();
+        const user = new User(userData);
+        user.id = userDocSnap.id;  // Hier wird die ID hinzugefügt
+        return user;
+      } else {
+        console.log('No such user!');
+        return null;
+      }
+    } catch (error) {
+      console.error('Error getting user:', error);
+      return null;
+    }
+  }
+  
 }
