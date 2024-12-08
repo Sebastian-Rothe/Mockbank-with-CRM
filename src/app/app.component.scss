@@ -16,8 +16,9 @@
   // }
   
   .router-container{
-    min-height: calc(100vh - 58px);
+    height: calc(100vh - 58px);
     padding: 24px;
+    overflow: scroll;
   }
   
   .sidenav {

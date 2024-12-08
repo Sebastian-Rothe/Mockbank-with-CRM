@@ -1,35 +1,25 @@
 <div>
-    <mat-card appearance="outlined" class="card-header m-32">
-        <!-- <mat-card-content>Simple card</mat-card-content> -->
-         <div>
-             <img src="assets/img/avatar-7964941_1280.png" alt="Customer-Avatar">
-             <div>
-                 <h3>{{ user?.firstName }} {{ user?.lastName }}</h3>
-                 <p>{{ user?.id }}</p> 
-                 <!-- kundennummer -->
-             </div>
-         </div>
-      </mat-card>
-      <mat-card appearance="outlined" class="m-32">
-        <mat-card-content>{{user?.city}}</mat-card-content>
-        
-      </mat-card>
-      <mat-card appearance="outlined" class="m-32">
-        <mat-card-content>{{user?.city}}</mat-card-content>
-        
-      </mat-card>
-      <mat-card appearance="outlined" class="m-32">
-        <mat-card-content>{{user?.city}}</mat-card-content>
-        
-      </mat-card>
-      <mat-card appearance="outlined" class="m-32">
-        <mat-card-content>{{user?.city}}</mat-card-content>
-        
-      </mat-card>
-      <mat-card appearance="outlined" class="m-32">
-        <mat-card-content>{{user?.city}}</mat-card-content>
-        
-      </mat-card>
-      
+  <mat-card appearance="outlined" class="card-header m-32">
+    <!-- <mat-card-content>Simple card</mat-card-content> -->
+    <div>
+      <img src="assets/img/avatar-7964941_1280.png" alt="Customer-Avatar" />
+      <div>
+        <h3>{{ user?.firstName }} {{ user?.lastName }}</h3>
+        <p>{{ user?.id }}</p>
+        <!-- kundennummer -->
+      </div>
+    </div>
+  </mat-card>
+  <mat-card appearance="outlined" class="m-32">
+    <h4>Address</h4>
+    <mat-card-content>{{ user?.streetAddress }}</mat-card-content>
 
+    <mat-card-content>{{ user?.zipCode }}</mat-card-content>
+
+    <mat-card-content>{{ user?.city }}</mat-card-content>
+
+    <mat-card-content>{{ user?.city }}</mat-card-content>
+
+    <mat-card-content>{{ user?.city }}</mat-card-content>
+  </mat-card>
 </div>
