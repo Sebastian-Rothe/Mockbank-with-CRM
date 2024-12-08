@@ -3,11 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 import { FirebaseService } from '../services/firebase.service';
 import { User } from '../../models/user.class';
 import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-user-detail',
   standalone: true,
-  imports: [MatCard, MatCardContent],
+  imports: [MatCard, MatCardContent, MatIcon, MatIconButton, MatTooltip],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss',
 })
@@ -29,5 +32,7 @@ export class UserDetailComponent implements OnInit {
       console.log('User not found');
     }
   }
-
+  openAddressDialog(){
+    
+  }
 }

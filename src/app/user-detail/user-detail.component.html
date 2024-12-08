@@ -12,6 +12,10 @@
   </mat-card>
   <mat-card appearance="outlined" class="m-32">
     <h4>Address</h4>
+    <button mat-icon-button class="address-menu-btn" matTooltip="menu" aria-label="open address data for changes" (click)="openAddressDialog()">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+   
     <mat-card-content>{{ user?.streetAddress }}</mat-card-content>
 
     <mat-card-content>{{ user?.zipCode }}</mat-card-content>
