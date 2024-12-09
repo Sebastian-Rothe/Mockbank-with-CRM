@@ -49,7 +49,9 @@ export class UserDetailComponent implements OnInit {
     // Realtime listener auf das Firestore-Dokument
     onSnapshot(userRef, (docSnap) => {
       if (docSnap.exists()) {
-        this.user = new User(docSnap.data()); // Daten in das User-Objekt laden
+        // Füge die id hinzu, damit sie im User-Objekt enthalten ist
+        const userData = docSnap.data();
+        this.user = new User({ ...userData, id: docSnap.id }); // id hinzufügen
         console.log('User fetched:', this.user);
       } else {
         console.log('User not found');
