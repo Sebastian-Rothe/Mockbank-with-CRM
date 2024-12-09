@@ -27,7 +27,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 })
 export class DialogEditUserAddressComponent {
   user = new User();
-  birthDate: Date = new Date();
+
   constructor(private firebaseService: FirebaseService, public dialogRef: MatDialogRef<DialogEditUserAddressComponent>) {}
   saveNewUser() {
     // this.user.birthDate = this.birthDate.getTime();

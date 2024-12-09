@@ -17,7 +17,6 @@ import { DialogEditUserDetailComponent } from '../dialog-edit-user-detail/dialog
   selector: 'app-user-detail',
   standalone: true,
   imports: [
- 
     MatCard,
     MatCardContent,
     MatIcon,
@@ -53,14 +52,14 @@ export class UserDetailComponent implements OnInit {
   editUserDetail() {
     if (this.user) {
       const dialog = this.dialog.open(DialogEditUserDetailComponent);
-      dialog.componentInstance.user = this.user;
+      dialog.componentInstance.user = new User(this.user.toPlainObject());
     }
   }
 
   editUserAddress() {
     if (this.user){
       const dialog = this.dialog.open(DialogEditUserAddressComponent);
-      dialog.componentInstance.user = this.user;
+      dialog.componentInstance.user = new User(this.user.toPlainObject());
     }
   }
 }
