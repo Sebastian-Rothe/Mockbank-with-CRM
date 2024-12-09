@@ -3,6 +3,10 @@ import { FirebaseService } from '../services/firebase.service';
 
 import { FormsModule } from '@angular/forms';
 
+import { Observable } from 'rxjs';
+import { updateDoc, doc } from 'firebase/firestore';
+import { from } from 'rxjs';
+
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule} from '@angular/material/dialog';
 import { MatDialogRef } from '@angular/material/dialog';
@@ -32,21 +36,11 @@ export class DialogEditUserDetailComponent {
 
   constructor(private firebaseService: FirebaseService, public dialogRef: MatDialogRef<DialogEditUserDetailComponent>) {}
   
-  saveNewUser() {
-    // this.user.birthDate = this.birthDate.getTime();
-    // this.firebaseService
-    //   .addUser(this.user)
-    //   .then((docRef) => {
-    //     this.user.id = docRef.id;
-    //     console.log('User added successfully with ID:', docRef.id);
-    //     console.log(this.user.id);
-        
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error adding user:', error);
-    //   });
-    // this.closeDialog();
-  }
+  saveNewUser(user: any): Observable<void> {
+    const ref = doc(this.firebaseService.firestore, 'users', user.id);
+    this.closeDialog();
+    return from(updateDoc(ref, { ...user }));
+ }
   
   closeDialog(): void {
     this.dialogRef.close(); 

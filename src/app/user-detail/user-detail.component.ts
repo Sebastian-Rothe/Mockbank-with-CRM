@@ -12,6 +12,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditUserAddressComponent } from '../dialog-edit-user-address/dialog-edit-user-address.component';
 import { DialogEditUserDetailComponent } from '../dialog-edit-user-detail/dialog-edit-user-detail.component';
+
+import { doc, onSnapshot } from 'firebase/firestore';
 // import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-user-detail',
@@ -41,13 +43,18 @@ export class UserDetailComponent implements OnInit {
     console.log(this.userId);
     this.getUserDetails(this.userId);
   }
-  async getUserDetails(userId: string): Promise<void> {
-    this.user = await this.firebaseService.getUser(userId);
-    if (this.user) {
-      console.log('User fetched:', this.user);
-    } else {
-      console.log('User not found');
-    }
+  getUserDetails(userId: string): void {
+    const userRef = doc(this.firebaseService.firestore, 'users', userId);
+
+    // Realtime listener auf das Firestore-Dokument
+    onSnapshot(userRef, (docSnap) => {
+      if (docSnap.exists()) {
+        this.user = new User(docSnap.data()); // Daten in das User-Objekt laden
+        console.log('User fetched:', this.user);
+      } else {
+        console.log('User not found');
+      }
+    });
   }
   editUserDetail() {
     if (this.user) {
