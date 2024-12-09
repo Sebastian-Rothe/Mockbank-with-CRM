@@ -1,1 +1,33 @@
 <p>dialog-edit-user-address works!</p>
+
+<h2 mat-dialog-title>Add User</h2>
+
+<div mat-dialog-content>
+  
+
+  <div>
+    <mat-form-field class="full-width" appearance="outline">
+      <mat-label>Street Address</mat-label>
+      <input [(ngModel)]="user.streetAddress" matInput placeholder="Street Address" />
+      <!-- <mat-hint>Please enter your last name</mat-hint> -->
+    </mat-form-field>
+  </div>
+  <div>
+    <mat-form-field class="mr-16" appearance="outline">
+      <mat-label>Zip Code</mat-label>
+      <input [(ngModel)]="user.zipCode" matInput placeholder="Zip Code" />
+      <!-- <mat-hint>Please enter your last name</mat-hint> -->
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>City</mat-label>
+      <input [(ngModel)]="user.city" matInput placeholder="City" />
+      <!-- <mat-hint>Please enter your last name</mat-hint> -->
+    </mat-form-field>
+  </div>
+</div>
+
+<mat-dialog-actions>
+  <button mat-button (click)="closeDialog()">Cancel</button>
+  <button mat-button (click)="saveNewUser()" cdkFocusInitial>Save</button>
+</mat-dialog-actions>
