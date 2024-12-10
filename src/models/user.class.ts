@@ -25,27 +25,24 @@
 //       };
 //     }
 //   }
-
 export class User {
-  id?: string;
+  id?: string = '';
   firstName: string = '';
   lastName: string = '';
   email?: string = '';
   phoneNumber?: string = '';
   birthDate: number = 0;
-  // addresses?: { type: string; streetAddress: string; zipCode: string; city: string }[] = [];
   streetAddress: string = '';
   zipCode: number = 0;
   city: string = '';
-  accounts: string[] = []; // Referenz zu Konten (z. B. Konto-IDs)
+  accounts: string[] = [];
   role: 'user' | 'admin' | 'support' = 'user';
   status?: 'active' | 'inactive' | 'closed' = 'active';
-  // isTwoFactorEnabled: boolean = false;
-  profilePictureUrl?: string;
-  assignedAdvisorId?: string;
-  nationality?: string;
-  taxId?: string;
-  occupation?: string;
+  profilePictureUrl?: string = '';
+  assignedAdvisorId?: string = '';
+  nationality?: string = '';
+  taxId?: string = '';
+  occupation?: string = '';
   lastLogin: number = Date.now();
 
   constructor(obj?: Partial<User>) {
@@ -62,14 +59,12 @@ export class User {
       email: this.email,
       phoneNumber: this.phoneNumber,
       birthDate: this.birthDate,
-      // addresses: this.addresses,
       streetAddress: this.streetAddress,
       zipCode: this.zipCode,
       city: this.city,
       accounts: this.accounts,
       role: this.role,
       status: this.status,
-      // isTwoFactorEnabled: this.isTwoFactorEnabled,
       profilePictureUrl: this.profilePictureUrl,
       assignedAdvisorId: this.assignedAdvisorId,
       nationality: this.nationality,
