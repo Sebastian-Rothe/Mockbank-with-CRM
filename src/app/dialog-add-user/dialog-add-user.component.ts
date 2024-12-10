@@ -45,7 +45,6 @@ export class DialogAddUserComponent {
         this.user.id = docRef.id;
         console.log('User added successfully with ID:', docRef.id);
         console.log(this.user.id);
-        
       })
       .catch((error) => {
         console.error('Error adding user:', error);
