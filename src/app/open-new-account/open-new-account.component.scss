@@ -1,0 +1,44 @@
+.main-open-new-account {
+  height: 100vh;
+}
+mat-toolbar {
+  color: white;
+  height: 8vh;
+  display: flex;
+  justify-content: space-between;
+  background-color: rgb(19, 75, 112);
+}
+
+.contact-popup {
+  list-style-type: none;
+  padding: 8px;
+  margin: 0;
+}
+
+.contact-headline {
+  font-size: 0.7rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.contact-popup a {
+  text-decoration: none;
+  color: #0066cc;
+}
+
+.contact-popup a:hover {
+  text-decoration: underline;
+}
+
+.dropdown-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+h6 {
+  margin: 0;
+}
+
+.contact-btn{
+    color: white !important;
+}

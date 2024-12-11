@@ -1,0 +1,30 @@
+<div class="main-open-new-account">
+  <mat-toolbar>
+    <span>MockBank</span>
+    <span class="example-spacer"></span>
+    <div class="button-align">
+      <button mat-button [matMenuTriggerFor]="contact" class="contact-btn">Help & Contact</button>
+      <mat-menu #contact="matMenu">
+        <ul mat-menu class="contact-popup">
+            <div class="collapse">
+         
+              <li class="">
+                <h6 class="contact-headline m-0">Phone (Mo. - Fr. 08:00 - 20:00 Uhr)</h6>
+                <a href="tel:+4969242469000" >176 52968778</a>
+              </li>
+          
+              <li class="">
+                <h6 class="contact-headline mb-0 mt-3">E-Mail</h6>
+                <a href="mailto:kundenservice@c24.de" >customerserviceMB.de</a>
+              </li>
+          
+              <li class="">
+                <h6 class="contact-headline mb-0 mt-3">Q&A</h6>
+                <a target="_blank" href="" >To Help Center</a>
+              </li>
+            </div>
+          </ul>
+      </mat-menu>
+    </div>
+  </mat-toolbar>
+</div>
