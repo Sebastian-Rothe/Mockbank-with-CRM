@@ -5,11 +5,12 @@
 .main-content-frontpage {
   height: 100vh;
   background-color: rgb(80, 140, 155);
-  mat-toolbar {
-    height: 8vh;
-    background-color: rgb(19, 75, 112);
-    color: white;
-  }
+}
+mat-toolbar {
+  position: fixed;
+  height: 8vh;
+  background-color: rgb(19, 75, 112);
+  color: white;
 }
 // Basis-Styles für alle Buttons bleiben erhalten
 .button-align {
@@ -53,3 +54,16 @@
     }
   }
   
+.content-align{
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+h1{
+  font-size: 3rem;
+}
+li{
+  color: white;
+  font-size: 1.2rem;
+}

@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { MainContentComponent } from './main-content/main-content.component';
 import { FrontpageComponent } from './frontpage/frontpage.component';
+import { FooterComponent } from './footer/footer.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [MainContentComponent, FrontpageComponent],
+  imports: [MainContentComponent, FrontpageComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

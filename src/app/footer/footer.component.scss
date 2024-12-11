@@ -1,0 +1,16 @@
+.footer{
+    height: 20vh;
+    width: 100%;
+    background-color: rgb(42, 42, 46);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.footer-right{
+    display: flex;
+    flex-direction: column;
+    a{
+        color: white;
+    }
+}
