@@ -1,7 +1,13 @@
 .main-open-new-account {
   height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
 }
 mat-toolbar {
+  position: fixed;
+  top: 0;
   color: white;
   height: 8vh;
   display: flex;
@@ -41,4 +47,10 @@ h6 {
 
 .contact-btn{
     color: white !important;
+}
+
+.new-account-form{
+background-color: #333;
+width: 40%;
+height: 55%;
 }
