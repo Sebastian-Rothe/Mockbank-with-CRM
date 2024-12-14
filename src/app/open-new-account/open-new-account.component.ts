@@ -51,7 +51,7 @@ export class OpenNewAccountComponent {
     streetAddress: ['', Validators.required],
     zipCode: [
       '',
-      [Validators.required, Validators.pattern(/^\d{5}$/)], // 5-digit zip code
+      [Validators.required, Validators.pattern(/^\d{6}$/)], // 5-digit zip code
     ],
     city: ['', Validators.required],
   });
