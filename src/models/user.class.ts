@@ -30,10 +30,11 @@ export class User {
   firstName: string = '';
   lastName: string = '';
   email?: string = '';
+  countryCode?: string = '';
   phoneNumber?: string = '';
   birthDate: number = 0;
   streetAddress: string = '';
-  zipCode: number = 0;
+  zipCode: string = '';
   city: string = '';
   accounts: string[] = [];
   role: 'user' | 'admin' | 'support' = 'user';
@@ -57,6 +58,7 @@ export class User {
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,
+      countryCode: this.countryCode,
       phoneNumber: this.phoneNumber,
       birthDate: this.birthDate,
       streetAddress: this.streetAddress,
