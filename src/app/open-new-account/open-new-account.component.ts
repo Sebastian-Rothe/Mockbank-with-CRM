@@ -38,5 +38,8 @@ export class OpenNewAccountComponent {
   secondFormGroup = this._formBuilder.group({
     secondCtrl: ['', Validators.required],
   });
+  thirdFormGroup = this._formBuilder.group({
+    secondCtrl: ['', Validators.required],
+  });
   isLinear = false;
 }

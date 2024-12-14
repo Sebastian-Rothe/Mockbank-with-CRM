@@ -1,8 +1,9 @@
 .main-open-new-account {
   height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  // justify-content: center;
+  // align-items: center;
+  flex-direction: column;
 
 }
 mat-toolbar {
@@ -57,4 +58,9 @@ height: 55%;
 
 .mat-stepper-horizontal {
   margin-top: 8px;
+}
+
+mat-stepper{
+  margin-top: 8vh !important;
+  width: 100%;
 }
