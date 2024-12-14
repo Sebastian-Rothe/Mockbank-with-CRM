@@ -33,13 +33,34 @@ export class OpenNewAccountComponent {
   private _formBuilder = inject(FormBuilder);
 
   firstFormGroup = this._formBuilder.group({
-    firstCtrl: ['', Validators.required],
+    countryCode: [
+      '',
+      [Validators.required, Validators.pattern(/^\+\d{1,3}$/)], // E.g., +49
+    ],
+    phoneNumber: [
+      '',
+      [Validators.required, Validators.pattern(/^\d{10,15}$/)], // E.g., 10-15 digits
+    ],
+    email: ['', [Validators.required, Validators.email]],
   });
+
   secondFormGroup = this._formBuilder.group({
-    secondCtrl: ['', Validators.required],
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
+    dateOfBirth: ['', Validators.required], // Should be a valid date
+    streetAddress: ['', Validators.required],
+    zipCode: [
+      '',
+      [Validators.required, Validators.pattern(/^\d{5}$/)], // 5-digit zip code
+    ],
+    city: ['', Validators.required],
   });
+
   thirdFormGroup = this._formBuilder.group({
-    secondCtrl: ['', Validators.required],
+    occupation: [''], // Optional field
+    nationality: [''], // Optional field
+    taxId: ['', Validators.pattern(/^\d{9,15}$/)], // Optional, numeric tax ID
   });
+
   isLinear = false;
 }
