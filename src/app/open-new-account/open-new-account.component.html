@@ -34,136 +34,161 @@
   <!-- <button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
       {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
     </button> -->
-  <mat-stepper [linear]="isLinear" #stepper>
-    <mat-step [stepControl]="firstFormGroup" errorMessage="Contact Information's are required.">
-      <form [formGroup]="firstFormGroup">
-        <ng-template matStepLabel>Contact Information</ng-template>
+  <div class="align-form">
+    <mat-stepper [linear]="isLinear" #stepper>
+      <mat-step
+        class="mat-step1"
+        [stepControl]="firstFormGroup"
+        errorMessage="Contact Information's are required."
+      >
+        <form class="form-1" [formGroup]="firstFormGroup">
+          <ng-template matStepLabel>Contact Information</ng-template>
+     
+            <!-- <mat-form-field>
+              <mat-label>Country Code</mat-label>
+              <input
+                matInput
+                type="text"
+                placeholder="+49"
+                formControlName="countryCode"
+              />
+              @if(firstFormGroup.get('countryCode')?.hasError('pattern')){
 
-        <mat-form-field>
-          <mat-label>Country Code</mat-label>
-          <input
-            matInput
-            type="text"
-            placeholder="+49"
-            formControlName="countryCode"
-          />
-          @if(firstFormGroup.get('countryCode')?.hasError('pattern')){
+              <mat-error> Enter a valid country code (e.g., +49). </mat-error>
+              }
+            </mat-form-field> -->
 
-          <mat-error> Enter a valid country code (e.g., +49). </mat-error>
-          }
-        </mat-form-field>
+            <mat-form-field>
+              <mat-label>Phone Number</mat-label>
+              <input
+                matInput
+                type="tel"
+                placeholder="Phone Number"
+                formControlName="phoneNumber"
+              />
+              @if(firstFormGroup.get('phoneNumber')?.hasError('pattern')){
+              <mat-error>
+                Enter a valid phone number (10-15 digits).
+              </mat-error>
+              }
+            </mat-form-field>
+          
 
-        <mat-form-field>
-          <mat-label>Phone Number</mat-label>
-          <input
-            matInput
-            type="tel"
-            placeholder="Phone Number"
-            formControlName="phoneNumber"
-          />
-          @if(firstFormGroup.get('phoneNumber')?.hasError('pattern')){
-          <mat-error> Enter a valid phone number (10-15 digits). </mat-error>
-          }
-        </mat-form-field>
+          <mat-form-field>
+            <mat-label>Email Address</mat-label>
+            <input
+              matInput
+              type="email"
+              placeholder="Email Address"
+              formControlName="email"
+            />
+            @if(firstFormGroup.get('email')?.hasError('email')){
+            <mat-error> Enter a valid email address. </mat-error>
+            }
+          </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Email Address</mat-label>
-          <input
-            matInput
-            type="email"
-            placeholder="Email Address"
-            formControlName="email"
-          />
-          @if(firstFormGroup.get('email')?.hasError('email')){
-          <mat-error> Enter a valid email address. </mat-error>
-          }
-        </mat-form-field>
+          <div>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
 
-        <div>
-          <button mat-button matStepperNext>Next</button>
-        </div>
-      </form>
-    </mat-step>
+      <mat-step
+        [stepControl]="secondFormGroup"
+        errorMessage="Address Details are required."
+      >
+        <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Address Details</ng-template>
 
-    <mat-step [stepControl]="secondFormGroup" errorMessage="Address Details are required.">
-      <form [formGroup]="secondFormGroup">
-        <ng-template matStepLabel>Address Details</ng-template>
+          <mat-form-field>
+            <mat-label>First Name</mat-label>
+            <input matInput type="text" formControlName="firstName" />
+          </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>First Name</mat-label>
-          <input matInput type="text" formControlName="firstName" />
-        </mat-form-field>
+          <mat-form-field>
+            <mat-label>Last Name</mat-label>
+            <input matInput type="text" formControlName="lastName" />
+          </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Last Name</mat-label>
-          <input matInput type="text" formControlName="lastName" />
-        </mat-form-field>
+          <mat-form-field>
+            <mat-label>Date of Birth</mat-label>
+            <input matInput type="date" formControlName="dateOfBirth" />
+          </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Date of Birth</mat-label>
-          <input matInput type="date" formControlName="dateOfBirth" />
-        </mat-form-field>
+          <mat-form-field>
+            <mat-label>Street Address</mat-label>
+            <input matInput type="text" formControlName="streetAddress" />
+          </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Street Address</mat-label>
-          <input matInput type="text" formControlName="streetAddress" />
-        </mat-form-field>
+          <mat-form-field>
+            <mat-label>Zip Code</mat-label>
+            <input matInput type="number" formControlName="zipCode" />
+            @if(secondFormGroup.get('zipCode')?.hasError('zipCode')){
+            <mat-error> Enter a valid Zip Code. </mat-error>
+            }
+          </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>Zip Code</mat-label>
-          <input matInput type="number" formControlName="zipCode" />
-          @if(secondFormGroup.get('zipCode')?.hasError('zipCode')){
-          <mat-error> Enter a valid Zip Code. </mat-error>
-          }
-        </mat-form-field>
+          <mat-form-field>
+            <mat-label>City</mat-label>
+            <input matInput type="text" formControlName="city" />
+          </mat-form-field>
 
-        <mat-form-field>
-          <mat-label>City</mat-label>
-          <input matInput type="text" formControlName="city" />
-        </mat-form-field>
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+          </div>
+        </form>
+      </mat-step>
 
+      <mat-step
+        [stepControl]="thirdFormGroup"
+        errorMessage="Additional Information's are required."
+      >
+        <form [formGroup]="thirdFormGroup">
+          <ng-template matStepLabel>Additional Information</ng-template>
+
+          <mat-form-field>
+            <mat-label>Occupation</mat-label>
+            <input matInput type="text" formControlName="occupation" />
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Nationality</mat-label>
+            <input matInput type="text" formControlName="nationality" />
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Tax ID</mat-label>
+            <input matInput type="number" formControlName="taxId" />
+          </mat-form-field>
+
+          <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button
+              mat-button
+              matStepperNext
+              [disabled]="
+                !firstFormGroup.valid &&
+                !secondFormGroup.valid &&
+                !thirdFormGroup.valid
+              "
+            >
+              Next
+            </button>
+          </div>
+        </form>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>Done</ng-template>
+        <p>Review your data and submit.</p>
         <div>
           <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
+          <button mat-button (click)="saveNewUser()">Reset</button>
         </div>
-      </form>
-    </mat-step>
-
-    <mat-step [stepControl]="thirdFormGroup" errorMessage="Additional Information's are required.">
-      <form [formGroup]="thirdFormGroup">
-        <ng-template matStepLabel>Additional Information</ng-template>
-
-        <mat-form-field>
-          <mat-label>Occupation</mat-label>
-          <input matInput type="text" formControlName="occupation" />
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label>Nationality</mat-label>
-          <input matInput type="text" formControlName="nationality" />
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label>Tax ID</mat-label>
-          <input matInput type="number" formControlName="taxId" />
-        </mat-form-field>
-
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext [disabled]="!firstFormGroup.valid && !secondFormGroup.valid && !thirdFormGroup.valid">Next</button>
-        </div>
-      </form>
-    </mat-step>
-
-    <mat-step>
-      <ng-template matStepLabel>Done</ng-template>
-      <p>Review your data and submit.</p>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button (click)="saveNewUser()">Reset</button>
-      </div>
-    </mat-step>
-  </mat-stepper>
+      </mat-step>
+    </mat-stepper>
+  </div>
 
   <!-- </div> -->
 </div>
