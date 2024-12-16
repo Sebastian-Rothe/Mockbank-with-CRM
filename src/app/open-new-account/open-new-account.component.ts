@@ -13,18 +13,24 @@ import {
 } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 
-
-import { MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialogRef } from '@angular/material/dialog';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { User } from '../../models/user.class';
 import { FirebaseService } from '../../services/firebase.service';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 @Component({
   selector: 'app-open-new-account',
   standalone: true,
-  providers: [provideNativeDateAdapter()],
+  providers: [
+    {
+      provide: STEPPER_GLOBAL_OPTIONS,
+      useValue: { showError: true },
+    },
+    provideNativeDateAdapter(),
+  ],
   imports: [
     MatToolbarModule,
     MatButtonModule,
@@ -46,26 +52,26 @@ export class OpenNewAccountComponent {
 
   constructor(private firebaseService: FirebaseService) {}
 
-    saveNewUser() {
+  saveNewUser() {
     // Zugriff auf die FormGroup-Werte direkt
-    this.user.countryCode = this.firstFormGroup.get('countryCode')?.value || '';  
-    this.user.phoneNumber = this.firstFormGroup.get('phoneNumber')?.value || '';  
-    this.user.email = this.firstFormGroup.get('email')?.value || '';  
+    this.user.countryCode = this.firstFormGroup.get('countryCode')?.value || '';
+    this.user.phoneNumber = this.firstFormGroup.get('phoneNumber')?.value || '';
+    this.user.email = this.firstFormGroup.get('email')?.value || '';
     this.user.firstName = this.secondFormGroup.get('firstName')?.value || '';
-    this.user.lastName = this.secondFormGroup.get('lastName')?.value || '';  
-    this.user.birthDate = this.birthDate.getTime();  
-    this.user.streetAddress = this.secondFormGroup.get('streetAddress')?.value || '';  
-    this.user.zipCode = this.secondFormGroup.get('zipCode')?.value || '';  
-    this.user.city = this.secondFormGroup.get('city')?.value || '';  
-    this.user.occupation = this.thirdFormGroup.get('occupation')?.value || '';  
-    this.user.nationality = this.thirdFormGroup.get('nationality')?.value || '';  
-    this.user.taxId = this.thirdFormGroup.get('taxId')?.value || '';  
-
+    this.user.lastName = this.secondFormGroup.get('lastName')?.value || '';
+    this.user.birthDate = this.birthDate.getTime();
+    this.user.streetAddress =
+      this.secondFormGroup.get('streetAddress')?.value || '';
+    this.user.zipCode = this.secondFormGroup.get('zipCode')?.value || '';
+    this.user.city = this.secondFormGroup.get('city')?.value || '';
+    this.user.occupation = this.thirdFormGroup.get('occupation')?.value || '';
+    this.user.nationality = this.thirdFormGroup.get('nationality')?.value || '';
+    this.user.taxId = this.thirdFormGroup.get('taxId')?.value || '';
 
     // Speichern des Benutzers in Firebase
     this.firebaseService
-    .addUser(this.user)
-    .then((docRef) => {
+      .addUser(this.user)
+      .then((docRef) => {
         this.user.id = docRef.id;
         console.log('User added successfully with ID:', docRef.id);
         console.log(this.user.id);
@@ -100,8 +106,8 @@ export class OpenNewAccountComponent {
   });
 
   thirdFormGroup = this._formBuilder.group({
-    occupation: [''], // Optional field
-    nationality: [''], // Optional field
+    occupation: ['', Validators.required],
+    nationality: ['', Validators.required],
     taxId: ['', Validators.pattern(/^\d{9,15}$/)], // Optional, numeric tax ID
   });
 

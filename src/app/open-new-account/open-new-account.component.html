@@ -35,7 +35,7 @@
       {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
     </button> -->
   <mat-stepper [linear]="isLinear" #stepper>
-    <mat-step [stepControl]="firstFormGroup">
+    <mat-step [stepControl]="firstFormGroup" errorMessage="Contact Information's are required.">
       <form [formGroup]="firstFormGroup">
         <ng-template matStepLabel>Contact Information</ng-template>
 
@@ -62,7 +62,6 @@
             formControlName="phoneNumber"
           />
           @if(firstFormGroup.get('phoneNumber')?.hasError('pattern')){
-
           <mat-error> Enter a valid phone number (10-15 digits). </mat-error>
           }
         </mat-form-field>
@@ -86,7 +85,7 @@
       </form>
     </mat-step>
 
-    <mat-step [stepControl]="secondFormGroup">
+    <mat-step [stepControl]="secondFormGroup" errorMessage="Address Details are required.">
       <form [formGroup]="secondFormGroup">
         <ng-template matStepLabel>Address Details</ng-template>
 
@@ -114,8 +113,8 @@
           <mat-label>Zip Code</mat-label>
           <input matInput type="number" formControlName="zipCode" />
           @if(secondFormGroup.get('zipCode')?.hasError('zipCode')){
-            <mat-error> Enter a valid Zip Code. </mat-error>
-            }
+          <mat-error> Enter a valid Zip Code. </mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field>
@@ -130,7 +129,7 @@
       </form>
     </mat-step>
 
-    <mat-step [stepControl]="thirdFormGroup">
+    <mat-step [stepControl]="thirdFormGroup" errorMessage="Additional Information's are required.">
       <form [formGroup]="thirdFormGroup">
         <ng-template matStepLabel>Additional Information</ng-template>
 
@@ -151,7 +150,7 @@
 
         <div>
           <button mat-button matStepperPrevious>Back</button>
-          <button mat-button matStepperNext>Next</button>
+          <button mat-button matStepperNext [disabled]="!firstFormGroup.valid && !secondFormGroup.valid && !thirdFormGroup.valid">Next</button>
         </div>
       </form>
     </mat-step>
