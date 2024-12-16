@@ -21,6 +21,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { User } from '../../models/user.class';
 import { FirebaseService } from '../../services/firebase.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+
 @Component({
   selector: 'app-open-new-account',
   standalone: true,
@@ -41,6 +42,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatDatepickerModule
   ],
   templateUrl: './open-new-account.component.html',
   styleUrl: './open-new-account.component.scss',
@@ -96,7 +98,7 @@ export class OpenNewAccountComponent {
   secondFormGroup = this._formBuilder.group({
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
-    dateOfBirth: ['', Validators.required], // Should be a valid date
+    birthDate: ['', Validators.required], // Should be a valid date
     streetAddress: ['', Validators.required],
     zipCode: [
       '',
@@ -111,5 +113,5 @@ export class OpenNewAccountComponent {
     taxId: ['', Validators.pattern(/^\d{9,15}$/)], // Optional, numeric tax ID
   });
 
-  isLinear = false;
+  isLinear = true;
 }

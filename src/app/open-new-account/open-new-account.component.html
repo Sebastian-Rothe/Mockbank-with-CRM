@@ -43,37 +43,34 @@
       >
         <form class="form-1" [formGroup]="firstFormGroup">
           <ng-template matStepLabel>Contact Information</ng-template>
-     
-            <mat-form-field>
-              <mat-label>Country Code</mat-label>
-              <input
-                matInput
-                type="text"
-                placeholder="+49"
-                formControlName="countryCode"
-              />
-              @if(firstFormGroup.get('countryCode')?.hasError('pattern')){
 
-              <mat-error> Enter a valid country code (e.g., +49). </mat-error>
-              }
-            </mat-form-field>
+          <mat-form-field>
+            <mat-label>Country Code</mat-label>
+            <input
+              matInput
+              type="text"
+              placeholder="+49"
+              formControlName="countryCode"
+            />
+            @if(firstFormGroup.get('countryCode')?.hasError('pattern')){
 
-            <mat-form-field>
-              <mat-label>Phone Number</mat-label>
-              <input
-                matInput
-                type="tel"
-                placeholder="Phone Number"
-                formControlName="phoneNumber"
-                placeholder="17652968778"
-              />
-              @if(firstFormGroup.get('phoneNumber')?.hasError('pattern')){
-              <mat-error>
-                Enter a valid phone number (10-15 digits).
-              </mat-error>
-              }
-            </mat-form-field>
-          
+            <mat-error> Enter a valid country code (e.g., +49). </mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Phone Number</mat-label>
+            <input
+              matInput
+              type="tel"
+              placeholder="Phone Number"
+              formControlName="phoneNumber"
+              placeholder="17652968778"
+            />
+            @if(firstFormGroup.get('phoneNumber')?.hasError('pattern')){
+            <mat-error> Enter a valid phone number (10-15 digits). </mat-error>
+            }
+          </mat-form-field>
 
           <mat-form-field>
             <mat-label>Email Address</mat-label>
@@ -94,7 +91,7 @@
         </form>
       </mat-step>
 
-      <mat-step 
+      <mat-step
         [stepControl]="secondFormGroup"
         errorMessage="Address Details are required."
       >
@@ -103,27 +100,56 @@
 
           <mat-form-field>
             <mat-label>First Name</mat-label>
-            <input matInput type="text" formControlName="firstName" placeholder="Sebastian"/>
+            <input
+              matInput
+              type="text"
+              formControlName="firstName"
+              placeholder="Sebastian"
+            />
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Last Name</mat-label>
-            <input matInput type="text" formControlName="lastName" placeholder="Rothe" />
+            <input
+              matInput
+              type="text"
+              formControlName="lastName"
+              placeholder="Rothe"
+            />
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Date of Birth</mat-label>
-            <input matInput type="date" formControlName="dateOfBirth" />
+            <input
+            formControlName="birthDate"
+              matInput
+              [matDatepicker]="picker"
+            />
+            <mat-datepicker-toggle
+              matIconSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Street Address</mat-label>
-            <input matInput type="text" formControlName="streetAddress" placeholder="Mühlwehrstr. 8" />
+            <input
+              matInput
+              type="text"
+              formControlName="streetAddress"
+              placeholder="Mühlwehrstr. 8"
+            />
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Zip Code</mat-label>
-            <input matInput type="number" formControlName="zipCode" placeholder="60488" />
+            <input
+              matInput
+              type="number"
+              formControlName="zipCode"
+              placeholder="60488"
+            />
             @if(secondFormGroup.get('zipCode')?.hasError('zipCode')){
             <mat-error> Enter a valid Zip Code. </mat-error>
             }
@@ -131,7 +157,12 @@
 
           <mat-form-field>
             <mat-label>City</mat-label>
-            <input matInput type="text" formControlName="city" placeholder="Frankfurt am Main" />
+            <input
+              matInput
+              type="text"
+              formControlName="city"
+              placeholder="Frankfurt am Main"
+            />
           </mat-form-field>
 
           <div class="align-next-btn">
@@ -150,17 +181,33 @@
 
           <mat-form-field>
             <mat-label>Occupation</mat-label>
-            <input matInput type="text" formControlName="occupation" placeholder="Software Developer" />
+            <input
+              matInput
+              type="text"
+              formControlName="occupation"
+              placeholder="Software Developer"
+            />
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Nationality</mat-label>
-            <input matInput type="text" formControlName="nationality" placeholder="German"/>
+            <input
+              matInput
+              type="text"
+              formControlName="nationality"
+              placeholder="German"
+            />
           </mat-form-field>
 
           <mat-form-field>
             <mat-label>Tax ID</mat-label>
-            <input class="text-d-none" matInput type="number" formControlName="taxId" placeholder="12345678901"/>
+            <input
+              class="text-d-none"
+              matInput
+              type="number"
+              formControlName="taxId"
+              placeholder="12345678901"
+            />
           </mat-form-field>
 
           <div class="align-next-btn">
@@ -180,12 +227,12 @@
         </form>
       </mat-step>
 
-      <mat-step>
+      <mat-step [editable]="false">
         <ng-template matStepLabel>Done</ng-template>
         <p>Review your data and submit.</p>
         <div>
           <button mat-button matStepperPrevious>Back</button>
-          <button mat-button (click)="saveNewUser()">Reset</button>
+          <button mat-button (click)="saveNewUser()">Send application</button>
         </div>
       </mat-step>
     </mat-stepper>
