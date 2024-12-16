@@ -93,11 +93,11 @@
         </form>
       </mat-step>
 
-      <mat-step
+      <mat-step 
         [stepControl]="secondFormGroup"
         errorMessage="Address Details are required."
       >
-        <form [formGroup]="secondFormGroup">
+        <form class="form-2" [formGroup]="secondFormGroup">
           <ng-template matStepLabel>Address Details</ng-template>
 
           <mat-form-field>
@@ -133,7 +133,7 @@
             <input matInput type="text" formControlName="city" />
           </mat-form-field>
 
-          <div>
+          <div class="align-next-btn">
             <button mat-button matStepperPrevious>Back</button>
             <button mat-button matStepperNext>Next</button>
           </div>
@@ -162,7 +162,7 @@
             <input matInput type="number" formControlName="taxId" />
           </mat-form-field>
 
-          <div>
+          <div class="align-next-btn">
             <button mat-button matStepperPrevious>Back</button>
             <button
               mat-button

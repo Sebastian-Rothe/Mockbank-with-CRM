@@ -88,3 +88,22 @@ h6 {
     border-radius: 8px;
   }
 }
+.form-2{
+  margin-top: 30px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);  
+  gap: 24px; 
+  padding: 0 84px;
+  
+  :last-child{
+   grid-column: span 2;
+   
+  }
+}
+
+.align-next-btn{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
