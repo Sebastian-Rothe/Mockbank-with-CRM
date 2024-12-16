@@ -76,6 +76,7 @@ h6 {
 
 // }
 .form-1 {
+  margin-top: 30px;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -83,27 +84,39 @@ h6 {
   // background-color: #0066cc;
 
   > mat-form-field {
-    margin-top: 30px;
     width: 40%;
-    border-radius: 8px;
+  }
+  > div {
+    margin-top: 50px;
   }
 }
-.form-2{
+.form-2 {
   margin-top: 30px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 1fr);  
-  gap: 24px; 
+  grid-template-rows: repeat(2, 1fr);
+  gap: 24px;
   padding: 0 84px;
-  
-  :last-child{
-   grid-column: span 2;
-   
+
+  :last-child {
+    grid-column: span 2;
   }
 }
 
-.align-next-btn{
+.align-next-btn {
   width: 100%;
   display: flex;
   justify-content: space-between;
+  margin-top: 50px;
+}
+
+.form-3 {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  > mat-form-field {
+    width: 40%;
+  }
 }

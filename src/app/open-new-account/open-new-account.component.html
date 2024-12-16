@@ -44,7 +44,7 @@
         <form class="form-1" [formGroup]="firstFormGroup">
           <ng-template matStepLabel>Contact Information</ng-template>
      
-            <!-- <mat-form-field>
+            <mat-form-field>
               <mat-label>Country Code</mat-label>
               <input
                 matInput
@@ -56,7 +56,7 @@
 
               <mat-error> Enter a valid country code (e.g., +49). </mat-error>
               }
-            </mat-form-field> -->
+            </mat-form-field>
 
             <mat-form-field>
               <mat-label>Phone Number</mat-label>
@@ -144,7 +144,7 @@
         [stepControl]="thirdFormGroup"
         errorMessage="Additional Information's are required."
       >
-        <form [formGroup]="thirdFormGroup">
+        <form class="form-3" [formGroup]="thirdFormGroup">
           <ng-template matStepLabel>Additional Information</ng-template>
 
           <mat-form-field>
