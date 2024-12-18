@@ -11,7 +11,7 @@
       </tr>
       @for(user of (user$ | async ); track $index){
         
-      <tr routerLink="{{ user.id }}">
+      <tr routerLink="{{ user.uid }}">
         <td>{{ user.firstName }}</td>
         <td>{{ user.lastName }}</td>
         <!-- <td>{{ user.birthDate }}</td> -->

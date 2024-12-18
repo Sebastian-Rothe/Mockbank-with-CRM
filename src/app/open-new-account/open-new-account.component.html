@@ -121,7 +121,7 @@
           <mat-form-field>
             <mat-label>Date of Birth</mat-label>
             <input
-            formControlName="birthDate"
+              formControlName="birthDate"
               matInput
               [matDatepicker]="picker"
             />
@@ -212,17 +212,57 @@
 
           <div class="align-next-btn">
             <button mat-button matStepperPrevious>Back</button>
-            <button
-              mat-button
-              matStepperNext
-              [disabled]="
-                !firstFormGroup.valid &&
-                !secondFormGroup.valid &&
-                !thirdFormGroup.valid
-              "
-            >
-              Next
-            </button>
+            <button mat-button matStepperNext>Next</button>
+            <!-- [disabled]="
+            !firstFormGroup.valid &&
+            !secondFormGroup.valid &&
+            !thirdFormGroup.valid
+          " wäre eignetlich etwas weiter oben! -->
+          </div>
+        </form>
+      </mat-step>
+      <mat-step
+        [stepControl]="fourthFormGroup"
+        errorMessage="Password is required."
+      >
+        <form [formGroup]="fourthFormGroup">
+          <ng-template matStepLabel>Set Password</ng-template>
+
+          <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              type="password"
+              formControlName="password"
+              placeholder="Enter your password"
+            />
+            @if(fourthFormGroup.get('password')?.hasError('required')){
+            <mat-error> Password is required. </mat-error>}
+            @if((fourthFormGroup.get('password')?.hasError('pattern'))){
+            <mat-error>
+              Password must be at least 8 characters and include a number, a
+              special character, and a capital letter. </mat-error
+            >}
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Confirm Password</mat-label>
+            <input
+              matInput
+              type="password"
+              formControlName="confirmPassword"
+              placeholder="Confirm your password"
+            />
+            @if(
+            fourthFormGroup.get('confirmPassword')?.hasError('required')){<mat-error>
+              Confirmation is required. </mat-error
+            >} @if(passwordMismatch){
+            <mat-error> Passwords do not match. </mat-error>}
+          </mat-form-field>
+
+          <div class="align-next-btn">
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
           </div>
         </form>
       </mat-step>

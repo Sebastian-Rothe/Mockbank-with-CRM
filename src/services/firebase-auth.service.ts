@@ -5,9 +5,12 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   User,
+  UserCredential
 } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { onAuthStateChanged } from 'firebase/auth';
+
+
 @Injectable({
   providedIn: 'root',
 })

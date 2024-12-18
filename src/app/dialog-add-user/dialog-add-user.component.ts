@@ -42,9 +42,9 @@ export class DialogAddUserComponent {
     this.firebaseService
       .addUser(this.user)
       .then((docRef) => {
-        this.user.id = docRef.id;
+        this.user.uid = docRef.id;
         console.log('User added successfully with ID:', docRef.id);
-        console.log(this.user.id);
+        console.log(this.user.uid);
       })
       .catch((error) => {
         console.error('Error adding user:', error);

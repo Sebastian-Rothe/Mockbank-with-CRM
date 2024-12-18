@@ -42,7 +42,7 @@ export class FirebaseService {
         // Wenn das Dokument existiert, gebe es als User-Objekt zurück und setze die ID
         const userData = userDocSnap.data();
         const user = new User(userData);
-        user.id = userDocSnap.id;  // Hier wird die ID hinzugefügt
+        user.uid = userDocSnap.id;  // Hier wird die ID hinzugefügt
         return user;
       } else {
         console.log('No such user!');

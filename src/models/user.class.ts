@@ -26,7 +26,7 @@
 //     }
 //   }
 export class User {
-  id?: string = '';
+  uid?: string = '';
   firstName: string = '';
   lastName: string = '';
   email?: string = '';
@@ -54,7 +54,7 @@ export class User {
 
   toPlainObject(): Record<string, any> {
     return {
-      id: this.id,
+      uid: this.uid,
       firstName: this.firstName,
       lastName: this.lastName,
       email: this.email,

@@ -21,6 +21,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { User } from '../../models/user.class';
 import { FirebaseService } from '../../services/firebase.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { FirebaseAuthService } from '../../services/firebase-auth.service';
 
 @Component({
   selector: 'app-open-new-account',
@@ -42,7 +43,8 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    
   ],
   templateUrl: './open-new-account.component.html',
   styleUrl: './open-new-account.component.scss',
@@ -51,37 +53,11 @@ export class OpenNewAccountComponent {
   user = new User();
   birthDate: Date = new Date();
   private _formBuilder = inject(FormBuilder);
-
-  constructor(private firebaseService: FirebaseService) {}
-
-  saveNewUser() {
-    // Zugriff auf die FormGroup-Werte direkt
-    this.user.countryCode = this.firstFormGroup.get('countryCode')?.value || '';
-    this.user.phoneNumber = this.firstFormGroup.get('phoneNumber')?.value || '';
-    this.user.email = this.firstFormGroup.get('email')?.value || '';
-    this.user.firstName = this.secondFormGroup.get('firstName')?.value || '';
-    this.user.lastName = this.secondFormGroup.get('lastName')?.value || '';
-    this.user.birthDate = this.birthDate.getTime();
-    this.user.streetAddress =
-      this.secondFormGroup.get('streetAddress')?.value || '';
-    this.user.zipCode = this.secondFormGroup.get('zipCode')?.value || '';
-    this.user.city = this.secondFormGroup.get('city')?.value || '';
-    this.user.occupation = this.thirdFormGroup.get('occupation')?.value || '';
-    this.user.nationality = this.thirdFormGroup.get('nationality')?.value || '';
-    this.user.taxId = this.thirdFormGroup.get('taxId')?.value || '';
-
-    // Speichern des Benutzers in Firebase
-    this.firebaseService
-      .addUser(this.user)
-      .then((docRef) => {
-        this.user.id = docRef.id;
-        console.log('User added successfully with ID:', docRef.id);
-        console.log(this.user.id);
-      })
-      .catch((error) => {
-        console.error('Error adding user:', error);
-      });
-  }
+  constructor(
+    
+    private firebaseService: FirebaseService,
+    private firebaseAuthService: FirebaseAuthService
+  ) {}
 
   firstFormGroup = this._formBuilder.group({
     countryCode: [
@@ -113,5 +89,81 @@ export class OpenNewAccountComponent {
     taxId: ['', Validators.pattern(/^\d{9,15}$/)], // Optional, numeric tax ID
   });
 
-  isLinear = true;
+  fourthFormGroup = this._formBuilder.group(
+    {
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(
+            /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+          ),
+        ],
+      ],
+      confirmPassword: ['', Validators.required],
+    },
+    { validators: this.passwordMatchValidator }
+  );
+
+  passwordMatchValidator(formGroup: any) {
+    const password = formGroup.get('password').value;
+    const confirmPassword = formGroup.get('confirmPassword').value;
+    return password === confirmPassword ? null : { mismatch: true };
+  }
+
+  get passwordMismatch() {
+    return (
+      this.fourthFormGroup.hasError('mismatch') &&
+      this.fourthFormGroup.get('confirmPassword')?.touched
+    );
+  }
+  saveNewUser() {
+    const email = this.firstFormGroup.get('email')?.value || '';
+    const password = this.fourthFormGroup.get('password')?.value || '';
+  
+    this.firebaseAuthService
+      .register(email, password)
+      .then((firebaseUser) => {
+        if (firebaseUser) {
+          // Schritt 2: Zusätzliche Daten in Firestore speichern
+          this.user.uid = firebaseUser.uid; // Verknüpfe UID aus Firebase Auth
+          this.user.email = firebaseUser.email || '';
+  
+          // Zusätzliche Formulardaten in das `user`-Objekt übernehmen
+          this.user.countryCode =
+            this.firstFormGroup.get('countryCode')?.value || '';
+          this.user.phoneNumber =
+            this.firstFormGroup.get('phoneNumber')?.value || '';
+          this.user.firstName =
+            this.secondFormGroup.get('firstName')?.value || '';
+          this.user.lastName = this.secondFormGroup.get('lastName')?.value || '';
+          this.user.birthDate = this.birthDate.getTime();
+          this.user.streetAddress =
+            this.secondFormGroup.get('streetAddress')?.value || '';
+          this.user.zipCode = this.secondFormGroup.get('zipCode')?.value || '';
+          this.user.city = this.secondFormGroup.get('city')?.value || '';
+          this.user.occupation =
+            this.thirdFormGroup.get('occupation')?.value || '';
+          this.user.nationality =
+            this.thirdFormGroup.get('nationality')?.value || '';
+          this.user.taxId = this.thirdFormGroup.get('taxId')?.value || '';
+  
+          // Speichern des Benutzers in Firestore
+          this.firebaseService
+            .addUser(this.user)
+            .then((docRef) => {
+              this.user.uid = docRef.id;
+              console.log('User added successfully with ID:', docRef.id);
+            })
+            .catch((error) => {
+              console.error('Error adding user:', error);
+            });
+        }
+      })
+      .catch((error) => {
+        console.error('Error registering user:', error);
+      });
+  }
+  
+  isLinear = false;
 }
