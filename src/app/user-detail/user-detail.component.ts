@@ -51,7 +51,7 @@ export class UserDetailComponent implements OnInit {
       if (docSnap.exists()) {
         // Füge die id hinzu, damit sie im User-Objekt enthalten ist
         const userData = docSnap.data();
-        this.user = new User({ ...userData, uid: docSnap.id }); // id hinzufügen
+        this.user = new User({ ...userData, id: docSnap.id }); // id hinzufügen
         console.log('User fetched:', this.user);
       } else {
         console.log('User not found');
