@@ -5,19 +5,20 @@ import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-
+import { provideAuth, getAuth } from '@angular/fire/auth';
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideAuth(() => getAuth()),
     provideRouter(routes),
     provideAnimationsAsync(),
     provideFirebaseApp(() =>
       initializeApp({
-        apiKey: "AIzaSyCJlPzQrrMLsAZVA74wbTDeluBCA2KTbdo",
-        authDomain: "simplecrm-a9b92.firebaseapp.com",
-        projectId: "simplecrm-a9b92",
-        storageBucket: "simplecrm-a9b92.firebasestorage.app",
-        messagingSenderId: "155952910222",
-        appId: "1:155952910222:web:0becb70a8b451de6cc1edf"
+        apiKey: "AIzaSyA6sjgrec6hzkCFlANaK2QbOg9ln4VyZNQ",
+        authDomain: "mb-with-crm.firebaseapp.com",
+        projectId: "mb-with-crm",
+        storageBucket: "mb-with-crm.firebasestorage.app",
+        messagingSenderId: "406632378127",
+        appId: "1:406632378127:web:dde6d36e01fdd3090b987a"
       })
     ),
     provideFirestore(() => getFirestore()),
