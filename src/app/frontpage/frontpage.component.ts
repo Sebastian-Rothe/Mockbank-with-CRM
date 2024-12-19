@@ -3,6 +3,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { RouterLink } from '@angular/router';
+import { LoginComponent } from '../login/login.component';
+import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-frontpage',
   standalone: true,
@@ -11,5 +13,12 @@ import { RouterLink } from '@angular/router';
   styleUrl: './frontpage.component.scss'
 })
 export class FrontpageComponent {
+  constructor(public dialog: MatDialog) {}
 
+  openLoginDialog(): void {
+    this.dialog.open(LoginComponent, {
+      width: '400px', // Optional: Passe die Größe des Dialogs an
+      disableClose: true, // Optional: Verhindert das Schließen des Dialogs durch Klicken außerhalb
+    });
+}
 }

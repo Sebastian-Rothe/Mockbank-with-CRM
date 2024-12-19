@@ -10,15 +10,26 @@
     <span>MockBank</span>
     <span class="example-spacer"></span>
     <div class="button-align">
-      <a mat-flat-button class="btn-outline" routerLink="/open-account">Open new Account</a>
-      <button mat-raised-button class="btn-gradient" routerLink="/main">Login</button>
+      <a mat-flat-button class="btn-outline" routerLink="/open-account"
+        >Open new Account</a
+      >
+      <button
+        mat-raised-button
+        class="btn-gradient"
+        (click)="openLoginDialog()"
+      >
+        Login
+      </button>
     </div>
   </mat-toolbar>
   <div class="content-align">
     <div class="left">
       <h1>Best Checking Account</h1>
       <ol>
-        <li>The safest account in the world – because there's no real money involved!</li>
+        <li>
+          The safest account in the world – because there's no real money
+          involved!
+        </li>
         <li>Banking reimagined – for practice, not payments.</li>
         <li>MockBank – your gateway into the FinTech world.</li>
         <li>MockBank – because code is your currency.</li>
@@ -26,7 +37,6 @@
         <li>"MockBank – Real innovation. Fake money.</li>
       </ol>
       <button mat-flat-button class="btn-outline">Open new Account</button>
-
     </div>
     <div class="right">
       <p>here we put an img</p>
