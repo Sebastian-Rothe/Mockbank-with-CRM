@@ -1,27 +1,46 @@
 <div mat-dialog-content>
-    <h2 mat-dialog-title>Login</h2>
-    <form class="form-container">
-      <div class="form-field">
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Email</mat-label>
-          <input matInput placeholder="Enter your email" type="email" required />
-        </mat-form-field>
-      </div>
-  
-      <div class="form-field">
-        <mat-form-field class="full-width" appearance="outline">
-          <mat-label>Password</mat-label>
-          <input matInput placeholder="Enter your password" type="password" required />
-        </mat-form-field>
-      </div>
-  
-      <div class="button-container">
-        <button mat-flat-button color="primary" class="submit-button" type="submit">
-          Login
-        </button>
-        <button mat-stroked-button color="warn" mat-dialog-close>
-          Cancel
-        </button>
-      </div>
-    </form>
-  </div>
+  <h2 mat-dialog-title>Login</h2>
+  <form class="form-container" (ngSubmit)="login()">
+    <mat-form-field class="full-width" appearance="outline">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        placeholder="Enter your email"
+        type="email"
+        [(ngModel)]="email"
+        name="email"
+        required
+      />
+    </mat-form-field>
+
+    <mat-form-field class="full-width" appearance="outline">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        placeholder="Enter your password"
+        type="password"
+        [(ngModel)]="password"
+        name="password"
+        required
+      />
+    </mat-form-field>
+
+    @if(errorMessage){
+    <div class="error-message">
+      {{ errorMessage }}
+    </div>
+    }
+
+    <div class="button-container">
+      <button
+        mat-flat-button
+        color="primary"
+        class="submit-button"
+        type="submit"
+      >
+        Login
+      </button>
+      <button mat-stroked-button color="warn" (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+</div>

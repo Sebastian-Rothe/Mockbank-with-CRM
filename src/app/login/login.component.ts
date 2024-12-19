@@ -12,6 +12,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { User } from '../../models/user.class';
 import { FirebaseService } from '../../services/firebase.service';
+import { FirebaseAuthService } from '../../services/firebase-auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -28,4 +29,26 @@ import { FirebaseService } from '../../services/firebase.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent {}
+export class LoginComponent {
+  email: string = '';
+  password: string = '';
+  errorMessage: string = '';
+
+  constructor(
+    private authService: FirebaseAuthService,
+    public dialogRef: MatDialogRef<LoginComponent>
+  ) {}
+
+  async login(): Promise<void> {
+    try {
+      await this.authService.login(this.email, this.password);
+      this.dialogRef.close(); // Schließt den Dialog nach erfolgreicher Anmeldung
+    } catch (error: any) {
+      this.errorMessage = error.message; // Zeigt Fehlermeldungen an
+    }
+  }
+
+  cancel(): void {
+    this.dialogRef.close(); // Schließt den Dialog ohne Aktion
+  }
+}
