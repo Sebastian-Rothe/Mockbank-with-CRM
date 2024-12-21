@@ -13,6 +13,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { User } from '../../../models/user.class';
 import { FirebaseService } from '../../../services/firebase.service';
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -35,14 +36,21 @@ export class LoginComponent {
   errorMessage: string = '';
 
   constructor(
+    private router: Router,
     private authService: FirebaseAuthService,
     public dialogRef: MatDialogRef<LoginComponent>
   ) {}
 
   async login(): Promise<void> {
     try {
-      await this.authService.login(this.email, this.password);
-      this.dialogRef.close(); // Schließt den Dialog nach erfolgreicher Anmeldung
+      const user = await this.authService.login(this.email, this.password);
+
+      if (user) {
+        // Weiterleitung mit UID als Query-Parameter
+        this.router.navigate(['main'], { queryParams: { uid: user.uid } });
+        console.log(user.uid);
+        this.cancel();
+      }
     } catch (error: any) {
       this.errorMessage = error.message; // Zeigt Fehlermeldungen an
     }
