@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { FirebaseService } from '../../services/firebase.service';
+import { FirebaseService } from '../../../services/firebase.service';
+
 import { FormsModule } from '@angular/forms';
 
 import { Observable } from 'rxjs';
@@ -12,13 +13,13 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { User } from '../../models/user.class';
+import { User } from '../../../models/user.class';
 import { provideNativeDateAdapter } from '@angular/material/core';
 @Component({
-  selector: 'app-dialog-edit-user-address',
+  selector: 'app-dialog-edit-user-detail',
   standalone: true,
   providers: [provideNativeDateAdapter()],
-  imports: [MatDialogModule,
+  imports: [ MatDialogModule,
     // MatDialogClose,
     MatFormFieldModule,
     
@@ -26,13 +27,14 @@ import { provideNativeDateAdapter } from '@angular/material/core';
     MatDatepickerModule,
     MatButtonModule,
     FormsModule],
-  templateUrl: './dialog-edit-user-address.component.html',
-  styleUrl: './dialog-edit-user-address.component.scss'
+  templateUrl: './dialog-edit-user-detail.component.html',
+  styleUrl: './dialog-edit-user-detail.component.scss'
 })
-export class DialogEditUserAddressComponent {
+export class DialogEditUserDetailComponent {
   user = new User();
+  birthDate: Date = new Date();
 
-  constructor(private firebaseService: FirebaseService, public dialogRef: MatDialogRef<DialogEditUserAddressComponent>) {}
+  constructor(private firebaseService: FirebaseService, public dialogRef: MatDialogRef<DialogEditUserDetailComponent>) {}
   
   saveNewUser(user: any): Observable<void> {
     const ref = doc(this.firebaseService.firestore, 'users', user.id);
@@ -40,7 +42,6 @@ export class DialogEditUserAddressComponent {
     return from(updateDoc(ref, { ...user }));
  }
   
-
   closeDialog(): void {
     this.dialogRef.close(); 
   }

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { FirebaseService } from '../../services/firebase.service';
-import { User } from '../../models/user.class';
+import { FirebaseService } from '../../../services/firebase.service';
+import { User } from '../../../models/user.class';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';

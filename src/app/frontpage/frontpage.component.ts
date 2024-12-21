@@ -3,7 +3,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import { RouterLink } from '@angular/router';
-import { LoginComponent } from '../login/login.component';
+import { LoginComponent } from './login/login.component';
 import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'app-frontpage',

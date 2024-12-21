@@ -10,9 +10,9 @@ import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { User } from '../../models/user.class';
-import { FirebaseService } from '../../services/firebase.service';
-import { FirebaseAuthService } from '../../services/firebase-auth.service';
+import { User } from '../../../models/user.class';
+import { FirebaseService } from '../../../services/firebase.service';
+import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,

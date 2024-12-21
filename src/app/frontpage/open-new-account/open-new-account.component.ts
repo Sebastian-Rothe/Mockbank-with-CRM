@@ -18,10 +18,10 @@ import { MatDialogRef } from '@angular/material/dialog';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { User } from '../../models/user.class';
-import { FirebaseService } from '../../services/firebase.service';
+import { User } from '../../../models/user.class';
+import { FirebaseService } from '../../../services/firebase.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { FirebaseAuthService } from '../../services/firebase-auth.service';
+import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 
 @Component({
   selector: 'app-open-new-account',
