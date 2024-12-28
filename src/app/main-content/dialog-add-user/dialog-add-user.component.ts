@@ -37,20 +37,20 @@ export class DialogAddUserComponent {
 
   constructor(private firebaseService: FirebaseService, public dialogRef: MatDialogRef<DialogAddUserComponent>) {}
 
-  saveNewUser() {
-    this.user.birthDate = this.birthDate.getTime();
-    this.firebaseService
-      .addUser(this.user)
-      .then((docRef) => {
-        this.user.uid = docRef.id;
-        console.log('User added successfully with ID:', docRef.id);
-        console.log(this.user.uid);
-      })
-      .catch((error) => {
-        console.error('Error adding user:', error);
-      });
-    this.closeDialog();
-  }
+  // saveNewUser() {
+  //   this.user.birthDate = this.birthDate.getTime();
+  //   this.firebaseService
+  //     .addUser(this.user)
+  //     .then((docRef) => {
+  //       this.user.uid = docRef.id;
+  //       console.log('User added successfully with ID:', docRef.id);
+  //       console.log(this.user.uid);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error adding user:', error);
+  //     });
+  //   this.closeDialog();
+  // }
   
 
   closeDialog(): void {

@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, DocumentReference, DocumentData, collection, collectionData, addDoc, doc, updateDoc, deleteDoc, getDoc } from '@angular/fire/firestore';
+import { Firestore, DocumentReference, DocumentData, collection, collectionData, addDoc, doc, setDoc, updateDoc, deleteDoc, getDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.class';
 @Injectable({
@@ -22,14 +22,19 @@ export class FirebaseService {
    * @param user Der Benutzer, der hinzugefügt werden soll.
    * @returns Promise mit dem Ergebnis der Operation.
    */
-   addUser(user: User): Promise<DocumentReference<DocumentData>> {
+   async addUser(user: User): Promise<void> {
     const userData = user.toPlainObject();
-    Object.keys(userData).forEach(key => {
+  
+    // Entferne undefined-Werte
+    Object.keys(userData).forEach((key) => {
       if (userData[key] === undefined) {
         delete userData[key];
       }
     });
-    return addDoc(this.userCollection, userData);
+  
+    // Dokument mit der UID als ID erstellen
+    const userDocRef = doc(this.userCollection, user.uid); 
+    await setDoc(userDocRef, userData);
   }
   async getUser(userId: string): Promise<User | null> {
     try {

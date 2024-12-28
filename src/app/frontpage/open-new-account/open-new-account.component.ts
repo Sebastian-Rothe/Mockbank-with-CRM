@@ -125,11 +125,9 @@ export class OpenNewAccountComponent {
       .register(email, password)
       .then((firebaseUser) => {
         if (firebaseUser) {
-          // Schritt 2: Zusätzliche Daten in Firestore speichern
-          this.user.uid = firebaseUser.uid; // Verknüpfe UID aus Firebase Auth
+          // Zusätzliche Daten für Firestore-User setzen
+          this.user.uid = firebaseUser.uid; // UID aus Firebase Auth als ID für Firestore-Dokument
           this.user.email = firebaseUser.email || '';
-  
-          // Zusätzliche Formulardaten in das `user`-Objekt übernehmen
           this.user.countryCode =
             this.firstFormGroup.get('countryCode')?.value || '';
           this.user.phoneNumber =
@@ -148,22 +146,25 @@ export class OpenNewAccountComponent {
             this.thirdFormGroup.get('nationality')?.value || '';
           this.user.taxId = this.thirdFormGroup.get('taxId')?.value || '';
   
-          // Speichern des Benutzers in Firestore
+          // Benutzer in Firestore speichern
           this.firebaseService
             .addUser(this.user)
-            .then((docRef) => {
-              this.user.uid = docRef.id;
-              console.log('User added successfully with ID:', docRef.id);
+            .then(() => {
+              console.log('Benutzer erfolgreich gespeichert:', this.user.uid);
             })
             .catch((error) => {
-              console.error('Error adding user:', error);
+              console.error(
+                'Fehler beim Speichern des Benutzers in Firestore:',
+                error
+              );
             });
         }
       })
       .catch((error) => {
-        console.error('Error registering user:', error);
+        console.error('Fehler beim Registrieren des Benutzers:', error);
       });
   }
+  
   
   isLinear = false;
 }
