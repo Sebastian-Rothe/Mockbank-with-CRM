@@ -225,7 +225,7 @@
         [stepControl]="fourthFormGroup"
         errorMessage="Password is required."
       >
-        <form [formGroup]="fourthFormGroup">
+        <form class="form-4" [formGroup]="fourthFormGroup">
           <ng-template matStepLabel>Set Password</ng-template>
 
           <mat-form-field>
@@ -269,10 +269,31 @@
 
       <mat-step [editable]="false">
         <ng-template matStepLabel>Done</ng-template>
-        <p>Review your data and submit.</p>
-        <div>
-          <button mat-button matStepperPrevious>Back</button>
-          <button mat-button (click)="saveNewUser()">Send application</button>
+        <div class="form-done">
+          <div class="summary">
+            <h3>Summary of Your Information</h3>
+            <p><strong>Contact Information:</strong></p>
+            <p>Country Code: {{ firstFormGroup.get('countryCode')?.value }}</p>
+            <p>Phone Number: {{ firstFormGroup.get('phoneNumber')?.value }}</p>
+            <p>Email: {{ firstFormGroup.get('email')?.value }}</p>
+            <p><strong>Address Details:</strong></p>
+            <p>First Name: {{ secondFormGroup.get('firstName')?.value }}</p>
+            <p>Last Name: {{ secondFormGroup.get('lastName')?.value }}</p>
+            <p>City: {{ secondFormGroup.get('city')?.value }}</p>
+            <p><strong>Additional Information:</strong></p>
+            <p>Occupation: {{ thirdFormGroup.get('occupation')?.value }}</p>
+            <p>Nationality: {{ thirdFormGroup.get('nationality')?.value }}</p>
+          </div>
+          <div class="action-buttons">
+            <button mat-button (click)="stepper.selectedIndex = 0">Edit Data</button>
+            <button mat-raised-button color="primary" (click)="downloadPdf()">Download as PDF</button>
+        
+          </div>
+          <div class="align-next-btn">
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="saveNewUser()">Send application</button>
+          </div>
+       
         </div>
       </mat-step>
     </mat-stepper>
