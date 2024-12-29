@@ -95,9 +95,10 @@ export class OpenNewAccountComponent {
         '',
         [
           Validators.required,
-          Validators.pattern(
-            /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-          ),
+          // Validators.pattern(
+          //   /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+          // ),
+          Validators.minLength(6) // for testing
         ],
       ],
       confirmPassword: ['', Validators.required],

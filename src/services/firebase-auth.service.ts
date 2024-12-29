@@ -5,17 +5,21 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   User,
-  UserCredential
+  UserCredential,
 } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
 import { onAuthStateChanged } from 'firebase/auth';
-
 
 @Injectable({
   providedIn: 'root',
 })
 export class FirebaseAuthService {
-  constructor(private auth: Auth) {}
+  private uid: string | null = null; // UID speichern
+  constructor(private auth: Auth) {
+    this.getCurrentUser().subscribe((user) => {
+      this.uid = user?.uid || null;
+    });
+  }
 
   async register(email: string, password: string): Promise<User> {
     const userCredential = await createUserWithEmailAndPassword(
@@ -23,6 +27,7 @@ export class FirebaseAuthService {
       email,
       password
     );
+    this.uid = userCredential.user.uid; // UID setzen
     return userCredential.user;
   }
 
@@ -33,12 +38,14 @@ export class FirebaseAuthService {
       email,
       password
     );
+    this.uid = userCredential.user.uid; // UID setzen
     return userCredential.user;
   }
 
   // Abmelden
   async logout(): Promise<void> {
     await signOut(this.auth);
+    this.uid = null; // UID zurücksetzen
   }
 
   // Benutzerstatus beobachten
@@ -49,5 +56,8 @@ export class FirebaseAuthService {
       });
       return { unsubscribe };
     });
+  }
+  getUid(): string | null {
+    return this.uid;
   }
 }

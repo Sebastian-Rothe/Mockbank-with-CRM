@@ -1,1 +1,14 @@
-<p>dashboard works!</p>
+
+@if(user){
+    <div>
+        <h1>Willkommen, {{ user.firstName }}</h1>
+        <p>Email: {{ user.email }}</p>
+        <p>Telefon: {{ user.phoneNumber }}</p>
+        <!-- Weitere Felder hier -->
+      </div>
+} @else {
+    <ng-template #loading>
+      <p>Lade Benutzerdaten...</p>
+    </ng-template>
+} 
+  
