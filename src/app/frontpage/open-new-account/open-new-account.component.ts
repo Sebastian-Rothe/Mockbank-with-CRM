@@ -15,7 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialogRef } from '@angular/material/dialog';
-
+import { MatDialog } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { User } from '../../../models/user.class';
@@ -24,6 +24,8 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import jsPDF from 'jspdf'; // PDF-Bibliothek installieren: `npm install jspdf`
 import { Router } from '@angular/router';
+import { SuccessDialogComponent } from '../success-dialog/success-dialog.component';
+
 @Component({
   selector: 'app-open-new-account',
   standalone: true,
@@ -56,6 +58,7 @@ export class OpenNewAccountComponent {
   private _formBuilder = inject(FormBuilder);
   constructor(
     private router: Router,
+    private dialog: MatDialog,
     private firebaseService: FirebaseService,
     private firebaseAuthService: FirebaseAuthService
   ) {}
@@ -154,6 +157,15 @@ export class OpenNewAccountComponent {
             .then(() => {
               console.log('Benutzer erfolgreich gespeichert:', this.user.uid);
               // this.router.navigate(['/']);
+                    // Dialog öffnen
+                    const dialogRef = this.dialog.open(SuccessDialogComponent);
+
+                    // Dialog-Aktion abfangen
+                    dialogRef.afterClosed().subscribe((result) => {
+                      if (result === 'goToHome') {
+                        this.router.navigate(['/']);
+                      }
+                    });
             })
             .catch((error) => {
               console.error(
@@ -201,5 +213,5 @@ export class OpenNewAccountComponent {
     doc.save('Application_Summary.pdf');
   }
   
-  isLinear = true;
+  isLinear = false;
 }
