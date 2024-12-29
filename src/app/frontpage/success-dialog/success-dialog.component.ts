@@ -1,0 +1,38 @@
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-success-dialog',
+  standalone: true,
+  imports: [MatDialogModule,
+      // MatDialogClose,
+      MatFormFieldModule,
+      
+      MatInputModule,
+      MatDatepickerModule,
+      MatButtonModule,
+      FormsModule],
+  templateUrl: './success-dialog.component.html',
+  styleUrl: './success-dialog.component.scss'
+})
+export class SuccessDialogComponent {
+  constructor(
+    private dialogRef: MatDialogRef<SuccessDialogComponent>,
+    private router: Router
+  ) {}
+
+  close(): void {
+    this.dialogRef.close();
+  }
+
+  goToLogin(): void {
+    this.dialogRef.close();
+    this.router.navigate(['/login']); // Zur Login-Seite navigieren
+  }
+}

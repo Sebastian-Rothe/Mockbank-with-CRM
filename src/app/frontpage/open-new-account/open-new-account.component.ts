@@ -23,6 +23,7 @@ import { FirebaseService } from '../../../services/firebase.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import jsPDF from 'jspdf'; // PDF-Bibliothek installieren: `npm install jspdf`
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-open-new-account',
   standalone: true,
@@ -44,7 +45,7 @@ import jsPDF from 'jspdf'; // PDF-Bibliothek installieren: `npm install jspdf`
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-    
+   
   ],
   templateUrl: './open-new-account.component.html',
   styleUrl: './open-new-account.component.scss',
@@ -54,7 +55,7 @@ export class OpenNewAccountComponent {
   birthDate: Date = new Date();
   private _formBuilder = inject(FormBuilder);
   constructor(
-    
+    private router: Router,
     private firebaseService: FirebaseService,
     private firebaseAuthService: FirebaseAuthService
   ) {}
@@ -152,6 +153,7 @@ export class OpenNewAccountComponent {
             .addUser(this.user)
             .then(() => {
               console.log('Benutzer erfolgreich gespeichert:', this.user.uid);
+              // this.router.navigate(['/']);
             })
             .catch((error) => {
               console.error(
