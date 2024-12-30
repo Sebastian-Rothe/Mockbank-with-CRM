@@ -12,9 +12,10 @@ export const routes: Routes = [
     path: 'main',
     component: MainContentComponent,
     children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // Default-Route
       { path: 'dashboard', component: DashboardComponent },
       { path: 'user', component: UserComponent },
-      { path: 'user/:id', component: UserDetailComponent },
+      { path: 'user/:uid', component: UserDetailComponent },
     ],
   },
   { path: 'open-account', component: OpenNewAccountComponent },
