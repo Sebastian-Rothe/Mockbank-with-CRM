@@ -35,7 +35,7 @@ export class DialogEditUserAddressComponent {
   constructor(private firebaseService: FirebaseService, public dialogRef: MatDialogRef<DialogEditUserAddressComponent>) {}
   
   saveNewUser(user: any): Observable<void> {
-    const ref = doc(this.firebaseService.firestore, 'users', user.id);
+    const ref = doc(this.firebaseService.firestore, 'users', user.uid);
     this.closeDialog();
     return from(updateDoc(ref, { ...user }));
  }
