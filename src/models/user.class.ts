@@ -38,7 +38,7 @@ export class User {
   zipCode: string = '';
   city: string = '';
   accounts: string[] = [];
-  role: 'user' | 'admin' | 'support' = 'user';
+  role: 'user' | 'admin' | 'support' | 'management' = 'user';
   status?: 'active' | 'inactive' | 'closed' = 'active';
   profilePictureUrl?: string = '';
   assignedAdvisorId?: string = '';
