@@ -1,5 +1,5 @@
 
-<div class="full-width">
+<div class="full-width content-div">
   <form class="" [formGroup]="formGroup">
         <mat-form-field class="mr-16" appearance="outline">
             <mat-label>First Name</mat-label>
@@ -56,7 +56,7 @@
               special character, and a capital letter. </mat-error
             >}
           </mat-form-field>
-          <mat-form-field>
+          <mat-form-field class="mr-16" appearance="outline">
             <mat-label>Confirm Password</mat-label>
             <input
               matInput
@@ -71,8 +71,7 @@
             <mat-error> Passwords do not match. </mat-error>}
           </mat-form-field>
           <div class="align-next-btn">
-            <button mat-button matStepperPrevious>Back</button>
-            <button mat-button (click)="saveNewAdmin()">Send application</button>
+            <button mat-button (click)="saveNewAdmin()">Submit</button>
           </div>
     </form>
 
