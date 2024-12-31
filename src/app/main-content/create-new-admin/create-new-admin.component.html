@@ -1,0 +1,79 @@
+
+<div class="full-width">
+  <form class="" [formGroup]="formGroup">
+        <mat-form-field class="mr-16" appearance="outline">
+            <mat-label>First Name</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="firstName"
+              placeholder="Sebastian"
+            />
+          </mat-form-field>
+
+          <mat-form-field class="mr-16" appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <input
+              matInput
+              type="text"
+              formControlName="lastName"
+              placeholder="Rothe"
+            />
+          </mat-form-field>
+          <mat-form-field class="mr-16" appearance="outline">
+            <mat-label>Select Role</mat-label>
+            <mat-select formControlName="role">
+              @for (role of roles; track role) {
+                <mat-option [value]="role">{{ role }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        <mat-form-field class="mr-16" appearance="outline">
+            <mat-label>Email Address</mat-label>
+            <input
+              matInput
+              type="email"
+              placeholder="mail@sebastian-rothe.com"
+              formControlName="email"
+            />
+            @if(formGroup.get('email')?.hasError('email')){
+            <mat-error> Enter a valid email address. </mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field class="mr-16" appearance="outline">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              type="password"
+              formControlName="password"
+              placeholder="Enter your password"
+            />
+            @if(formGroup.get('password')?.hasError('required')){
+            <mat-error> Password is required. </mat-error>}
+            @if((formGroup.get('password')?.hasError('pattern'))){
+            <mat-error>
+              Password must be at least 8 characters and include a number, a
+              special character, and a capital letter. </mat-error
+            >}
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Confirm Password</mat-label>
+            <input
+              matInput
+              type="password"
+              formControlName="confirmPassword"
+              placeholder="Confirm your password"
+            />
+            @if(
+            formGroup.get('confirmPassword')?.hasError('required')){<mat-error>
+              Confirmation is required. </mat-error
+            >} @if(passwordMismatch){
+            <mat-error> Passwords do not match. </mat-error>}
+          </mat-form-field>
+          <div class="align-next-btn">
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button (click)="saveNewAdmin()">Send application</button>
+          </div>
+    </form>
+
+</div>

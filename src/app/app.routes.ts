@@ -5,6 +5,7 @@ import { UserDetailComponent } from './main-content/user-detail/user-detail.comp
 import { FrontpageComponent } from './frontpage/frontpage.component';
 import { OpenNewAccountComponent } from './frontpage/open-new-account/open-new-account.component';
 import { MainContentComponent } from './main-content/main-content.component';
+import { CreateNewAdminComponent } from './main-content/create-new-admin/create-new-admin.component';
 
 export const routes: Routes = [
   { path: '', component: FrontpageComponent },
@@ -16,6 +17,7 @@ export const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'user', component: UserComponent },
       { path: 'user/:uid', component: UserDetailComponent },
+      { path: 'new-admin', component: CreateNewAdminComponent },
     ],
   },
   { path: 'open-account', component: OpenNewAccountComponent },
