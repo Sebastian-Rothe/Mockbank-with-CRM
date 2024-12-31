@@ -8,7 +8,9 @@
           <mat-icon>dashboard</mat-icon> Dashboard
         </li>
         <li routerLink="/main/user"><mat-icon>person</mat-icon> User</li>
+        @if(user?.role === 'admin'){
         <li routerLink="/main/new-admin"><mat-icon>person_add</mat-icon> Create new Admin</li>
+        }
         <li (click)="logout()"><mat-icon>logout</mat-icon> Logout</li>
       </ul>
     </mat-drawer>

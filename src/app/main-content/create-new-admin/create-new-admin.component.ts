@@ -54,9 +54,9 @@ export class CreateNewAdminComponent {
         '',
         [
           Validators.required,
-          Validators.pattern(
-            /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-          ),
+          // Validators.pattern(
+          //   /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+          // ), => not in use
         ],
       ],
       confirmPassword: ['', Validators.required],

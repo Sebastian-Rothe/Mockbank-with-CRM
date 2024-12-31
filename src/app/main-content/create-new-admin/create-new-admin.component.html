@@ -1,6 +1,7 @@
 
 <div class="full-width content-div">
   <form class="" [formGroup]="formGroup">
+    <h2>Add a new Employee</h2>
         <mat-form-field class="mr-16" appearance="outline">
             <mat-label>First Name</mat-label>
             <input
@@ -50,11 +51,11 @@
             />
             @if(formGroup.get('password')?.hasError('required')){
             <mat-error> Password is required. </mat-error>}
-            @if((formGroup.get('password')?.hasError('pattern'))){
-            <mat-error>
+            <!-- @if((formGroup.get('password')?.hasError('pattern'))){
+            <mat-error class="align-error">
               Password must be at least 8 characters and include a number, a
               special character, and a capital letter. </mat-error
-            >}
+            >} -->
           </mat-form-field>
           <mat-form-field class="mr-16" appearance="outline">
             <mat-label>Confirm Password</mat-label>
