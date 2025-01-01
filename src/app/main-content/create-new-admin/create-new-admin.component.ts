@@ -16,6 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import { User } from '../../../models/user.class';
 import { FirebaseService } from '../../../services/firebase.service';
+import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-create-new-admin',
   standalone: true,
@@ -30,12 +31,14 @@ import { FirebaseService } from '../../../services/firebase.service';
     MatDatepickerModule,
     MatButtonModule,
     ReactiveFormsModule,
+    MatIcon
   ],
   templateUrl: './create-new-admin.component.html',
   styleUrl: './create-new-admin.component.scss',
 })
 export class CreateNewAdminComponent {
   // formGroup: FormGroup;
+  passwordVisible = false;
   user = new User();
   roles: string[] = ['user', 'admin', 'support', 'management'];
   private _formBuilder = inject(FormBuilder);

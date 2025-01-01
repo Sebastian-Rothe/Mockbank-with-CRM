@@ -230,12 +230,11 @@
 
           <mat-form-field>
             <mat-label>Password</mat-label>
-            <input
-              matInput
-              type="password"
-              formControlName="password"
-              placeholder="Enter your password"
-            />
+            <input name="password" formControlName="password" matInput [type]="passwordVisible ? 'text' : 'password'">
+            <button mat-icon-button matSuffix (click)="passwordVisible = !passwordVisible" [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="!passwordVisible">
+              <mat-icon>{{passwordVisible ? 'visibility' : 'visibility_off'}}</mat-icon>
+            </button>
             @if(fourthFormGroup.get('password')?.hasError('required')){
             <mat-error> Password is required. </mat-error>}
             @if((fourthFormGroup.get('password')?.hasError('pattern'))){

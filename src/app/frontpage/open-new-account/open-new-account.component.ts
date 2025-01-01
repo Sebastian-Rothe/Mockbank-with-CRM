@@ -214,4 +214,6 @@ export class OpenNewAccountComponent {
   }
   
   isLinear = false;
+
+  passwordVisible = false;
 }

@@ -8,13 +8,16 @@ import { User } from '../../../models/user.class';
   standalone: true,
   imports: [],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent implements OnInit {
   uid: string | null = null;
   user: User | null = null; // Benutzerdaten
 
-  constructor(private authService: FirebaseAuthService,  private firebaseService: FirebaseService) {}
+  constructor(
+    private authService: FirebaseAuthService,
+    private firebaseService: FirebaseService
+  ) {}
 
   ngOnInit(): void {
     this.uid = this.authService.getUid();
