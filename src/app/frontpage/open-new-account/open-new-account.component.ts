@@ -47,7 +47,6 @@ import { SuccessDialogComponent } from '../success-dialog/success-dialog.compone
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
-   
   ],
   templateUrl: './open-new-account.component.html',
   styleUrl: './open-new-account.component.scss',
@@ -102,7 +101,7 @@ export class OpenNewAccountComponent {
           // Validators.pattern(
           //   /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
           // ),
-          Validators.minLength(6) // for testing
+          Validators.minLength(6), // for testing
         ],
       ],
       confirmPassword: ['', Validators.required],
@@ -125,7 +124,7 @@ export class OpenNewAccountComponent {
   saveNewUser() {
     const email = this.firstFormGroup.get('email')?.value || '';
     const password = this.fourthFormGroup.get('password')?.value || '';
-  
+
     this.firebaseAuthService
       .register(email, password)
       .then((firebaseUser) => {
@@ -139,7 +138,8 @@ export class OpenNewAccountComponent {
             this.firstFormGroup.get('phoneNumber')?.value || '';
           this.user.firstName =
             this.secondFormGroup.get('firstName')?.value || '';
-          this.user.lastName = this.secondFormGroup.get('lastName')?.value || '';
+          this.user.lastName =
+            this.secondFormGroup.get('lastName')?.value || '';
           this.user.birthDate = this.birthDate.getTime();
           this.user.streetAddress =
             this.secondFormGroup.get('streetAddress')?.value || '';
@@ -150,22 +150,22 @@ export class OpenNewAccountComponent {
           this.user.nationality =
             this.thirdFormGroup.get('nationality')?.value || '';
           this.user.taxId = this.thirdFormGroup.get('taxId')?.value || '';
-  
+
           // Benutzer in Firestore speichern
           this.firebaseService
             .addUser(this.user)
             .then(() => {
               console.log('Benutzer erfolgreich gespeichert:', this.user.uid);
               // this.router.navigate(['/']);
-                    // Dialog öffnen
-                    const dialogRef = this.dialog.open(SuccessDialogComponent);
+              // Dialog öffnen
+              const dialogRef = this.dialog.open(SuccessDialogComponent);
 
-                    // Dialog-Aktion abfangen
-                    dialogRef.afterClosed().subscribe((result) => {
-                      if (result === 'goToHome') {
-                        this.router.navigate(['/']);
-                      }
-                    });
+              // Dialog-Aktion abfangen
+              dialogRef.afterClosed().subscribe((result) => {
+                if (result === 'goToHome') {
+                  this.router.navigate(['/']);
+                }
+              });
             })
             .catch((error) => {
               console.error(
@@ -179,41 +179,77 @@ export class OpenNewAccountComponent {
         console.error('Fehler beim Registrieren des Benutzers:', error);
       });
   }
-  
+
   downloadPdf() {
     const doc = new jsPDF();
     // Titel
     doc.setFontSize(16);
     doc.text('Application Summary', 10, 10);
-  
+
     // Kontaktinformationen
     doc.setFontSize(12);
     doc.text('Contact Information:', 10, 20);
-    doc.text(`Country Code: ${this.firstFormGroup.get('countryCode')?.value || 'N/A'}`, 10, 30);
-    doc.text(`Phone Number: ${this.firstFormGroup.get('phoneNumber')?.value || 'N/A'}`, 10, 40);
-    doc.text(`Email: ${this.firstFormGroup.get('email')?.value || 'N/A'}`, 10, 50);
-  
+    doc.text(
+      `Country Code: ${this.firstFormGroup.get('countryCode')?.value || 'N/A'}`,
+      10,
+      30
+    );
+    doc.text(
+      `Phone Number: ${this.firstFormGroup.get('phoneNumber')?.value || 'N/A'}`,
+      10,
+      40
+    );
+    doc.text(
+      `Email: ${this.firstFormGroup.get('email')?.value || 'N/A'}`,
+      10,
+      50
+    );
+
     // Adressdetails
     doc.text('Address Details:', 10, 60);
-    doc.text(`First Name: ${this.secondFormGroup.get('firstName')?.value || 'N/A'}`, 10, 70);
-    doc.text(`Last Name: ${this.secondFormGroup.get('lastName')?.value || 'N/A'}`, 10, 80);
-    doc.text(`City: ${this.secondFormGroup.get('city')?.value || 'N/A'}`, 10, 90);
-  
+    doc.text(
+      `First Name: ${this.secondFormGroup.get('firstName')?.value || 'N/A'}`,
+      10,
+      70
+    );
+    doc.text(
+      `Last Name: ${this.secondFormGroup.get('lastName')?.value || 'N/A'}`,
+      10,
+      80
+    );
+    doc.text(
+      `City: ${this.secondFormGroup.get('city')?.value || 'N/A'}`,
+      10,
+      90
+    );
+
     // Zusätzliche Informationen
     doc.text('Additional Information:', 10, 100);
-    doc.text(`Occupation: ${this.thirdFormGroup.get('occupation')?.value || 'N/A'}`, 10, 110);
-    doc.text(`Nationality: ${this.thirdFormGroup.get('nationality')?.value || 'N/A'}`, 10, 120);
-  
+    doc.text(
+      `Occupation: ${this.thirdFormGroup.get('occupation')?.value || 'N/A'}`,
+      10,
+      110
+    );
+    doc.text(
+      `Nationality: ${this.thirdFormGroup.get('nationality')?.value || 'N/A'}`,
+      10,
+      120
+    );
+
     // Footer mit Datum
     const currentDate = new Date().toLocaleDateString();
     doc.setFontSize(10);
     doc.text(`Generated on: ${currentDate}`, 10, 280);
-  
+
     // PDF speichern
     doc.save('Application_Summary.pdf');
   }
-  
+
   isLinear = false;
 
   passwordVisible = false;
+
+  exit(): void {
+    this.router.navigate(['/']); // Navigiert zur Startseite oder einer anderen definierten Route
+  }
 }
