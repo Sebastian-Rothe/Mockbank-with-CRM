@@ -98,7 +98,7 @@ export class CreateNewAdminComponent {
           this.user.role = this.formGroup.get('role')?.value || '';
           // Benutzer in Firestore speichern
           this.firebaseService
-            .addUser(this.user)
+            .addUserWithAccount(this.user)
             .then(() => {
               console.log('Benutzer erfolgreich gespeichert:', this.user.uid);
               // // this.router.navigate(['/']);

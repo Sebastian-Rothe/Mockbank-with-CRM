@@ -153,7 +153,8 @@ export class OpenNewAccountComponent {
 
           // Benutzer in Firestore speichern
           this.firebaseService
-            .addUser(this.user)
+            // .addUser(this.user)
+            .addUserWithAccount(this.user)
             .then(() => {
               console.log('Benutzer erfolgreich gespeichert:', this.user.uid);
               // this.router.navigate(['/']);

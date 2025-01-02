@@ -42,7 +42,7 @@ export class DialogAddUserComponent {
   saveNewUser() {
     this.user.birthDate = this.birthDate.getTime();
     this.firebaseService
-      .addUser(this.user)
+      .addUserWithAccount(this.user)
       // .then((docRef) => {
       //   this.user.uid = docRef.uid;
       //   console.log('User added successfully with ID:', docRef.id);
