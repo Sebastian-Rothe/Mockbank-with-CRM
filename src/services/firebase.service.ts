@@ -165,6 +165,18 @@ export class FirebaseService {
       throw error;
     }
   }
+
+
+  async getAccount(accountId: string): Promise<{ name: string; balance: number }> {
+    const accountDocRef = doc(this.firestore, 'accounts', accountId);
+    const accountSnap = await getDoc(accountDocRef);
+  
+    if (accountSnap.exists()) {
+      return accountSnap.data() as { name: string; balance: number };
+    } else {
+      throw new Error('Account not found');
+    }
+  }
   
   
 }

@@ -1,14 +1,42 @@
-
-@if(user){
-    <div>
-        <h1>Willkommen, {{ user.firstName }}</h1>
-        <p>Email: {{ user.email }}</p>
-        <p>Telefon: {{ user.phoneNumber }}</p>
-        <!-- Weitere Felder hier -->
+@if(user){ @if(user.role === 'admin') {
+<div>
+  <h1>Willkommen, {{ user.firstName }}</h1>
+  <p>Email: {{ user.email }}</p>
+  <p>Telefon: {{ user.phoneNumber }}</p>
+  <!-- Weitere Felder hier -->
+</div>
+} @else if(user.role === 'user') {
+  <div>
+    <mat-card appearance="outlined" class="card-header m-32">
+      <!-- <button mat-icon-button class="address-menu-btn" [matMenuTriggerFor]="userDetail" aria-label="open address data for changes" >
+        <mat-icon>more_vert</mat-icon>
+      </button> -->
+      <!-- <mat-menu #userDetail="matMenu">
+        <button mat-menu-item (click)="editUserDetail()">Edit</button>
+        <button mat-menu-item>Item 2</button>
+      </mat-menu> -->
+      <!-- <mat-card-content>Simple card</mat-card-content> -->
+      <div>
+        <div class="total-balance">
+          <h4>Total Balance: {{ totalBalance }}€</h4>
+        
+        </div>
+        <img src="assets/img/avatar-7964941_1280.png" alt="Customer-Avatar" />
+        <div>
+          <h3>{{ user.firstName }} {{ user.lastName }}</h3>
+          <p>{{ user.email }}</p>
+          <!-- kundennummer -->
+        </div>
       </div>
-} @else {
-    <ng-template #loading>
-      <p>Lade Benutzerdaten...</p>
-    </ng-template>
-} 
-  
+    </mat-card>
+    <div class="align-btn">
+      <button mat-flat-button>Basic</button>
+      <button mat-flat-button>Basic</button>
+      <button mat-flat-button>Basic</button>
+    </div>
+  </div>
+
+} @else {<ng-template #loading>
+  <p>Lade Benutzerdaten...</p>
+</ng-template>}
+ }

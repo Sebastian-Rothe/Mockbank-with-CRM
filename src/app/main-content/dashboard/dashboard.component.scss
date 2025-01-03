@@ -1,0 +1,46 @@
+.card-header {
+    background-color: aquamarine;
+    height: 30vh;
+    display: flex;
+    justify-content: flex-end;
+    padding: 24px;
+    margin-bottom: 32px;
+    div {
+      display: flex;
+      align-items: center;
+      img {
+        height: 150px;
+        width: 150px;
+      }
+      div{
+          h3{
+              font-size: 2rem;
+          }
+          margin-left: 12px;
+          flex-direction: column;
+          align-items: flex-start;
+      }
+    }
+  }
+//   .address-menu-btn{
+//     position: absolute;
+//     top: 8px;
+//     right: 4px;
+//   cursor: pointer;
+//   }
+
+  .align-btn{
+    display: flex;
+    justify-content: space-evenly;
+  }
+  
+  .total-balance{
+    position: absolute;
+    top: 44px;
+    right: 44px;
+    display: flex;
+    >p{
+        text-align: right;
+    }
+
+  }
