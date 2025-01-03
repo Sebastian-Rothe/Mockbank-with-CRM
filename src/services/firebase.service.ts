@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { Firestore, DocumentReference, DocumentData, collection, collectionData, addDoc, doc, setDoc, updateDoc, deleteDoc, getDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.class';
+import { Transfer } from '../models/transfer.class';
 @Injectable({
   providedIn: 'root'
 })
@@ -65,6 +66,7 @@ export class FirebaseService {
       const accountData = {
         accountId,
         userId: user.uid,
+        fullname: `${user.firstName} ${user.lastName}`, // Vollständiger Name des Benutzers
         balance: 1000,
         currency: 'EUR',
         createdAt: Date.now(),
@@ -109,5 +111,60 @@ export class FirebaseService {
       return null;
     }
   }
+
+
+  async transferFunds(
+    senderAccountId: string,
+    receiverAccountId: string,
+    amount: number,
+    description?: string
+  ): Promise<void> {
+    try {
+      // Zugriff auf Sender- und Empfänger-Dokumente
+      const senderDocRef = doc(this.accountCollection, senderAccountId);
+      const receiverDocRef = doc(this.accountCollection, receiverAccountId);
+  
+      const senderSnap = await getDoc(senderDocRef);
+      const receiverSnap = await getDoc(receiverDocRef);
+  
+      // Sicherstellen, dass beide Dokumente existieren
+      if (!senderSnap.exists() || !receiverSnap.exists()) {
+        throw new Error('Sender or receiver account not found.');
+      }
+  
+      // Typisierte Daten abrufen
+      const senderData = senderSnap.data() as { balance: number; fullname: string };
+      const receiverData = receiverSnap.data() as { balance: number; fullname: string };
+  
+      // Prüfen, ob der Sender genügend Guthaben hat
+      if (senderData.balance < amount) {
+        throw new Error('Insufficient funds.');
+      }
+  
+      // Transfer-Daten erstellen
+      const transfer = new Transfer({
+        senderAccountId,
+        senderFullName: senderData.fullname,
+        receiverAccountId,
+        receiverFullName: receiverData.fullname,
+        amount,
+        description,
+      });
+  
+      // Transfer in Firestore speichern
+      const transferDocRef = doc(collection(this.firestore, 'transfers'), transfer.transferId);
+      await setDoc(transferDocRef, transfer.toPlainObject());
+  
+      // Kontostände aktualisieren
+      await updateDoc(senderDocRef, { balance: senderData.balance - amount });
+      await updateDoc(receiverDocRef, { balance: receiverData.balance + amount });
+  
+      console.log('Transfer completed successfully!');
+    } catch (error) {
+      console.error('Error processing transfer:', error);
+      throw error;
+    }
+  }
+  
   
 }
