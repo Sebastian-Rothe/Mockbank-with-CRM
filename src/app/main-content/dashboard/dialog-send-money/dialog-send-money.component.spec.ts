@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DialogSentMoneyComponent } from './dialog-sent-money.component';
+import { DialogSentMoneyComponent } from './dialog-send-money.component';
 
 describe('DialogSentMoneyComponent', () => {
   let component: DialogSentMoneyComponent;
