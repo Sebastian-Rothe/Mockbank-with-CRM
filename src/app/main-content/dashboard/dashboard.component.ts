@@ -4,7 +4,10 @@ import { FirebaseService } from '../../../services/firebase.service';
 import { User } from '../../../models/user.class';
 import { MatCard } from '@angular/material/card';
 import { MatButton, MatButtonModule } from '@angular/material/button';
-
+import { MatDialog } from '@angular/material/dialog';
+import { DialogSendMoneyComponent } from './dialog-send-money/dialog-send-money.component';
+import { DialogOpenNewPocketComponent } from './dialog-open-new-pocket/dialog-open-new-pocket.component';
+import { DialogMoveMoneyComponent } from './dialog-move-money/dialog-move-money.component';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -20,7 +23,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private authService: FirebaseAuthService,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -58,5 +62,15 @@ export class DashboardComponent implements OnInit {
     } catch (error) {
       console.error('Error loading accounts:', error);
     }
+  }
+
+  openSendMoneyDialog(): void {
+    this.dialog.open(DialogSendMoneyComponent);
+  }
+  openNewPocketDialog(): void {
+    this.dialog.open(DialogOpenNewPocketComponent);
+  }
+  openMoveMoneyDialog(): void {
+    this.dialog.open(DialogMoveMoneyComponent);
   }
 }

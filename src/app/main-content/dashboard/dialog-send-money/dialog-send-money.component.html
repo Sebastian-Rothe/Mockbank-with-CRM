@@ -1,39 +1,47 @@
 <div mat-dialog-content>
   <div class="name-container">
     <mat-form-field class="mr-16" appearance="outline">
-      <mat-label>Recipient</mat-label>
+      <mat-label>Sender Account ID</mat-label>
       <input
-        [(ngModel)]="account.accountId"
+        [(ngModel)]="transfer.senderAccountId"
         matInput
-        placeholder="First Name"
+        placeholder="Sender Account ID"
       />
-      <!-- <mat-hint>Please enter your first name</mat-hint> -->
     </mat-form-field>
     <mat-form-field class="mr-16" appearance="outline">
-      <mat-label>Recipient ID</mat-label>
-      <input [(ngModel)]="account.fullname" matInput placeholder="First Name" />
-      <!-- <mat-hint>Please enter your first name</mat-hint> -->
+      <mat-label>Recipient Account ID</mat-label>
+      <input
+        [(ngModel)]="transfer.receiverAccountId"
+        matInput
+        placeholder="Recipient Account ID"
+      />
     </mat-form-field>
   </div>
 
   <div class="name-container">
     <mat-form-field class="mr-16" appearance="outline">
       <mat-label>Amount (€)</mat-label>
-      <input [(ngModel)]="" />
-    </mat-form-field>
-    <mat-form-field class="mr-16" appearance="outline">
-      <mat-label>currency</mat-label>
-      <input [(ngModel)]="" />
-      <!-- maybe a mat select would be nice here -->
+      <input
+        type="number"
+        [(ngModel)]="transfer.amount"
+        matInput
+        placeholder="Amount"
+      />
     </mat-form-field>
     <mat-form-field class="mr-16" appearance="outline">
       <mat-label>Description</mat-label>
-      <textarea matInput placeholder="Description"></textarea>
+      <textarea
+        [(ngModel)]="transfer.description"
+        matInput
+        placeholder="Description (optional)"
+      ></textarea>
     </mat-form-field>
   </div>
 </div>
 
 <mat-dialog-actions>
   <button mat-button (click)="closeDialog()">Cancel</button>
-  <button mat-button (click)="send()" cdkFocusInitial>Send</button>
+  <button mat-button color="primary" (click)="sendMoney()">
+    Send
+  </button>
 </mat-dialog-actions>

@@ -1,64 +1,33 @@
+<h2>Create New Account</h2>
+<form (ngSubmit)="createAccount()">
+  <!-- <mat-form-field appearance="fill">
+    <mat-label>Account Name</mat-label>
+    <input matInput [(ngModel)]="account.accountId" name="accountId" required />
+  </mat-form-field> -->
 
-<div mat-dialog-content>
-    <div class="name-container">
-      <mat-form-field class="mr-16" appearance="outline">
-        <mat-label>First Name</mat-label>
-        <input [(ngModel)]="user.firstName" matInput placeholder="First Name" />
-        <!-- <mat-hint>Please enter your first name</mat-hint> -->
-      </mat-form-field>
-  
-      <mat-form-field appearance="outline">
-        <mat-label>Last Name</mat-label>
-        <input [(ngModel)]="user.lastName" matInput placeholder="Last Name" />
-        <!-- <mat-hint>Please enter your last name</mat-hint> -->
-      </mat-form-field>
-    </div>
-  
-    <div class="name-container">
-      <mat-form-field class="mr-16" appearance="outline">
-        <mat-label>Birth Date</mat-label>
-        <input [(ngModel)]="birthDate" matInput [matDatepicker]="picker" />
-        <mat-datepicker-toggle
-          matIconSuffix
-          [for]="picker"
-        ></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-        <mat-hint>MM/DD/YYYY</mat-hint>
-      </mat-form-field>
-      <mat-form-field class="mr-16" appearance="outline">
-        <mat-label>Select Role</mat-label>
-        <mat-select [(ngModel)]="user.role" name="role">
-          @for (role of roles; track role) {
-            <mat-option [value]="role">{{ role }}</mat-option>
-          }
-        </mat-select>
-      </mat-form-field>
-    </div>
-  
-    <div>
-      <mat-form-field class="full-width" appearance="outline">
-        <mat-label>Street Address</mat-label>
-        <input [(ngModel)]="user.streetAddress" matInput placeholder="Street Address" />
-        <!-- <mat-hint>Please enter your last name</mat-hint> -->
-      </mat-form-field>
-    </div>
-    <div>
-      <mat-form-field class="mr-16" appearance="outline">
-        <mat-label>Zip Code</mat-label>
-        <input [(ngModel)]="user.zipCode" matInput placeholder="Zip Code" />
-        <!-- <mat-hint>Please enter your last name</mat-hint> -->
-      </mat-form-field>
-  
-      <mat-form-field appearance="outline">
-        <mat-label>City</mat-label>
-        <input [(ngModel)]="user.city" matInput placeholder="City" />
-        <!-- <mat-hint>Please enter your last name</mat-hint> -->
-      </mat-form-field>
-    </div>
+  <mat-form-field appearance="fill">
+    <mat-label>Initial Balance</mat-label>
+    <input
+      matInput
+      type="number"
+      [(ngModel)]="account.balance"
+      name="balance"
+      required
+      min="1"
+    />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Currency</mat-label>
+    <mat-select [(ngModel)]="account.currency" name="currency" required>
+      <mat-option value="EUR">EUR</mat-option>
+      <mat-option value="USD">USD</mat-option>
+      <mat-option value="GBP">GBP</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="actions">
+    <button mat-button type="button" (click)="closeDialog()">Cancel</button>
+    <button mat-raised-button color="primary" type="submit">Create</button>
   </div>
-  
-  <mat-dialog-actions>
-    <button mat-button (click)="closeDialog()">Cancel</button>
-    <button mat-button (click)="saveNewUser()" cdkFocusInitial>Save</button>
-  </mat-dialog-actions>
-  
+</form>

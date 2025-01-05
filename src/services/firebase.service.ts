@@ -178,5 +178,38 @@ export class FirebaseService {
     }
   }
   
+  async addAccount(userId: string, accountDetails: { balance: number; currency: string }): Promise<void> {
+    try {
+      const accountId = `ACC-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+      const accountData = {
+        accountId,
+        userId,
+        balance: accountDetails.balance,
+        currency: accountDetails.currency,
+        createdAt: Date.now(),
+      };
+  
+      // Account in Firestore hinzufügen
+      const accountDocRef = doc(this.accountCollection, accountId);
+      await setDoc(accountDocRef, accountData);
+  
+      // Account-ID zum Benutzer-Dokument hinzufügen
+      const userDocRef = doc(this.firestore, 'users', userId);
+      const userSnap = await getDoc(userDocRef);
+  
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        const accounts = userData['accounts'] || [];
+        accounts.push(accountId);
+        await updateDoc(userDocRef, { accounts });
+      } else {
+        throw new Error('User not found.');
+      }
+    } catch (error) {
+      console.error('Error adding account:', error);
+      throw error;
+    }
+  }
+  
   
 }
