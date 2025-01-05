@@ -3,23 +3,27 @@ import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import { FirebaseService } from '../../../services/firebase.service';
 import { User } from '../../../models/user.class';
 import { MatCard } from '@angular/material/card';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogSendMoneyComponent } from './dialog-send-money/dialog-send-money.component';
 import { DialogOpenNewPocketComponent } from './dialog-open-new-pocket/dialog-open-new-pocket.component';
 import { DialogMoveMoneyComponent } from './dialog-move-money/dialog-move-money.component';
+import { MatCardModule } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { Account } from '../../../models/account.class';  // Import der Account-Klasse
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [MatCard, MatButtonModule],
+  imports: [MatCard, MatButtonModule, MatCardModule, MatIcon],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss',
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
   uid: string | null = null;
   user: User | null = null; // Benutzerdaten
   totalBalance: number = 0; // Gesamtsumme der Konten
-  userAccounts: { name: string; balance: number }[] = []; // Kontodetails
+  userAccounts: Account[] = []; // Array von Account-Objekten, statt nur einem Account-Objekt
 
   constructor(
     private authService: FirebaseAuthService,
@@ -34,6 +38,7 @@ export class DashboardComponent implements OnInit {
       this.loadUser(this.uid);
     }
   }
+
   async loadUser(uid: string): Promise<void> {
     try {
       this.user = await this.firebaseService.getUser(uid);
@@ -52,7 +57,7 @@ export class DashboardComponent implements OnInit {
       const accounts = await Promise.all(
         accountIds.map(async (accountId) => {
           const accountData = await this.firebaseService.getAccount(accountId);
-          return { name: accountData.name, balance: accountData.balance };
+          return Account.fromJson(accountData);  // Umwandlung in Account-Objekt mit fromJson
         })
       );
 
@@ -63,13 +68,16 @@ export class DashboardComponent implements OnInit {
       console.error('Error loading accounts:', error);
     }
   }
+  
 
   openSendMoneyDialog(): void {
     this.dialog.open(DialogSendMoneyComponent);
   }
+
   openNewPocketDialog(): void {
     this.dialog.open(DialogOpenNewPocketComponent);
   }
+
   openMoveMoneyDialog(): void {
     this.dialog.open(DialogMoveMoneyComponent);
   }

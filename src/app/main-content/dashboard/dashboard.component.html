@@ -35,6 +35,27 @@
       <button mat-stroked-button (click)="openMoveMoneyDialog()">Move money to different account</button>
       <button mat-raised-button (click)="openNewPocketDialog()">Open new Pocket</button>
     </div>
+<div class="align-card">
+  @for(account of userAccounts; track $index) {
+    <mat-card appearance="outlined">
+      <mat-card-content>
+        <div class="account-header">
+          <h3>{{ account.accountId }}</h3>
+          <p>{{ account.balance }}€</p>
+        </div>
+        <div class="account-actions">
+          <button mat-icon-button (click)="openSendMoneyDialog()">
+            <mat-icon>send</mat-icon>
+          </button>
+          <button mat-icon-button (click)="openMoveMoneyDialog()">
+            <mat-icon>swap_horiz</mat-icon>
+          </button>
+         
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>
   </div>
 
 } @else {<ng-template #loading>

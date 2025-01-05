@@ -1,27 +1,27 @@
 .card-header {
-    background-color: aquamarine;
-    height: 30vh;
+  background-color: aquamarine;
+  height: 30vh;
+  display: flex;
+  justify-content: flex-end;
+  padding: 24px;
+  margin-bottom: 32px;
+  div {
     display: flex;
-    justify-content: flex-end;
-    padding: 24px;
-    margin-bottom: 32px;
+    align-items: center;
+    img {
+      height: 150px;
+      width: 150px;
+    }
     div {
-      display: flex;
-      align-items: center;
-      img {
-        height: 150px;
-        width: 150px;
+      h3 {
+        font-size: 2rem;
       }
-      div{
-          h3{
-              font-size: 2rem;
-          }
-          margin-left: 12px;
-          flex-direction: column;
-          align-items: flex-start;
-      }
+      margin-left: 12px;
+      flex-direction: column;
+      align-items: flex-start;
     }
   }
+}
 //   .address-menu-btn{
 //     position: absolute;
 //     top: 8px;
@@ -29,18 +29,26 @@
 //   cursor: pointer;
 //   }
 
-  .align-btn{
-    display: flex;
-    justify-content: space-evenly;
-  }
-  
-  .total-balance{
-    position: absolute;
-    top: 44px;
-    right: 44px;
-    display: flex;
-    >p{
-        text-align: right;
-    }
+.align-btn {
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: space-evenly;
+}
 
+.total-balance {
+  position: absolute;
+  top: 44px;
+  right: 44px;
+  display: flex;
+  > p {
+    text-align: right;
   }
+  .align-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px !important;
+    > mat-card {
+      margin-bottom: 16px;
+    }
+  }
+}

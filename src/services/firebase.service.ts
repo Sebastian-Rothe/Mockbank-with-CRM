@@ -167,16 +167,43 @@ export class FirebaseService {
   }
 
 
-  async getAccount(accountId: string): Promise<{ name: string; balance: number }> {
+  // async getAccount(accountId: string): Promise<{ name: string; balance: number }> {
+  //   const accountDocRef = doc(this.firestore, 'accounts', accountId);
+  //   const accountSnap = await getDoc(accountDocRef);
+  
+  //   if (accountSnap.exists()) {
+  //     return accountSnap.data() as { name: string; balance: number };
+  //   } else {
+  //     throw new Error('Account not found');
+  //   }
+  // }
+  // Beispiel einer getAccount Methode
+// async getAccount(accountId: string): Promise<any> {
+//   const accountRef = this.firestore.collection('accounts').doc(accountId);
+//   const accountSnapshot = await accountRef.get();
+//   if (accountSnapshot.exists) {
+//     return accountSnapshot.data(); // Gibt die Account-Daten als JSON zurück
+//   } else {
+//     throw new Error('Account not found');
+//   }
+// }
+async getAccount(accountId: string): Promise<any> {
+  try {
+    // Zugriff auf das Account-Dokument in der "accounts"-Sammlung
     const accountDocRef = doc(this.firestore, 'accounts', accountId);
     const accountSnap = await getDoc(accountDocRef);
-  
+
     if (accountSnap.exists()) {
-      return accountSnap.data() as { name: string; balance: number };
+      return accountSnap.data();
     } else {
       throw new Error('Account not found');
     }
+  } catch (error) {
+    console.error('Error getting account:', error);
+    throw error;
   }
+}
+
   
   async addAccount(userId: string, accountDetails: { balance: number; currency: string }): Promise<void> {
     try {
