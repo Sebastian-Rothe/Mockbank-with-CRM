@@ -24,7 +24,7 @@
         <img src="assets/img/avatar-7964941_1280.png" alt="Customer-Avatar" />
         <div>
           <h3>{{ user.firstName }} {{ user.lastName }}</h3>
-          <p>{{ user.accounts[0] }}</p>
+          <p>{{ user.email }}</p>
           <!-- <p>{{ user.email }}</p> -->
           <!-- kundennummer -->
         </div>
@@ -40,6 +40,9 @@
     <mat-card appearance="outlined">
       <mat-card-content>
         <div class="account-header">
+          <!-- @if(account.accountName){ -->
+            <h3>{{ account.accountName }}</h3>
+          <!-- } -->
           <h3>{{ account.accountId }}</h3>
           <p>{{ account.balance }}€</p>
         </div>

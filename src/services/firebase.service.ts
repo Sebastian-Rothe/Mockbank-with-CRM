@@ -205,12 +205,13 @@ async getAccount(accountId: string): Promise<any> {
 }
 
   
-  async addAccount(userId: string, accountDetails: { balance: number; currency: string }): Promise<void> {
+  async addAccount(userId: string, accountDetails: {accountName: string; balance: number; currency: string}): Promise<void> {
     try {
       const accountId = `ACC-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
       const accountData = {
         accountId,
         userId,
+        accountName: accountDetails.accountName,
         balance: accountDetails.balance,
         currency: accountDetails.currency,
         createdAt: Date.now(),
