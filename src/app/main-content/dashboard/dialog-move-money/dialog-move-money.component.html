@@ -19,7 +19,7 @@
   <mat-form-field appearance="fill">
     <mat-label>Account</mat-label>
     <mat-select  name="account" required>
-        @for(account of user.accounts; track $index) {
+        @for(account of user?.accounts; track $index) {
         
                 <mat-option value="{{ account }}">{{ account }}</mat-option>
             
@@ -27,7 +27,7 @@
   
     </mat-select>
   </mat-form-field>
-  <mat-form-field appearance="fill">
+  <!-- <mat-form-field appearance="fill">
     <mat-label>Account</mat-label>
     
     <input
@@ -37,7 +37,7 @@
       name="accountName"
       required
     />
-  </mat-form-field>
+  </mat-form-field> -->
   <!-- <mat-form-field appearance="fill">
     <mat-label>Name</mat-label>
     <input
