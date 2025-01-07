@@ -34,7 +34,7 @@ import { FirebaseAuthService } from '../../../../services/firebase-auth.service'
 export class DialogMoveMoneyComponent {
     uid: string | null = null; // User-ID
     user: User | null = null;
-    account: Account = new Account(); // Neues Konto
+    // acc: Account = new Account(); // Neues Konto
     transfer = new Transfer(); // Neuer Transfer  
     totalBalance: number = 0; // Gesamtsumme der Konten
     userAccounts: Account[] = []; // Array von Account-Objekten, statt nur einem Account-Objekt
@@ -85,7 +85,7 @@ export class DialogMoveMoneyComponent {
     }
 
 moveMoney(): void {
-    // Hier wird der Code zum Senden des Geldes eingefügt
+    
     this.closeDialog();
   }
   closeDialog(): void {
