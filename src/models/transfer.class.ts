@@ -1,9 +1,9 @@
 export class Transfer {
     transferId: string;
     senderAccountId: string = '';
-    // senderFullName: string = '';
+    senderUserId: string = ''; // Neue Eigenschaft
     receiverAccountId: string = '';
-    // receiverFullName: string = '';
+    receiverUserId: string = ''; // Neue Eigenschaft
     amount: number = 0;
     currency: string = 'EUR';
     createdAt: number;
@@ -22,9 +22,9 @@ export class Transfer {
       return {
         transferId: this.transferId,
         senderAccountId: this.senderAccountId,
-        // senderFullName: this.senderFullName,
+        senderUserId: this.senderUserId,
         receiverAccountId: this.receiverAccountId,
-        // receiverFullName: this.receiverFullName,
+        receiverUserId: this.receiverUserId,
         amount: this.amount,
         currency: this.currency,
         createdAt: this.createdAt,

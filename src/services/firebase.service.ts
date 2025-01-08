@@ -18,6 +18,7 @@ import {
 import { Observable } from 'rxjs';
 import { User } from '../models/user.class';
 import { Transfer } from '../models/transfer.class';
+import { Account } from '../models/account.class';
 @Injectable({
   providedIn: 'root',
 })
@@ -182,63 +183,62 @@ private async getTransfersForAccount(accountId: string): Promise<Transfer[]> {
 
 
 
-  async transferFunds(
-    senderAccountId: string,
-    receiverAccountId: string,
-    amount: number,
-    description?: string
-  ): Promise<void> {
-    try {
-      // Zugriff auf Sender- und Empfänger-Dokumente
-      const senderDocRef = doc(this.accountCollection, senderAccountId);
-      const receiverDocRef = doc(this.accountCollection, receiverAccountId);
+async transferFunds(
+  senderAccountId: string,
+  receiverAccountId: string,
+  amount: number,
+  description?: string
+): Promise<void> {
+  try {
+    // Zugriff auf Sender- und Empfänger-Dokumente
+    const senderDocRef = doc(this.accountCollection, senderAccountId);
+    const receiverDocRef = doc(this.accountCollection, receiverAccountId);
 
-      const senderSnap = await getDoc(senderDocRef);
-      const receiverSnap = await getDoc(receiverDocRef);
+    const senderSnap = await getDoc(senderDocRef);
+    const receiverSnap = await getDoc(receiverDocRef);
 
-      // Sicherstellen, dass beide Dokumente existieren
-      if (!senderSnap.exists() || !receiverSnap.exists()) {
-        throw new Error('Sender or receiver account not found.');
-      }
-
-      // Typisierte Daten abrufen
-      const senderData = senderSnap.data() as { balance: number };
-      const receiverData = receiverSnap.data() as { balance: number };
-
-      // Prüfen, ob der Sender genügend Guthaben hat
-      if (senderData.balance < amount) {
-        throw new Error('Insufficient funds.');
-      }
-
-      // Transfer-Daten erstellen
-      const transfer = new Transfer({
-        senderAccountId,
-        // senderFullName: senderData.fullname,
-        receiverAccountId,
-        // receiverFullName: receiverData.fullname,
-        amount,
-        description,
-      });
-
-      // Transfer in Firestore speichern
-      const transferDocRef = doc(
-        collection(this.firestore, 'transfers'),
-        transfer.transferId
-      );
-      await setDoc(transferDocRef, transfer.toPlainObject());
-
-      // Kontostände aktualisieren
-      await updateDoc(senderDocRef, { balance: senderData.balance - amount });
-      await updateDoc(receiverDocRef, {
-        balance: receiverData.balance + amount,
-      });
-
-      console.log('Transfer completed successfully!');
-    } catch (error) {
-      console.error('Error processing transfer:', error);
-      throw error;
+    // Sicherstellen, dass beide Dokumente existieren
+    if (!senderSnap.exists() || !receiverSnap.exists()) {
+      throw new Error('Sender or receiver account not found.');
     }
+
+    // Daten in typisierte Account-Objekte umwandeln
+    const senderData = Account.fromJson(senderSnap.data());
+    const receiverData = Account.fromJson(receiverSnap.data());
+
+    // Prüfen, ob der Sender genügend Guthaben hat
+    if (senderData.balance < amount) {
+      throw new Error('Insufficient funds.');
+    }
+
+    // Transfer-Daten erstellen
+    const transfer = new Transfer({
+      senderAccountId,
+      senderUserId: senderData.userId, // Benutzer-ID des Senders
+      receiverAccountId,
+      receiverUserId: receiverData.userId, // Benutzer-ID des Empfängers
+      amount,
+      description,
+    });
+
+    // Transfer in Firestore speichern
+    const transferDocRef = doc(
+      collection(this.firestore, 'transfers'),
+      transfer.transferId
+    );
+    await setDoc(transferDocRef, transfer.toPlainObject());
+
+    // Kontostände aktualisieren
+    await updateDoc(senderDocRef, { balance: senderData.balance - amount });
+    await updateDoc(receiverDocRef, { balance: receiverData.balance + amount });
+
+    console.log('Transfer completed successfully!');
+  } catch (error) {
+    console.error('Error processing transfer:', error);
+    throw error;
   }
+}
+
 
   // async getAccount(accountId: string): Promise<{ name: string; balance: number }> {
   //   const accountDocRef = doc(this.firestore, 'accounts', accountId);
