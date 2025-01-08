@@ -6,42 +6,43 @@
   <!-- Weitere Felder hier -->
 </div>
 } @else if(user.role === 'user') {
-  <div>
-    <mat-card appearance="outlined" class="card-header m-32">
-      <!-- <button mat-icon-button class="address-menu-btn" [matMenuTriggerFor]="userDetail" aria-label="open address data for changes" >
+<div>
+  <mat-card appearance="outlined" class="card-header m-32">
+    <!-- <button mat-icon-button class="address-menu-btn" [matMenuTriggerFor]="userDetail" aria-label="open address data for changes" >
         <mat-icon>more_vert</mat-icon>
       </button> -->
-      <!-- <mat-menu #userDetail="matMenu">
+    <!-- <mat-menu #userDetail="matMenu">
         <button mat-menu-item (click)="editUserDetail()">Edit</button>
         <button mat-menu-item>Item 2</button>
       </mat-menu> -->
-      <!-- <mat-card-content>Simple card</mat-card-content> -->
-      <div>
-        <div class="total-balance">
-          <h4>Total Balance: {{ totalBalance }}€</h4>
-        
-        </div>
-        <img src="assets/img/avatar-7964941_1280.png" alt="Customer-Avatar" />
-        <div>
-          <h3>{{ user.firstName }} {{ user.lastName }}</h3>
-          <p>{{ user.email }}</p>
-          <!-- <p>{{ user.email }}</p> -->
-          <!-- kundennummer -->
-        </div>
+    <!-- <mat-card-content>Simple card</mat-card-content> -->
+    <div>
+      <div class="total-balance">
+        <h4>Total Balance: {{ totalBalance }}€</h4>
       </div>
-    </mat-card>
-    <div class="align-btn">
-      <!-- <button mat-flat-button (click)="openSendMoneyDialog()">Sent money</button>
-      <button mat-stroked-button (click)="openMoveMoneyDialog()">Move money to different account</button> -->
-      <button mat-raised-button (click)="openNewPocketDialog()">Open new Pocket</button>
+      <img src="assets/img/avatar-7964941_1280.png" alt="Customer-Avatar" />
+      <div>
+        <h3>{{ user.firstName }} {{ user.lastName }}</h3>
+        <p>{{ user.email }}</p>
+        <!-- <p>{{ user.email }}</p> -->
+        <!-- kundennummer -->
+      </div>
     </div>
-<div class="align-card">
-  @for(account of userAccounts; track $index) {
+  </mat-card>
+  <div class="align-btn">
+    <!-- <button mat-flat-button (click)="openSendMoneyDialog()">Sent money</button>
+      <button mat-stroked-button (click)="openMoveMoneyDialog()">Move money to different account</button> -->
+    <button mat-raised-button (click)="openNewPocketDialog()">
+      Open new Pocket
+    </button>
+  </div>
+  <div class="align-card">
+    @for(account of userAccounts; track $index) {
     <mat-card appearance="outlined">
       <mat-card-content>
         <div class="account-header">
           <!-- @if(account.accountName){ -->
-            <h3>{{ account.accountName }}</h3>
+          <h3>{{ account.accountName }}</h3>
           <!-- } -->
           <h3>{{ account.accountId }}</h3>
           <p>{{ account.balance }}€</p>
@@ -53,15 +54,17 @@
           <button mat-icon-button (click)="openMoveMoneyDialog()">
             <mat-icon>swap_horiz</mat-icon>
           </button>
-         
         </div>
       </mat-card-content>
     </mat-card>
-  }
-</div>
+    }
   </div>
 
+  <div class="transfers">
+    
+  </div>
+</div>
+
 } @else {<ng-template #loading>
-  <p>Lade Benutzerdaten...</p>
-</ng-template>}
- }
+  <p>Lade Benutzerdaten...</p> </ng-template
+>} }

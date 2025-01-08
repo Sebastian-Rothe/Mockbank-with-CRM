@@ -29,17 +29,18 @@
       } }
     </mat-select>
   </mat-form-field>
-  <!-- <mat-form-field appearance="fill">
-    <mat-label>Account</mat-label>
+  <mat-form-field appearance="fill">
+    <mat-label>Description</mat-label>
     
-    <input
+    <textarea
       matInput
       type="string"
-      [(ngModel)]="transfer.receiverAccountId"
-      name="accountName"
-      required
-    />
-  </mat-form-field> -->
+      [(ngModel)]="transfer.description"
+      name="description"
+   
+    >
+    </textarea>
+  </mat-form-field>
   <!-- <mat-form-field appearance="fill">
     <mat-label>Name</mat-label>
     <input

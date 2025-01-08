@@ -93,4 +93,3 @@ moveMoney(): void {
   }
 }
 
-//  this c does not know how the user is!!!
