@@ -24,19 +24,23 @@ export class DashboardComponent implements OnInit {
   user: User | null = null; // Benutzerdaten
   totalBalance: number = 0; // Gesamtsumme der Konten
   userAccounts: Account[] = []; // Array von Account-Objekten, statt nur einem Account-Objekt
-
+  transfers: any[] = []; // Eine Liste für die Transfers des Benutzers
+ 
+ 
   constructor(
     private authService: FirebaseAuthService,
     private firebaseService: FirebaseService,
     public dialog: MatDialog
   ) {}
-
+  
   ngOnInit(): void {
     this.uid = this.authService.getUid();
     console.log('Current UID:', this.uid);
+
     if (this.uid) {
       this.loadUser(this.uid);
     }
+
   }
 
   async loadUser(uid: string): Promise<void> {
@@ -46,6 +50,7 @@ export class DashboardComponent implements OnInit {
 
       if (this.user && this.user.accounts.length > 0) {
         await this.loadAccounts(this.user.accounts);
+        await this.loadTransfers();
       }
     } catch (error) {
       console.error('Error loading user:', error);
@@ -66,6 +71,20 @@ export class DashboardComponent implements OnInit {
       console.log('Total Balance:', this.totalBalance);
     } catch (error) {
       console.error('Error loading accounts:', error);
+    }
+  }
+
+  async loadTransfers(): Promise<void> {
+    try {
+      if (this.user) {
+        const transfers = await this.firebaseService.getTransfersForUser(this.user);  // Nur wenn user nicht null
+        this.transfers = transfers;
+        console.log('User transfers:', this.transfers);
+      } else {
+        console.error('User is null');
+      }
+    } catch (error) {
+      console.error('Error loading transfers:', error);
     }
   }
   

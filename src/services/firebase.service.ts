@@ -1,23 +1,37 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, DocumentReference, DocumentData, collection, collectionData, addDoc, doc, setDoc, updateDoc, deleteDoc, getDoc } from '@angular/fire/firestore';
+import {
+  Firestore,
+  DocumentReference,
+  DocumentData,
+  collection,
+  query,
+  where,
+  collectionData,
+  addDoc,
+  doc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  getDocs,
+  getDoc,
+} from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { User } from '../models/user.class';
 import { Transfer } from '../models/transfer.class';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FirebaseService {
-
   firestore: Firestore = inject(Firestore);
 
   private userCollection = collection(this.firestore, 'users');
   private accountCollection = collection(this.firestore, 'accounts');
 
-
   getUsers(): Observable<User[]> {
-    return collectionData(this.userCollection, { idField: 'id' }) as Observable<User[]>;
+    return collectionData(this.userCollection, { idField: 'id' }) as Observable<
+      User[]
+    >;
   }
-
 
   //  /**
   //  * Fügt einen neuen Benutzer zur Firestore-Datenbank hinzu.
@@ -26,20 +40,18 @@ export class FirebaseService {
   //  */
   //  async addUser(user: User): Promise<void> {
   //   const userData = user.toPlainObject();
-  
+
   //   // Entferne undefined-Werte
   //   Object.keys(userData).forEach((key) => {
   //     if (userData[key] === undefined) {
   //       delete userData[key];
   //     }
   //   });
-  
+
   //   // Dokument mit der UID als ID erstellen
-  //   const userDocRef = doc(this.userCollection, user.uid); 
+  //   const userDocRef = doc(this.userCollection, user.uid);
   //   await setDoc(userDocRef, userData);
   // }
-
-
 
   /**
    * Fügt einen Benutzer mit einem zugehörigen Account hinzu.
@@ -76,7 +88,7 @@ export class FirebaseService {
 
       // Schritt 4: Account-ID zum Benutzer-Dokument hinzufügen
       await updateDoc(userDocRef, {
-        accounts: [accountId] // Füge die Account-ID ins Array hinzu
+        accounts: [accountId], // Füge die Account-ID ins Array hinzu
       });
 
       console.log('User and account created successfully!');
@@ -86,21 +98,19 @@ export class FirebaseService {
     }
   }
 
-
-
-
   async getUser(userId: string): Promise<User | null> {
     try {
       // Zugriff auf das spezifische Dokument in der "users"-Sammlung
       const userDocRef = doc(this.firestore, 'users', userId);
       const userDocSnap = await getDoc(userDocRef);
-      
+
+      console.log('getUser - userDocSnap:', userDocSnap.exists(), userDocSnap.data());
       // Prüfen, ob das Dokument existiert
       if (userDocSnap.exists()) {
         // Wenn das Dokument existiert, gebe es als User-Objekt zurück und setze die ID
         const userData = userDocSnap.data();
         const user = new User(userData);
-        user.uid = userDocSnap.id;  // Hier wird die ID hinzugefügt
+        user.uid = userDocSnap.id; // Hier wird die ID hinzugefügt
         return user;
       } else {
         console.log('No such user!');
@@ -111,6 +121,65 @@ export class FirebaseService {
       return null;
     }
   }
+
+ /**
+   * Ruft alle Transfers ab, die mit einem bestimmten Benutzer verknüpft sind (für alle Accounts)
+   * @param user Der Benutzer, dessen Transfers abgerufen werden sollen
+   * @returns Eine Liste von Transfers, die mit den Accounts des Benutzers in Verbindung stehen
+   */
+ async getTransfersForUser(user: User): Promise<Transfer[]> {
+  try {
+    const allTransfers: Transfer[] = [];
+
+    // Durchlaufe alle Accounts des Benutzers
+    for (const accountId of user.accounts) {
+      const transfersForAccount = await this.getTransfersForAccount(accountId);
+      allTransfers.push(...transfersForAccount); // Füge die Transfers des aktuellen Accounts hinzu
+    }
+
+    return allTransfers;
+  } catch (error) {
+    console.error('Fehler beim Abrufen der Transfers:', error);
+    throw error;
+  }
+}
+
+/**
+ * Ruft die Transfers für einen bestimmten Account ab
+ * @param accountId Die ID des Accounts
+ * @returns Eine Liste von Transfers, die mit diesem Account in Verbindung stehen
+ */
+private async getTransfersForAccount(accountId: string): Promise<Transfer[]> {
+  const senderQuery = query(
+    collection(this.firestore, 'transfers'),
+    where('senderAccountId', '==', accountId)
+  );
+  
+  const receiverQuery = query(
+    collection(this.firestore, 'transfers'),
+    where('receiverAccountId', '==', accountId)
+  );
+
+  const senderDocs = await getDocs(senderQuery);
+  const receiverDocs = await getDocs(receiverQuery);
+
+  const transfers: Transfer[] = [];
+
+  senderDocs.forEach((doc) => {
+    const transferData = doc.data();
+    const transfer = new Transfer(transferData);
+    transfers.push(transfer);
+  });
+
+  receiverDocs.forEach((doc) => {
+    const transferData = doc.data();
+    const transfer = new Transfer(transferData);
+    transfers.push(transfer);
+  });
+
+  return transfers;
+}
+
 
 
   async transferFunds(
@@ -123,24 +192,24 @@ export class FirebaseService {
       // Zugriff auf Sender- und Empfänger-Dokumente
       const senderDocRef = doc(this.accountCollection, senderAccountId);
       const receiverDocRef = doc(this.accountCollection, receiverAccountId);
-  
+
       const senderSnap = await getDoc(senderDocRef);
       const receiverSnap = await getDoc(receiverDocRef);
-  
+
       // Sicherstellen, dass beide Dokumente existieren
       if (!senderSnap.exists() || !receiverSnap.exists()) {
         throw new Error('Sender or receiver account not found.');
       }
-  
+
       // Typisierte Daten abrufen
-      const senderData = senderSnap.data() as { balance: number;  };
-      const receiverData = receiverSnap.data() as { balance: number;  };
-  
+      const senderData = senderSnap.data() as { balance: number };
+      const receiverData = receiverSnap.data() as { balance: number };
+
       // Prüfen, ob der Sender genügend Guthaben hat
       if (senderData.balance < amount) {
         throw new Error('Insufficient funds.');
       }
-  
+
       // Transfer-Daten erstellen
       const transfer = new Transfer({
         senderAccountId,
@@ -150,15 +219,20 @@ export class FirebaseService {
         amount,
         description,
       });
-  
+
       // Transfer in Firestore speichern
-      const transferDocRef = doc(collection(this.firestore, 'transfers'), transfer.transferId);
+      const transferDocRef = doc(
+        collection(this.firestore, 'transfers'),
+        transfer.transferId
+      );
       await setDoc(transferDocRef, transfer.toPlainObject());
-  
+
       // Kontostände aktualisieren
       await updateDoc(senderDocRef, { balance: senderData.balance - amount });
-      await updateDoc(receiverDocRef, { balance: receiverData.balance + amount });
-  
+      await updateDoc(receiverDocRef, {
+        balance: receiverData.balance + amount,
+      });
+
       console.log('Transfer completed successfully!');
     } catch (error) {
       console.error('Error processing transfer:', error);
@@ -166,11 +240,10 @@ export class FirebaseService {
     }
   }
 
-
   // async getAccount(accountId: string): Promise<{ name: string; balance: number }> {
   //   const accountDocRef = doc(this.firestore, 'accounts', accountId);
   //   const accountSnap = await getDoc(accountDocRef);
-  
+
   //   if (accountSnap.exists()) {
   //     return accountSnap.data() as { name: string; balance: number };
   //   } else {
@@ -178,34 +251,36 @@ export class FirebaseService {
   //   }
   // }
   // Beispiel einer getAccount Methode
-// async getAccount(accountId: string): Promise<any> {
-//   const accountRef = this.firestore.collection('accounts').doc(accountId);
-//   const accountSnapshot = await accountRef.get();
-//   if (accountSnapshot.exists) {
-//     return accountSnapshot.data(); // Gibt die Account-Daten als JSON zurück
-//   } else {
-//     throw new Error('Account not found');
-//   }
-// }
-async getAccount(accountId: string): Promise<any> {
-  try {
-    // Zugriff auf das Account-Dokument in der "accounts"-Sammlung
-    const accountDocRef = doc(this.firestore, 'accounts', accountId);
-    const accountSnap = await getDoc(accountDocRef);
+  // async getAccount(accountId: string): Promise<any> {
+  //   const accountRef = this.firestore.collection('accounts').doc(accountId);
+  //   const accountSnapshot = await accountRef.get();
+  //   if (accountSnapshot.exists) {
+  //     return accountSnapshot.data(); // Gibt die Account-Daten als JSON zurück
+  //   } else {
+  //     throw new Error('Account not found');
+  //   }
+  // }
+  async getAccount(accountId: string): Promise<any> {
+    try {
+      // Zugriff auf das Account-Dokument in der "accounts"-Sammlung
+      const accountDocRef = doc(this.firestore, 'accounts', accountId);
+      const accountSnap = await getDoc(accountDocRef);
 
-    if (accountSnap.exists()) {
-      return accountSnap.data();
-    } else {
-      throw new Error('Account not found');
+      if (accountSnap.exists()) {
+        return accountSnap.data();
+      } else {
+        throw new Error('Account not found');
+      }
+    } catch (error) {
+      console.error('Error getting account:', error);
+      throw error;
     }
-  } catch (error) {
-    console.error('Error getting account:', error);
-    throw error;
   }
-}
 
-  
-  async addAccount(userId: string, accountDetails: {accountName: string; balance: number; currency: string}): Promise<void> {
+  async addAccount(
+    userId: string,
+    accountDetails: { accountName: string; balance: number; currency: string }
+  ): Promise<void> {
     try {
       const accountId = `ACC-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
       const accountData = {
@@ -216,15 +291,15 @@ async getAccount(accountId: string): Promise<any> {
         currency: accountDetails.currency,
         createdAt: Date.now(),
       };
-  
+
       // Account in Firestore hinzufügen
       const accountDocRef = doc(this.accountCollection, accountId);
       await setDoc(accountDocRef, accountData);
-  
+
       // Account-ID zum Benutzer-Dokument hinzufügen
       const userDocRef = doc(this.firestore, 'users', userId);
       const userSnap = await getDoc(userDocRef);
-  
+
       if (userSnap.exists()) {
         const userData = userSnap.data();
         const accounts = userData['accounts'] || [];
@@ -238,6 +313,4 @@ async getAccount(accountId: string): Promise<any> {
       throw error;
     }
   }
-  
-  
 }

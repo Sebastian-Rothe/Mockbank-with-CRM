@@ -1,13 +1,14 @@
 export class Transfer {
     transferId: string;
     senderAccountId: string = '';
-    senderFullName: string = '';
+    // senderFullName: string = '';
     receiverAccountId: string = '';
-    receiverFullName: string = '';
+    // receiverFullName: string = '';
     amount: number = 0;
     currency: string = 'EUR';
     createdAt: number;
     description?: string;
+    date: number = Date.now();
   
     constructor(obj?: Partial<Transfer>) {
       if (obj) {
@@ -21,13 +22,14 @@ export class Transfer {
       return {
         transferId: this.transferId,
         senderAccountId: this.senderAccountId,
-        senderFullName: this.senderFullName,
+        // senderFullName: this.senderFullName,
         receiverAccountId: this.receiverAccountId,
-        receiverFullName: this.receiverFullName,
+        // receiverFullName: this.receiverFullName,
         amount: this.amount,
         currency: this.currency,
         createdAt: this.createdAt,
         description: this.description,
+        date: this.date,
       };
     }
   }
