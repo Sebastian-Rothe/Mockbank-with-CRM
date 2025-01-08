@@ -78,7 +78,11 @@ export class DashboardComponent implements OnInit {
     this.dialog.open(DialogOpenNewPocketComponent);
   }
 
-  openMoveMoneyDialog(): void {
-    this.dialog.open(DialogMoveMoneyComponent);
+  openMoveMoneyDialog(accountId: string): void {
+    this.dialog.open(DialogMoveMoneyComponent, {
+      data: { senderAccountId: accountId } // Übergabe der Account-ID
+    });
+    console.log('Sender Account ID:', accountId);
   }
+  
 }

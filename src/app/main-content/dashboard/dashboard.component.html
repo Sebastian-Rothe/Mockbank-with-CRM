@@ -51,7 +51,7 @@
           <button mat-icon-button (click)="openSendMoneyDialog()">
             <mat-icon>send</mat-icon>
           </button>
-          <button mat-icon-button (click)="openMoveMoneyDialog()">
+          <button mat-icon-button (click)="openMoveMoneyDialog(account.accountId)">
             <mat-icon>swap_horiz</mat-icon>
           </button>
         </div>
@@ -61,7 +61,7 @@
   </div>
 
   <div class="transfers">
-    
+
   </div>
 </div>
 

@@ -133,8 +133,8 @@ export class FirebaseService {
       }
   
       // Typisierte Daten abrufen
-      const senderData = senderSnap.data() as { balance: number; fullname: string };
-      const receiverData = receiverSnap.data() as { balance: number; fullname: string };
+      const senderData = senderSnap.data() as { balance: number;  };
+      const receiverData = receiverSnap.data() as { balance: number;  };
   
       // Prüfen, ob der Sender genügend Guthaben hat
       if (senderData.balance < amount) {
@@ -144,9 +144,9 @@ export class FirebaseService {
       // Transfer-Daten erstellen
       const transfer = new Transfer({
         senderAccountId,
-        senderFullName: senderData.fullname,
+        // senderFullName: senderData.fullname,
         receiverAccountId,
-        receiverFullName: receiverData.fullname,
+        // receiverFullName: receiverData.fullname,
         amount,
         description,
       });
