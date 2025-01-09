@@ -51,7 +51,10 @@
           <button mat-icon-button (click)="openSendMoneyDialog()">
             <mat-icon>send</mat-icon>
           </button>
-          <button mat-icon-button (click)="openMoveMoneyDialog(account.accountId)">
+          <button
+            mat-icon-button
+            (click)="openMoveMoneyDialog(account.accountId)"
+          >
             <mat-icon>swap_horiz</mat-icon>
           </button>
         </div>
@@ -61,7 +64,6 @@
   </div>
 
   <div class="transfers">
-
     <mat-card appearance="outlined">
       <mat-card-header>
         <mat-card-title>Transfers</mat-card-title>
@@ -79,15 +81,38 @@
           <tbody>
             @for(transfer of transfers; track $index) {
             <tr>
-              <td>{{ transfer.senderAccountName ? transfer.senderAccountName: transfer.senderAccountId}}</td>
-              <td>{{ transfer.receiverAccountName ? transfer.receiverAccountName: transfer.receiverAccountId}}</td>
-              <td [ngClass]="{
-                'negative': transfer.type === 'sent',
-                'positive': transfer.type === 'received'
-              }">{{ transfer.amount }}€</td>
+              <td>{{ transfer.description }}</td>
+              <td>
+                {{
+                  transfer.senderAccountName
+                    ? transfer.senderAccountName
+                    : transfer.senderAccountId
+                }}
+              </td>
+              <td>
+                {{
+                  transfer.receiverAccountName
+                    ? transfer.receiverAccountName
+                    : transfer.receiverAccountId
+                }}
+              </td>
+              <td
+                [ngClass]="{
+                  negative: transfer.type === 'sent',
+                  positive: transfer.type === 'received'
+                }"
+              >
+                {{ transfer.amount }}€
+              </td>
               <td>{{ transfer.date }}</td>
               <td>
-                {{ transfer.type === 'sent' ? 'sent' : transfer.type === 'received' ? 'received' : 'internal' }}
+                {{
+                  transfer.type === "sent"
+                    ? "sent"
+                    : transfer.type === "received"
+                    ? "received"
+                    : "internal"
+                }}
               </td>
             </tr>
             }
@@ -95,10 +120,7 @@
         </table>
       </mat-card-content>
     </mat-card>
-    
   </div>
 </div>
 
-} @else {<ng-template #loading>
-  <p>Lade Benutzerdaten...</p> </ng-template
->} }
+} @else {<ng-template #loading> <p>Lade Benutzerdaten...</p> </ng-template>} }
