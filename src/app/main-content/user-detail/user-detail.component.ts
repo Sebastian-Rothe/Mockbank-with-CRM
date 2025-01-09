@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditUserAddressComponent } from '../dialog-edit-user-address/dialog-edit-user-address.component';
 import { DialogEditUserDetailComponent } from '../dialog-edit-user-detail/dialog-edit-user-detail.component';
+import { SharedService } from '../../../services/shared.service';
 
 import { doc, onSnapshot } from 'firebase/firestore';
 // import { CommonModule } from '@angular/common';
@@ -35,7 +36,10 @@ export class UserDetailComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     private route: ActivatedRoute,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private sharedService: SharedService
+
+
   ) {}
 
   ngOnInit() {
@@ -70,5 +74,8 @@ export class UserDetailComponent implements OnInit {
       const dialog = this.dialog.open(DialogEditUserAddressComponent);
       dialog.componentInstance.user = new User(this.user.toPlainObject());
     }
+  }
+  getFormattedBirthDate(): string {
+    return this.sharedService.formatTimestampToDate(this.user?.birthDate || 0);
   }
 }
