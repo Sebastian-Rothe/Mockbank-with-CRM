@@ -10,12 +10,14 @@ import { DialogOpenNewPocketComponent } from './dialog-open-new-pocket/dialog-op
 import { DialogMoveMoneyComponent } from './dialog-move-money/dialog-move-money.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
-import { Account } from '../../../models/account.class';  // Import der Account-Klasse
+import { Account } from '../../../models/account.class'; 
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [MatCard, MatButtonModule, MatCardModule, MatIcon],
+  imports: [MatCard, MatButtonModule, MatCardModule, MatIcon, CommonModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
@@ -77,9 +79,39 @@ export class DashboardComponent implements OnInit {
   async loadTransfers(): Promise<void> {
     try {
       if (this.user) {
-        const transfers = await this.firebaseService.getTransfersForUser(this.user);  // Nur wenn user nicht null
-        this.transfers = transfers;
-        console.log('User transfers:', this.transfers);
+        const transfers = await this.firebaseService.getTransfersForUser(this.user);
+  
+        this.transfers = [];
+  
+        // Für jeden Transfer erstellen wir zwei Einträge: einen als "sent" und einen als "received".
+        for (const transfer of transfers) {
+          const isSender = this.userAccounts.some(
+            (account) => account.accountId === transfer.senderAccountId
+          );
+  
+          const isReceiver = this.userAccounts.some(
+            (account) => account.accountId === transfer.receiverAccountId
+          );
+  
+          // Nur wenn der User beteiligt ist, wird der Transfer angezeigt.
+          if (isSender) {
+            this.transfers.push({
+              ...transfer,
+              amount: -transfer.amount, // Negativ für "sent"
+              type: 'sent',
+            });
+          }
+  
+          if (isReceiver) {
+            this.transfers.push({
+              ...transfer,
+              amount: transfer.amount, // Positiv für "received"
+              type: 'received',
+            });
+          }
+        }
+  
+        console.log('Processed transfers:', this.transfers);
       } else {
         console.error('User is null');
       }
@@ -87,6 +119,8 @@ export class DashboardComponent implements OnInit {
       console.error('Error loading transfers:', error);
     }
   }
+  
+  
   
 
   openSendMoneyDialog(): void {
