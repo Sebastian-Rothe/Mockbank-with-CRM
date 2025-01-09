@@ -214,8 +214,10 @@ async transferFunds(
     // Transfer-Daten erstellen
     const transfer = new Transfer({
       senderAccountId,
+      senderAccountName: senderData.accountName,
       senderUserId: senderData.userId, // Benutzer-ID des Senders
       receiverAccountId,
+      receiverAccountName: receiverData.accountName,
       receiverUserId: receiverData.userId, // Benutzer-ID des Empfängers
       amount,
       description,
