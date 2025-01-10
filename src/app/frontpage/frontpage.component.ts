@@ -5,10 +5,11 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import { RouterLink } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { MatDialog } from '@angular/material/dialog';
+import { FooterComponent } from '../footer/footer.component';
 @Component({
   selector: 'app-frontpage',
   standalone: true,
-  imports: [MatToolbarModule, MatButtonModule, MatIconModule, RouterLink],
+  imports: [MatToolbarModule, MatButtonModule, MatIconModule, RouterLink, FooterComponent],
   templateUrl: './frontpage.component.html',
   styleUrl: './frontpage.component.scss'
 })
