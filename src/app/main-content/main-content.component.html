@@ -13,6 +13,11 @@
         @if(user?.role === 'admin'){
         <li routerLink="/main/new-admin"><mat-icon>person_add</mat-icon> Create new Admin</li>
         }
+        <li class="footer-items"> 
+          <a href="">Help Center</a>
+          <a href="">Contact</a>
+          <a href="">Privacy Policy</a>
+          <a href="">Imprint</a></li>
         <li class="logout" (click)="logout()"><mat-icon>logout</mat-icon> Logout</li>
       </ul>
     </mat-drawer>
