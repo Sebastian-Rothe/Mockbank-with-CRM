@@ -104,7 +104,7 @@
               >
                 {{ transfer.amount }}€
               </td>
-              <td>{{ transfer.date }}</td>
+              <td>{{ getFormattedDate(transfer.createdAt) }}</td>
               <td>
                 {{
                   transfer.type === "sent"

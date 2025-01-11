@@ -12,6 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { Account } from '../../../models/account.class'; 
 import { CommonModule } from '@angular/common';
+import { SharedService } from '../../../services/shared.service';
 
 
 @Component({
@@ -30,6 +31,7 @@ export class DashboardComponent implements OnInit {
  
  
   constructor(
+    private sharedService: SharedService,
     private authService: FirebaseAuthService,
     private firebaseService: FirebaseService,
     public dialog: MatDialog
@@ -136,6 +138,11 @@ export class DashboardComponent implements OnInit {
       data: { senderAccountId: accountId } // Übergabe der Account-ID
     });
     console.log('Sender Account ID:', accountId);
+  }
+
+  getFormattedDate(transferDate: number): string {
+    let date: number = transferDate;
+    return this.sharedService.formatTimestampToDate(date);
   }
   
 }
