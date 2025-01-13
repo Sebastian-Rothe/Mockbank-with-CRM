@@ -151,4 +151,5 @@ export class DashboardComponent implements OnInit {
     return this.sharedService.formatTimestampToDate(date);
   }
   editAccount(){}
+  closeAccount(){}
 }
