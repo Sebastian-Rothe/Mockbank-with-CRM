@@ -14,8 +14,12 @@ export class Transfer {
   
     constructor(obj?: Partial<Transfer>) {
       if (obj) {
-        Object.assign(this, obj);
+        console.log('Data before Object.assign:', obj);
+        Object.assign(this, obj); // Übernimmt alle Werte aus obj
+        console.log('Data after Object.assign:', this);
       }
+      this.senderAccountName = obj?.senderAccountName ?? this.senderAccountName;
+      this.receiverAccountName = obj?.receiverAccountName ?? this.receiverAccountName;
       this.transferId = obj?.transferId || `TR-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
       this.createdAt = obj?.createdAt || Date.now();
     }
