@@ -36,10 +36,10 @@
       Open new Pocket
     </button>
   </div>
-  <div class="align-card">
+  <div class="align-cards-container">
     @for(account of userAccounts; track $index) {
-    <mat-card appearance="outlined">
-      <button mat-icon-button class="address-menu-btn" [matMenuTriggerFor]="account$index" aria-label="open address data for changes" >
+    <mat-card appearance="outlined" class="align-card">
+      <button mat-icon-button class="align-account-menu-btn" [matMenuTriggerFor]="account$index" aria-label="open address data for changes" >
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #account$index="matMenu">
@@ -49,10 +49,10 @@
       <mat-card-content>
         <div class="account-header">
           <!-- @if(account.accountName){ -->
-          <h3>{{ account.accountName }}</h3>
+          <h3 class="align-name">{{ account.accountName }}</h3>
           <!-- } -->
           <h3>{{ account.accountId }}</h3>
-          <p>{{ account.balance }}€</p>
+          <p class="align-balance">Balance: {{ account.balance }}€</p>
         </div>
         <div class="account-actions">
           <button mat-icon-button (click)="openSendMoneyDialog()">
