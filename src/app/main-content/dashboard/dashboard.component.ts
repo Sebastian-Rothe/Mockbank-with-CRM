@@ -90,28 +90,33 @@ export class DashboardComponent implements OnInit {
           const isSender = this.userAccounts.some(
             (account) => account.accountId === transfer.senderAccountId
           );
-  
+        
           const isReceiver = this.userAccounts.some(
             (account) => account.accountId === transfer.receiverAccountId
           );
-  
-          // Nur wenn der User beteiligt ist, wird der Transfer angezeigt.
-          if (isSender) {
-            this.transfers.push({
-              ...transfer,
-              amount: -transfer.amount, // Negativ für "sent"
-              type: 'sent',
-            });
-          }
-  
-          if (isReceiver) {
-            this.transfers.push({
-              ...transfer,
-              amount: transfer.amount, // Positiv für "received"
-              type: 'received',
-            });
+        
+          // Überprüfen, ob der Transfer bereits hinzugefügt wurde
+          const exists = this.transfers.some((t) => t.transferId === transfer.transferId);
+        
+          if (!exists) {
+            if (isSender) {
+              this.transfers.push({
+                ...transfer,
+                amount: -transfer.amount, // Negativ für "sent"
+                type: 'sent',
+              });
+            }
+        
+            if (isReceiver) {
+              this.transfers.push({
+                ...transfer,
+                amount: transfer.amount, // Positiv für "received"
+                type: 'received',
+              });
+            }
           }
         }
+        
   
         console.log('Processed transfers:', this.transfers);
       } else {
