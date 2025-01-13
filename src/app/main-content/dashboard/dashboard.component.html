@@ -39,6 +39,13 @@
   <div class="align-card">
     @for(account of userAccounts; track $index) {
     <mat-card appearance="outlined">
+      <button mat-icon-button class="address-menu-btn" [matMenuTriggerFor]="account$index" aria-label="open address data for changes" >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #account$index="matMenu">
+        <button mat-menu-item (click)="editAccount()">Edit</button>
+        <button mat-menu-item>Item 2</button>
+      </mat-menu>
       <mat-card-content>
         <div class="account-header">
           <!-- @if(account.accountName){ -->

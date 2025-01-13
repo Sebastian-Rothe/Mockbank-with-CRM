@@ -2,23 +2,24 @@ import { Component, OnInit } from '@angular/core';
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import { FirebaseService } from '../../../services/firebase.service';
 import { User } from '../../../models/user.class';
-import { MatCard } from '@angular/material/card';
+import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogSendMoneyComponent } from './dialog-send-money/dialog-send-money.component';
 import { DialogOpenNewPocketComponent } from './dialog-open-new-pocket/dialog-open-new-pocket.component';
 import { DialogMoveMoneyComponent } from './dialog-move-money/dialog-move-money.component';
 import { MatCardModule } from '@angular/material/card';
-import { MatIcon } from '@angular/material/icon';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { Account } from '../../../models/account.class'; 
 import { CommonModule } from '@angular/common';
 import { SharedService } from '../../../services/shared.service';
+import { MatMenu, MatMenuModule } from '@angular/material/menu';
 
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [MatCard, MatButtonModule, MatCardModule, MatIcon, CommonModule],
+  imports: [MatCard, MatIconModule, MatCardContent, MatMenuModule, MatButtonModule, MatCardModule, MatIcon, CommonModule, MatMenu],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
@@ -149,5 +150,5 @@ export class DashboardComponent implements OnInit {
     let date: number = transferDate;
     return this.sharedService.formatTimestampToDate(date);
   }
-  
+  editAccount(){}
 }
