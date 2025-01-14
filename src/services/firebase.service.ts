@@ -34,6 +34,14 @@ export class FirebaseService {
     >;
   }
 
+  async getAllUsers(): Promise<User[]> {
+    const snapshot = await getDocs(this.userCollection);
+    return snapshot.docs.map((doc) => {
+      const data = doc.data();
+      return new User({ ...data, uid: doc.id }); // User-Klasse instanziieren und die ID hinzufügen
+    });
+  }
+  
   //  /**
   //  * Fügt einen neuen Benutzer zur Firestore-Datenbank hinzu.
   //  * @param user Der Benutzer, der hinzugefügt werden soll.
