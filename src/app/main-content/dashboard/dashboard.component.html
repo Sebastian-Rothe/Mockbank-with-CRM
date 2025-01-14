@@ -55,7 +55,7 @@
           <p class="align-balance">Balance: {{ account.balance }}€</p>
         </div>
         <div class="account-actions">
-          <button mat-icon-button (click)="openSendMoneyDialog()">
+          <button mat-icon-button (click)="openSendMoneyDialog(account.accountId)">
             <mat-icon>send</mat-icon>
           </button>
           <button

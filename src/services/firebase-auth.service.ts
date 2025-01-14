@@ -14,7 +14,8 @@ import { onAuthStateChanged } from 'firebase/auth';
   providedIn: 'root',
 })
 export class FirebaseAuthService {
-  private uid: string | null = null; // UID speichern
+  private uid: string | null = null; 
+
   constructor(private auth: Auth) {
     this.getCurrentUser().subscribe((user) => {
       this.uid = user?.uid || null;

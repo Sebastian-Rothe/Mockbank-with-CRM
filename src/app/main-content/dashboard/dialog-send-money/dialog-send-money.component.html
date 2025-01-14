@@ -1,47 +1,74 @@
-<div mat-dialog-content>
-  <div class="name-container">
-    <mat-form-field class="mr-16" appearance="outline">
-      <mat-label>Sender Account ID</mat-label>
-      <input
-        [(ngModel)]="transfer.senderAccountId"
-        matInput
-        placeholder="Sender Account ID"
-      />
-    </mat-form-field>
-    <mat-form-field class="mr-16" appearance="outline">
-      <mat-label>Recipient Account ID</mat-label>
-      <input
-        [(ngModel)]="transfer.receiverAccountId"
-        matInput
-        placeholder="Recipient Account ID"
-      />
-    </mat-form-field>
-  </div>
+<h2>Move money to different account</h2>
+<form (ngSubmit)="sendMoney()" #sentMoneyForm="ngForm">
+  <!-- <mat-form-field appearance="fill">
+    <mat-label>Account Name</mat-label>
+    <input matInput [(ngModel)]="account.accountId" name="accountId" required />
+  </mat-form-field> -->
 
-  <div class="name-container">
-    <mat-form-field class="mr-16" appearance="outline">
-      <mat-label>Amount (€)</mat-label>
-      <input
-        type="number"
-        [(ngModel)]="transfer.amount"
-        matInput
-        placeholder="Amount"
-      />
-    </mat-form-field>
-    <mat-form-field class="mr-16" appearance="outline">
-      <mat-label>Description</mat-label>
-      <textarea
-        [(ngModel)]="transfer.description"
-        matInput
-        placeholder="Description (optional)"
-      ></textarea>
-    </mat-form-field>
-  </div>
-</div>
+  <mat-form-field appearance="fill">
+    <mat-label>Amount</mat-label>
+    <input
+      matInput
+      type="number"
+      [(ngModel)]="transfer.amount"
+      name="amount"
+      required
+      min="1"
+    />
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Account</mat-label>
+    <mat-select
+      [(ngModel)]="transfer.receiverAccountId"
+      name="account"
+      required
+    >
+      @for(account of user?.accounts; track $index) { @for(a of userAccounts;
+      track $index) { @if(account === a.accountId && a.accountId !==
+      senderAccountId) {
+      <mat-option value="{{ a.accountId }}">{{
+        a.accountName ? a.accountName : a.accountId
+      }}</mat-option>
 
-<mat-dialog-actions>
-  <button mat-button (click)="closeDialog()">Cancel</button>
-  <button mat-button color="primary" (click)="sendMoney()">
-    Send
-  </button>
-</mat-dialog-actions>
+      }
+      <!-- <mat-option value="{{ account }}">{{ account }}</mat-option> -->
+
+      } }
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Description</mat-label>
+
+    <textarea
+      matInput
+      type="string"
+      [(ngModel)]="transfer.description"
+      name="description"
+    >
+    </textarea>
+  </mat-form-field>
+  <!-- <mat-form-field appearance="fill">
+    <mat-label>Name</mat-label>
+    <input
+      matInput
+      type="string"
+      [(ngModel)]="transfer.receiverFullName"
+      name="accountName"
+      required
+    />
+  </mat-form-field> -->
+
+  <mat-form-field appearance="fill">
+    <mat-label>Currency</mat-label>
+    <mat-select [(ngModel)]="transfer.currency" name="currency" required>
+      <mat-option value="EUR">EUR</mat-option>
+      <mat-option value="USD">USD</mat-option>
+      <mat-option value="GBP">GBP</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="actions">
+    <button mat-button type="button" (click)="closeDialog()">Cancel</button>
+    <button mat-raised-button color="primary" type="submit">Create</button>
+  </div>
+</form>
