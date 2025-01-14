@@ -39,7 +39,7 @@ export class DialogSendMoneyComponent {
   totalBalance: number = 0; // Gesamtsumme der Konten
   userAccounts: Account[] = []; // Array von Account-Objekten, statt nur einem Account-Objekt
   users: User[] = [];
-  selectedUser: User | null = null;
+  selectedUser: string | null = null;
   selectedAccount: Account | null = null;
   senderAccountId: string; //
 
@@ -60,10 +60,10 @@ export class DialogSendMoneyComponent {
   ngOnInit(): void {
     this.uid = this.authService.getUid();
     console.log('Current UID:', this.uid);
-    if (this.users.length > 0) {
-      this.selectedUser = this.users.find(user => user.uid === this.uid) || null;
-      console.log('Selected user on init:', this.selectedUser);
-    }
+    // if (this.users.length > 0) {
+    //   this.selectedUser = this.users.find(user => user.uid === this.uid) || null;
+    //   console.log('Selected user on init:', this.selectedUser);
+    // }
   }
 
   async loadUser(uid: string): Promise<void> {
@@ -126,16 +126,18 @@ export class DialogSendMoneyComponent {
   }
 
   onUserSelect(userId: string): void {
-    console.log("Selected user UID:", userId);  // Konsolenausgabe für Debugging
-    this.selectedUser = this.users.find(user => user.uid === userId) || null;
-    console.log("Selected user:", this.selectedUser);  // Konsolenausgabe für Debugging
+    console.log('Selected user UID:', userId);
+    this.selectedUser = userId;
+    const user = this.users.find(user => user.uid === userId);
+    console.log('Selected user:', user);
   
-    if (this.selectedUser) {
-      this.loadAccounts(this.selectedUser.accounts);
+    if (user) {
+      this.loadAccounts(user.accounts);
     } else {
       this.userAccounts = [];
     }
   }
+  
   
   
   
