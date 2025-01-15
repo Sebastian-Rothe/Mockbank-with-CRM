@@ -47,13 +47,16 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.uid = this.authService.getUid();
-    console.log('Current UID:', this.uid);
-
-    if (this.uid) {
-      this.loadUser(this.uid);
-    }
+    // Auf UID-Änderungen reagieren
+    this.authService.uid$.subscribe((uid) => {
+      console.log('Aktuelle UID:', uid);
+      if (uid) {
+        this.uid = uid; // UID setzen
+        this.loadUser(uid); // Daten laden
+      }
+    });
   }
+  
 
   async loadUser(uid: string): Promise<void> {
     try {
@@ -69,25 +72,40 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  // async loadAccounts(accountIds: string[]): Promise<void> {
+  //   try {
+  //     const accounts = await Promise.all(
+  //       accountIds.map(async (accountId) => {
+  //         const accountData = await this.firebaseService.getAccount(accountId);
+  //         return Account.fromJson(accountData); // Umwandlung in Account-Objekt mit fromJson
+  //       })
+  //     );
+
+  //     this.userAccounts = accounts;
+  //     this.totalBalance = accounts.reduce(
+  //       (sum, account) => sum + account.balance,
+  //       0
+  //     );
+  //     console.log('Total Balance:', this.totalBalance);
+  //   } catch (error) {
+  //     console.error('Error loading accounts:', error);
+  //   }
+  // }
   async loadAccounts(accountIds: string[]): Promise<void> {
     try {
       const accounts = await Promise.all(
-        accountIds.map(async (accountId) => {
-          const accountData = await this.firebaseService.getAccount(accountId);
-          return Account.fromJson(accountData); // Umwandlung in Account-Objekt mit fromJson
-        })
+        accountIds.map(accountId => this.firebaseService.getAccount(accountId))
       );
-
-      this.userAccounts = accounts;
-      this.totalBalance = accounts.reduce(
+      this.userAccounts = accounts.map(Account.fromJson);
+      this.totalBalance = this.userAccounts.reduce(
         (sum, account) => sum + account.balance,
         0
       );
-      console.log('Total Balance:', this.totalBalance);
     } catch (error) {
       console.error('Error loading accounts:', error);
     }
   }
+  
 
   async loadTransfers(): Promise<void> {
     try {

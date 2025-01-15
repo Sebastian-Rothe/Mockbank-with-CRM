@@ -5,20 +5,22 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   User,
-  UserCredential,
 } from '@angular/fire/auth';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { onAuthStateChanged } from 'firebase/auth';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FirebaseAuthService {
-  private uid: string | null = null; 
+  private uidSubject = new BehaviorSubject<string | null>(null);
+  uid$ = this.uidSubject.asObservable(); // Observable für UID-Änderungen
 
   constructor(private auth: Auth) {
-    this.getCurrentUser().subscribe((user) => {
-      this.uid = user?.uid || null;
+    // Initialisieren und UID setzen
+    onAuthStateChanged(this.auth, (user) => {
+      const uid = user?.uid || null;
+      this.uidSubject.next(uid);
     });
   }
 
@@ -28,28 +30,25 @@ export class FirebaseAuthService {
       email,
       password
     );
-    this.uid = userCredential.user.uid; // UID setzen
+    this.uidSubject.next(userCredential.user.uid); // UID updaten
     return userCredential.user;
   }
 
-  // Anmeldung
   async login(email: string, password: string): Promise<User> {
     const userCredential = await signInWithEmailAndPassword(
       this.auth,
       email,
       password
     );
-    this.uid = userCredential.user.uid; // UID setzen
+    this.uidSubject.next(userCredential.user.uid); // UID updaten
     return userCredential.user;
   }
 
-  // Abmelden
   async logout(): Promise<void> {
     await signOut(this.auth);
-    this.uid = null; // UID zurücksetzen
+    this.uidSubject.next(null); // UID zurücksetzen
   }
 
-  // Benutzerstatus beobachten
   getCurrentUser(): Observable<User | null> {
     return new Observable((observer) => {
       const unsubscribe = onAuthStateChanged(this.auth, (user) => {
@@ -58,7 +57,9 @@ export class FirebaseAuthService {
       return { unsubscribe };
     });
   }
+
+  // Aktuelle UID synchron abrufen
   getUid(): string | null {
-    return this.uid;
+    return this.uidSubject.getValue(); // Aktueller Wert des BehaviorSubjects
   }
 }
