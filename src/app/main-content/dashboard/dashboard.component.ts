@@ -61,7 +61,7 @@ export class DashboardComponent implements OnInit {
   async loadUser(uid: string): Promise<void> {
     try {
       this.user = await this.firebaseService.getUser(uid);
-      console.log('Loaded user:', this.user);
+      // console.log('Loaded user:', this.user);
 
       if (this.user && this.user.accounts.length > 0) {
         await this.loadAccounts(this.user.accounts);

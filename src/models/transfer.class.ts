@@ -14,9 +14,9 @@ export class Transfer {
   
     constructor(obj?: Partial<Transfer>) {
       if (obj) {
-        console.log('Data before Object.assign:', obj);
+        // console.log('Data before Object.assign:', obj);
         Object.assign(this, obj); // Übernimmt alle Werte aus obj
-        console.log('Data after Object.assign:', this);
+        // console.log('Data after Object.assign:', this);
       }
       this.senderAccountName = obj?.senderAccountName ?? this.senderAccountName;
       this.receiverAccountName = obj?.receiverAccountName ?? this.receiverAccountName;
