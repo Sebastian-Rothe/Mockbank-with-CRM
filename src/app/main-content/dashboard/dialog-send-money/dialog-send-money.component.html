@@ -1,24 +1,14 @@
 <h2>Move money to different account</h2>
 <form (ngSubmit)="sendMoney()" #sentMoneyForm="ngForm">
-  <!-- <mat-form-field appearance="fill">
-    <mat-label>Account Name</mat-label>
-    <input matInput [(ngModel)]="account.accountId" name="accountId" required />
-  </mat-form-field> -->
-
-  <mat-form-field appearance="fill">
-    <mat-label>Amount</mat-label>
-    <input
-      matInput
-      type="number"
-      [(ngModel)]="transfer.amount"
-      name="amount"
-      required
-      min="1"
-    />
-  </mat-form-field>
+  
   <mat-form-field appearance="fill">
     <mat-label>User</mat-label>
-    <mat-select [(ngModel)]="selectedUser" name="selectedUser" (selectionChange)="onUserSelect($event.value)" required>
+    <mat-select
+      [(ngModel)]="selectedUser"
+      name="selectedUser"
+      (selectionChange)="onUserSelect($event.value)"
+      required
+    >
       @for(user of users; track $index) { @if(user.uid !== uid) {
       <mat-option value="{{ user.uid }}">{{
         user.firstName + " " + user.lastName
@@ -30,21 +20,13 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Account</mat-label>
-    <mat-select
-      [(ngModel)]="selectedAccount"
-      name="account"
-      required
-    >
-    @for(a of userAccounts;
-      track $index) { 
+    <mat-select [(ngModel)]="transfer.receiverAccountId" name="account" required>
+      @for(a of userAccounts; track $index) {
       <mat-option value="{{ a.accountId }}">{{
         a.accountName ? a.accountName : a.accountId
       }}</mat-option>
 
       }
-      <!-- <mat-option value="{{ account }}">{{ account }}</mat-option> -->
-    
-      
     </mat-select>
   </mat-form-field>
 
@@ -59,16 +41,18 @@
     >
     </textarea>
   </mat-form-field>
-  <!-- <mat-form-field appearance="fill">
-    <mat-label>Name</mat-label>
+  <mat-form-field appearance="fill">
+
+    <mat-label>Amount</mat-label>
     <input
       matInput
-      type="string"
-      [(ngModel)]="transfer.receiverFullName"
-      name="accountName"
+      type="number"
+      [(ngModel)]="transfer.amount"
+      name="amount"
       required
+      min="1"
     />
-  </mat-form-field> -->
+  </mat-form-field>
 
   <mat-form-field appearance="fill">
     <mat-label>Currency</mat-label>

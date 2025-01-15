@@ -40,7 +40,6 @@ export class DialogSendMoneyComponent {
   userAccounts: Account[] = []; // Array von Account-Objekten, statt nur einem Account-Objekt
   users: User[] = [];
   selectedUser: string | null = null;
-  selectedAccount: Account | null = null;
   senderAccountId: string; //
 
   constructor(
@@ -143,7 +142,7 @@ export class DialogSendMoneyComponent {
   
 
   sendMoney(): void {
-    if (this.senderAccountId && this.transfer.receiverAccountId) {
+    if (this.senderAccountId &&  this.transfer.receiverAccountId) {
       this.firebaseService
         .transferFunds(
           this.senderAccountId,
