@@ -35,11 +35,13 @@ export class MainContentComponent {
     private firebaseService: FirebaseService
   ) {}
   ngOnInit(): void {
-    this.uid = this.authService.getUid();
-    console.log('Current UID:', this.uid);
-    if (this.uid) {
-      this.loadUser(this.uid);
-    }
+    this.authService.uid$.subscribe((uid) => {
+      console.log('Aktuelle UID:', uid);
+      if (uid) {
+        this.uid = uid; 
+        this.loadUser(uid); 
+      }
+    });
   }
   async loadUser(uid: string): Promise<void> {
     try {
