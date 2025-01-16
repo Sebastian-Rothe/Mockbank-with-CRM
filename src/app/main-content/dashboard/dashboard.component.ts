@@ -33,12 +33,12 @@ import { MatMenu, MatMenuModule } from '@angular/material/menu';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  uid: string | null = null;
+  uid: string = ''; // UID des Benutzers
   user: User | null = null; // Benutzerdaten
   totalBalance: number = 0; // Gesamtsumme der Konten
   userAccounts: Account[] = []; // Array von Account-Objekten, statt nur einem Account-Objekt
   transfers: any[] = []; // Eine Liste für die Transfers des Benutzers
-
+profilePictureUrl: string = ''; // URL des Profilbilds
   constructor(
     private sharedService: SharedService,
     private authService: FirebaseAuthService,
@@ -182,4 +182,51 @@ export class DashboardComponent implements OnInit {
   }
   editAccount() {}
   closeAccount() {}
+
+
+ onFileSelected(event: Event): void {
+  const input = event.target as HTMLInputElement;
+
+  if (!input.files || input.files.length === 0) {
+    return; // Keine Datei ausgewählt
+  }
+
+  const file = input.files[0];
+  const allowedTypes = ['image/jpeg', 'image/png'];
+
+  // Prüfen, ob der Dateityp zulässig ist
+  if (!allowedTypes.includes(file.type)) {
+    alert('Bitte laden Sie eine gültige Bilddatei hoch (jpg, png).');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    this.profilePictureUrl = reader.result as string; 
+    if (this.user) {
+      this.user.profilePictureUrl = this.profilePictureUrl; // Optional: Aktualisiere auch die User-Objekt-Referenz
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+   /**
+   * Speichert das Profilbild des Benutzers.
+   */
+   async saveProfilePicture(): Promise<void> {
+    const userId = this.uid;
+    if (this.user?.profilePictureUrl) { // Greife auf `this.user.profilePictureUrl` zu
+      try {
+        await this.firebaseService.updateUserProfilePicture(userId, this.user.profilePictureUrl);
+        alert('Profilbild erfolgreich gespeichert!');
+      } catch (error) {
+        console.error('Fehler beim Speichern des Profilbilds:', error);
+        alert('Fehler beim Speichern des Profilbilds.');
+      }
+    } else {
+      alert('Bitte zuerst ein Bild auswählen.');
+    }
+  }
+  
+  
 }

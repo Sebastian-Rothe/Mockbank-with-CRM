@@ -323,4 +323,26 @@ async transferFunds(
       throw error;
     }
   }
+
+  /**
+ * Aktualisiert das Profilbild eines Benutzers.
+ * @param userId Die UID des Benutzers, dessen Profilbild aktualisiert werden soll.
+ * @param profilePictureUrl Die URL des neuen Profilbildes.
+ * @returns Promise<void>
+ */
+async updateUserProfilePicture(userId: string, profilePictureUrl: string): Promise<void> {
+  try {
+    // Zugriff auf das Benutzer-Dokument in Firestore
+    const userDocRef = doc(this.firestore, 'users', userId);
+
+    // Benutzer-Dokument mit der neuen Profilbild-URL aktualisieren
+    await updateDoc(userDocRef, { profilePictureUrl });
+
+    console.log('Profile picture updated successfully!');
+  } catch (error) {
+    console.error('Error updating profile picture:', error);
+    throw error; // Fehler weitergeben, um sie an der aufrufenden Stelle zu behandeln
+  }
+}
+
 }
