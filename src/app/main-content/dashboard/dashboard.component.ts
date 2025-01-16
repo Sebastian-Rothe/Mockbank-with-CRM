@@ -39,6 +39,7 @@ export class DashboardComponent implements OnInit {
   userAccounts: Account[] = []; // Array von Account-Objekten, statt nur einem Account-Objekt
   transfers: any[] = []; // Eine Liste für die Transfers des Benutzers
 profilePictureUrl: string = ''; // URL des Profilbilds
+isImageSelected = false; // Status, ob ein Bild ausgewählt wurde
   constructor(
     private sharedService: SharedService,
     private authService: FirebaseAuthService,
@@ -186,6 +187,7 @@ profilePictureUrl: string = ''; // URL des Profilbilds
 
  onFileSelected(event: Event): void {
   const input = event.target as HTMLInputElement;
+  this.isImageSelected = true; // Bild wurde ausgewählt
 
   if (!input.files || input.files.length === 0) {
     return; // Keine Datei ausgewählt
@@ -226,6 +228,7 @@ profilePictureUrl: string = ''; // URL des Profilbilds
     } else {
       alert('Bitte zuerst ein Bild auswählen.');
     }
+    this.isImageSelected = false;
   }
   
   

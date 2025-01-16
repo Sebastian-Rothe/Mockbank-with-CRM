@@ -20,17 +20,43 @@
       <div class="total-balance">
         <h4>Total Balance: {{ totalBalance }}€</h4>
       </div>
-      <img src="assets/img/avatar-7964941_1280.png" alt="Customer-Avatar" />
-      <!-- <input type="file" (change)="onFileSelected($event)" /> -->
-      <input 
-      type="file" 
-      (change)="onFileSelected($event)" 
-      accept=".jpg, .jpeg, .png" 
-    />
-    <button (click)="saveProfilePicture()">Save</button>
-    @if(user.profilePictureUrl) {
-    <img [src]="user.profilePictureUrl" alt="Profile Picture" class="profile-picture" />
-    }
+      <div class="profile-container">
+        <div class="profile-image-wrapper">
+          @if(user.profilePictureUrl) {
+          <img
+            [src]="user.profilePictureUrl"
+            alt="Profile Picture"
+            class="profile-picture"
+          />
+          } @else {
+          <img
+            src="assets/img/avatar-7964941_1280.png"
+            alt="Profile Picture"
+            class="profile-picture"
+          />
+          }
+        </div>
+        <div class="profile-actions">
+          @if(!user.profilePictureUrl || isImageSelected) {
+          <input
+            type="file"
+            (change)="onFileSelected($event)"
+            accept=".jpg, .jpeg, .png"
+            class="file-input"
+          />
+          }
+          @if(isImageSelected) {
+          <button
+            (click)="saveProfilePicture()"
+            mat-raised-button
+            color="primary"
+          >
+            Save
+          </button>
+        }
+        </div>
+      </div>
+
       <div>
         <h3>{{ user.firstName }} {{ user.lastName }}</h3>
         <p>{{ user.email }}</p>
@@ -49,7 +75,12 @@
   <div class="align-cards-container">
     @for(account of userAccounts; track $index) {
     <mat-card appearance="outlined" class="align-card">
-      <button mat-icon-button class="align-account-menu-btn" [matMenuTriggerFor]="account$index" aria-label="open address data for changes" >
+      <button
+        mat-icon-button
+        class="align-account-menu-btn"
+        [matMenuTriggerFor]="account$index"
+        aria-label="open address data for changes"
+      >
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #account$index="matMenu">
@@ -65,7 +96,10 @@
           <p class="align-balance">Balance: {{ account.balance }}€</p>
         </div>
         <div class="account-actions">
-          <button mat-icon-button (click)="openSendMoneyDialog(account.accountId)">
+          <button
+            mat-icon-button
+            (click)="openSendMoneyDialog(account.accountId)"
+          >
             <mat-icon>send</mat-icon>
           </button>
           <button
