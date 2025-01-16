@@ -187,16 +187,15 @@ isImageSelected = false; // Status, ob ein Bild ausgewählt wurde
 
  onFileSelected(event: Event): void {
   const input = event.target as HTMLInputElement;
-  this.isImageSelected = true; // Bild wurde ausgewählt
+  this.isImageSelected = true; 
 
   if (!input.files || input.files.length === 0) {
-    return; // Keine Datei ausgewählt
+    return;
   }
 
   const file = input.files[0];
   const allowedTypes = ['image/jpeg', 'image/png'];
 
-  // Prüfen, ob der Dateityp zulässig ist
   if (!allowedTypes.includes(file.type)) {
     alert('Bitte laden Sie eine gültige Bilddatei hoch (jpg, png).');
     return;
@@ -206,7 +205,7 @@ isImageSelected = false; // Status, ob ein Bild ausgewählt wurde
   reader.onload = () => {
     this.profilePictureUrl = reader.result as string; 
     if (this.user) {
-      this.user.profilePictureUrl = this.profilePictureUrl; // Optional: Aktualisiere auch die User-Objekt-Referenz
+      this.user.profilePictureUrl = this.profilePictureUrl; 
     }
   };
   reader.readAsDataURL(file);
@@ -220,10 +219,8 @@ isImageSelected = false; // Status, ob ein Bild ausgewählt wurde
     if (this.user?.profilePictureUrl) { // Greife auf `this.user.profilePictureUrl` zu
       try {
         await this.firebaseService.updateUserProfilePicture(userId, this.user.profilePictureUrl);
-        alert('Profilbild erfolgreich gespeichert!');
       } catch (error) {
         console.error('Fehler beim Speichern des Profilbilds:', error);
-        alert('Fehler beim Speichern des Profilbilds.');
       }
     } else {
       alert('Bitte zuerst ein Bild auswählen.');
