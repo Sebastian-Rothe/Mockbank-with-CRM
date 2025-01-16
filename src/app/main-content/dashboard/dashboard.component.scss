@@ -116,12 +116,10 @@ cursor: pointer;
   }
 
   .profile-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: center;
     gap: 16px;
-    margin: 24px 0;
   
     .profile-image-wrapper {
       position: relative;
@@ -129,48 +127,63 @@ cursor: pointer;
       height: 150px;
       border-radius: 50%;
       overflow: hidden;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border: 2px solid #ddd;
   
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border: 2px solid #e0e0e0;
-        transition: transform 0.3s, box-shadow 0.3s;
-  
-        &:hover {
-          // transform: scale(1.05);
-          box-shadow: 0 6px 12px rgba(0, 0, 0, 0.95);
-        }
-      }
+      // img,
+      // .placeholder {
+      //   width: 100%;
+      //   height: 100%;
+      //   object-fit: cover;
+      //   display: flex;
+      //   justify-content: center;
+      //   align-items: center;
+      //   background-color: #f0f0f0;
+      //   color: #888;
+      // }
     }
   
     .profile-actions {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 12px;
-  
-   
-      input[type="file"] + button {
-        cursor: pointer;
-        padding: 8px 16px;
-        background-color: #1976d2;
+      flex-direction: row;
+      gap: 8px;
+    
+      button {
+        min-width: 100px;
+      }
+    
+      .file-input-label {
+        display: inline-block;
+        background-color: #007bff;
         color: white;
-        border: none;
-        border-radius: 4px;
-        font-size: 14px;
-        transition: background-color 0.3s;
-  
+        padding: 10px 20px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      
         &:hover {
-          background-color: #115293;
+          background-color: #0056b3;
+          transform: scale(1.05);
         }
-  
-        &:focus {
-          outline: 2px solid #1976d2;
-          outline-offset: 2px;
+      
+        &:active {
+          background-color: #004085;
+          transform: scale(1);
+        }
+      
+        input[type="file"] {
+          opacity: 0;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          cursor: pointer;
         }
       }
     }
+    
+  
   }
   
