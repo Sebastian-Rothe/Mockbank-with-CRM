@@ -46,13 +46,13 @@
               accept=".jpg, .jpeg, .png"
               hidden
             />
-            <!-- <button mat-raised-button color="primary">Choose File</button> -->
           </label>
           } @if(isImageSelected) {
           <button
             (click)="saveProfilePicture()"
             mat-raised-button
             color="primary"
+            class="save"
           >
             Save
           </button>
