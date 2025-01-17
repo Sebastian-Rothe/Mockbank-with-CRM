@@ -11,7 +11,7 @@ import { RouterOutlet } from '@angular/router';
   imports: [
     // MainContentComponent,
     // FrontpageComponent,
-    FooterComponent,
+    // FooterComponent,
     // OpenNewAccountComponent,
     RouterOutlet,
   ],

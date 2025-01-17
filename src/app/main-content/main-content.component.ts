@@ -60,4 +60,34 @@ export class MainContentComponent {
       console.error('Fehler beim Logout:', error);
     }
   }
+
+  share() {
+    if (navigator.share) {
+      // Web Share API - funktioniert auf mobilen Geräten und einigen Desktop-Browsern
+      navigator.share({
+        title: 'My Awesome Content',
+        text: 'Check out this amazing content!',
+        url: window.location.href, // URL der aktuellen Seite
+      })
+      .then(() => console.log('Content shared successfully'))
+      .catch((error) => console.error('Error sharing content:', error));
+    } else {
+      // Fallback - Social Media Links für Sharing (z.B. Facebook, Twitter)
+      this.shareOnSocialMedia();
+    }
+  }
+
+  private shareOnSocialMedia() {
+    const url = window.location.href;
+    const text = 'Check out this amazing content!';
+    const title = 'My Awesome Content';
+
+    // Beispiel für das Teilen auf Facebook
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`, '_blank');
+    
+    // Beispiel für das Teilen auf Twitter
+    window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}&via=yourtwitterhandle`, '_blank');
+  
+    window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(text)}`, '_blank');
+  }
 }
