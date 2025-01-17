@@ -6,13 +6,11 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FooterComponent } from '../footer/footer.component';
-import { ImprintComponent } from './imprint/imprint.component';
-import { FrontpageContentComponent } from './frontpage-content/frontpage-content.component';
 
 @Component({
   selector: 'app-frontpage',
   standalone: true,
-  imports: [MatToolbarModule, MatButtonModule, MatIconModule, RouterLink, FooterComponent, ImprintComponent, FrontpageContentComponent, RouterOutlet],
+  imports: [MatToolbarModule, MatButtonModule, MatIconModule, RouterLink, FooterComponent, RouterOutlet],
   templateUrl: './frontpage.component.html',
   styleUrl: './frontpage.component.scss'
 })
