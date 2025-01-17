@@ -6,19 +6,27 @@ import { FrontpageComponent } from './frontpage/frontpage.component';
 import { OpenNewAccountComponent } from './frontpage/open-new-account/open-new-account.component';
 import { MainContentComponent } from './main-content/main-content.component';
 import { CreateNewAdminComponent } from './main-content/create-new-admin/create-new-admin.component';
+import { ImprintComponent } from './frontpage/imprint/imprint.component';
+import { FrontpageContentComponent } from './frontpage/frontpage-content/frontpage-content.component';
 
 export const routes: Routes = [
-  { path: '', component: FrontpageComponent },
+  { path: '', component: FrontpageComponent,
+    children: [
+      { path: '', component: FrontpageContentComponent },
+      { path: 'imprint', component: ImprintComponent },
+      { path: 'open-account', component: OpenNewAccountComponent },
+    ],
+   },
   {
     path: 'main',
     component: MainContentComponent,
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // Default-Route
+      { path: 'imprint', component: ImprintComponent },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'user', component: UserComponent },
       { path: 'user/:uid', component: UserDetailComponent },
       { path: 'new-admin', component: CreateNewAdminComponent },
     ],
   },
-  { path: 'open-account', component: OpenNewAccountComponent },
 ];
