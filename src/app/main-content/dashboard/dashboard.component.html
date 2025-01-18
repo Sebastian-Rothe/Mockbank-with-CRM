@@ -88,7 +88,7 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #account$index="matMenu">
-        <button mat-menu-item (click)="editAccount()">Edit Account</button>
+        <button mat-menu-item (click)="editAccount(account.accountId)">Edit Account</button>
         <button mat-menu-item (click)="closeAccount()">Close Account</button>
       </mat-menu>
       <mat-card-content>
@@ -173,15 +173,7 @@
                     {{ transfer.amount }}€
                   </td>
                   <td>{{ getFormattedDate(transfer.createdAt) }}</td>
-                  <td>
-                    {{
-                      transfer.type === "sent"
-                        ? "sent"
-                        : transfer.type === "received"
-                        ? "received"
-                        : "internal"
-                    }}
-                  </td>
+                
                 </tr>
               </mat-card-content>
             </mat-card>

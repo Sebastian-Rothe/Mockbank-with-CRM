@@ -324,6 +324,17 @@ async transferFunds(
     }
   }
 
+  async updateAccount(accountId: string, accountData: any): Promise<void> {
+    try {
+      const accountDocRef = doc(this.firestore, 'accounts', accountId);
+      await updateDoc(accountDocRef, accountData);
+      console.log('Account updated successfully');
+    } catch (error) {
+      console.error('Error updating account:', error);
+      throw error;
+    }
+  }
+  
   /**
  * Aktualisiert das Profilbild eines Benutzers.
  * @param userId Die UID des Benutzers, dessen Profilbild aktualisiert werden soll.

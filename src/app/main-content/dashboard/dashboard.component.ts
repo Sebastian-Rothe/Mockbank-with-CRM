@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogSendMoneyComponent } from './dialog-send-money/dialog-send-money.component';
 import { DialogOpenNewPocketComponent } from './dialog-open-new-pocket/dialog-open-new-pocket.component';
 import { DialogMoveMoneyComponent } from './dialog-move-money/dialog-move-money.component';
+import { DialogEditAccountComponent } from './dialog-edit-account/dialog-edit-account.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { Account } from '../../../models/account.class';
@@ -181,7 +182,11 @@ isImageSelected = false; // Status, ob ein Bild ausgewählt wurde
     let date: number = transferDate;
     return this.sharedService.formatTimestampToDate(date);
   }
-  editAccount() {}
+  editAccount(accountID: string) {
+    this.dialog.open(DialogEditAccountComponent, {
+      data: { accountID: accountID }, // Übergabe der Account-ID
+    });
+  }
   closeAccount() {}
 
 
