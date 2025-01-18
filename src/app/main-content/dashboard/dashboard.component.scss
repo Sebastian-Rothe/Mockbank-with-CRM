@@ -198,3 +198,21 @@ mat-card-content {
     }
   }
 }
+
+
+.transfer-icon{
+  background-color: #eeeeee; 
+  padding: 8px; 
+  border-radius: 50%;
+  display: inline-flex; 
+  align-items: center;
+  justify-content: center;
+  width: 36px; 
+  height: 36px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+  >mat-icon{
+    margin-top: 4px;
+    font-size: 20px; 
+    line-height: 1; 
+  }
+}

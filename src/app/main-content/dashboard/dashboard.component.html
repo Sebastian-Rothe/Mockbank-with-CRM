@@ -38,7 +38,8 @@
         </div>
         <div class="profile-actions">
           @if(!user.profilePictureUrl || isImageSelected) {
-          <label for="file" class="file-input-label">Choose File
+          <label for="file" class="file-input-label"
+            >Choose File
             <input
               id="file"
               type="file"
@@ -134,41 +135,56 @@
           </thead>
           <tbody>
             @for(transfer of transfers; track $index) {
-            <tr>
-              <td>{{ transfer.description }}</td>
-              <td>
-                {{
-                  transfer.senderAccountName
-                    ? transfer.senderAccountName
-                    : transfer.senderAccountId
-                }}
-              </td>
-              <td>
-                {{
-                  transfer.receiverAccountName
-                    ? transfer.receiverAccountName
-                    : transfer.receiverAccountId
-                }}
-              </td>
-              <td
-                [ngClass]="{
-                  negative: transfer.type === 'sent',
-                  positive: transfer.type === 'received'
-                }"
-              >
-                {{ transfer.amount }}€
-              </td>
-              <td>{{ getFormattedDate(transfer.createdAt) }}</td>
-              <td>
-                {{
-                  transfer.type === "sent"
-                    ? "sent"
-                    : transfer.type === "received"
-                    ? "received"
-                    : "internal"
-                }}
-              </td>
-            </tr>
+            <mat-card>
+              <mat-card-content>
+                <tr>
+                  <td>{{ transfer.description }}</td>
+                  <td>
+                    {{
+                      transfer.senderAccountName
+                        ? transfer.senderAccountName
+                        : transfer.senderAccountId
+                    }}
+                  </td>
+                  <td class="transfer-icon">
+                    @if(transfer.senderUserId === transfer.receiverUserId) {
+                      <mat-icon class="internal">
+                        sync_alt
+                       </mat-icon>
+                    } @else if( user.uid === transfer.senderUserId){
+                      <mat-icon class="negative">arrow_outward</mat-icon>
+                    } @else if( user.uid === transfer.receiverUserId){
+                      <mat-icon class="positive">arrow_inward</mat-icon>
+                    }
+                  </td>
+                  <td>
+                    {{
+                      transfer.receiverAccountName
+                        ? transfer.receiverAccountName
+                        : transfer.receiverAccountId
+                    }}
+                  </td>
+                  <td
+                    [ngClass]="{
+                      negative: transfer.type === 'sent',
+                      positive: transfer.type === 'received'
+                    }"
+                  >
+                    {{ transfer.amount }}€
+                  </td>
+                  <td>{{ getFormattedDate(transfer.createdAt) }}</td>
+                  <td>
+                    {{
+                      transfer.type === "sent"
+                        ? "sent"
+                        : transfer.type === "received"
+                        ? "received"
+                        : "internal"
+                    }}
+                  </td>
+                </tr>
+              </mat-card-content>
+            </mat-card>
             }
           </tbody>
         </table>
