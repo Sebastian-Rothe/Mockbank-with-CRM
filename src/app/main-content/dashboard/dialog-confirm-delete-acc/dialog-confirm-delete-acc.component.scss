@@ -1,0 +1,25 @@
+.dialog-container {
+    padding: 20px;
+    text-align: center;
+  
+    h2 {
+      margin-bottom: 10px;
+      font-size: 1.5rem;
+    }
+  
+    mat-dialog-content {
+      margin: 10px 0;
+      font-size: 1rem;
+    }
+  
+    mat-dialog-actions {
+      display: flex;
+      justify-content: space-around;
+      gap: 10px;
+  
+      button {
+        min-width: 80px;
+      }
+    }
+  }
+  

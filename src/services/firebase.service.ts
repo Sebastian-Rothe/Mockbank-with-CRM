@@ -8,6 +8,7 @@ import {
   where,
   collectionData,
   addDoc,
+  arrayRemove,
   doc,
   setDoc,
   updateDoc,
@@ -334,7 +335,30 @@ async transferFunds(
       throw error;
     }
   }
-  
+
+  async deleteAccount(accountId: string): Promise<void> {
+    try {
+      const accountDocRef = doc(this.firestore, 'accounts', accountId);
+      await deleteDoc(accountDocRef);
+      console.log('Account successfully deleted');
+    } catch (error) {
+      console.error('Error deleting account:', error);
+      throw error;
+    }
+  }
+  async removeAccountFromUser(userId: string, accountId: string): Promise<void> {
+    try {
+      const userDocRef = doc(this.firestore, 'users', userId);
+      await updateDoc(userDocRef, {
+        accounts: arrayRemove(accountId),
+      });
+      console.log(`Account ${accountId} removed from user ${userId}`);
+    } catch (error) {
+      console.error('Error removing account from user:', error);
+      throw error;
+    }
+  }
+
   /**
  * Aktualisiert das Profilbild eines Benutzers.
  * @param userId Die UID des Benutzers, dessen Profilbild aktualisiert werden soll.

@@ -89,7 +89,7 @@
       </button>
       <mat-menu #account$index="matMenu">
         <button mat-menu-item (click)="editAccount(account.accountId)">Edit Account</button>
-        <button mat-menu-item (click)="closeAccount()">Close Account</button>
+        <button mat-menu-item (click)="deleteAccount(account.accountId, uid)">Close Account</button>
       </mat-menu>
       <mat-card-content>
         <div class="account-header">

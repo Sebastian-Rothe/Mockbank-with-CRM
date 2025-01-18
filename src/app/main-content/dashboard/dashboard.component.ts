@@ -15,6 +15,7 @@ import { Account } from '../../../models/account.class';
 import { CommonModule } from '@angular/common';
 import { SharedService } from '../../../services/shared.service';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
+import { DialogConfirmDeleteAccComponent } from './dialog-confirm-delete-acc/dialog-confirm-delete-acc.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -187,8 +188,31 @@ isImageSelected = false; // Status, ob ein Bild ausgewählt wurde
       data: { accountID: accountID }, // Übergabe der Account-ID
     });
   }
-  closeAccount() {}
-
+  
+  deleteAccount(accountId: string, userId: string): void {
+    const dialogRef = this.dialog.open(DialogConfirmDeleteAccComponent, {
+      width: '400px',
+      data: {
+        title: 'Confirm Deletion',
+        message: `Are you sure you want to delete the account with ID ${accountId}? The money in the account will be lost.`,
+      },
+    });
+  
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        // Lösche das Konto aus der Account-Sammlung
+        this.firebaseService.deleteAccount(accountId).then(() => {
+          // Entferne die accountId aus dem Benutzerobjekt
+          return this.firebaseService.removeAccountFromUser(userId, accountId);
+        }).then(() => {
+          console.log('Account deleted and removed from user successfully');
+        }).catch((error) => {
+          console.error('Error deleting account:', error);
+        });
+      }
+    });
+  }
+  
 
  onFileSelected(event: Event): void {
   const input = event.target as HTMLInputElement;
