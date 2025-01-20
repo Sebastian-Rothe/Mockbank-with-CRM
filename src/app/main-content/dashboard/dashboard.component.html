@@ -138,14 +138,6 @@
             <mat-card>
               <mat-card-content>
                 <tr>
-                  <td>{{ transfer.description }}</td>
-                  <td>
-                    {{
-                      transfer.senderAccountName
-                        ? transfer.senderAccountName
-                        : transfer.senderAccountId
-                    }}
-                  </td>
                   <td class="transfer-icon">
                     @if(transfer.senderUserId === transfer.receiverUserId) {
                       <mat-icon class="internal">
@@ -157,6 +149,15 @@
                       <mat-icon class="positive">arrow_inward</mat-icon>
                     }
                   </td>
+                  <td>{{ transfer.description }}</td>
+                  <td>
+                    {{
+                      transfer.senderAccountName
+                        ? transfer.senderAccountName
+                        : transfer.senderAccountId
+                    }}
+                  </td>
+                
                   <td>
                     {{
                       transfer.receiverAccountName

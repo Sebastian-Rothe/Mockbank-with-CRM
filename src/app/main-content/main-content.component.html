@@ -7,6 +7,9 @@
         <li routerLink="/main/dashboard" routerLinkActive="router-link-active">
           <mat-icon>dashboard</mat-icon> Dashboard
         </li>
+        @if(user?.role === 'user'){
+          <li routerLink="/main/user-profile"><mat-icon>person</mat-icon>Profile</li>
+        }
         <!-- @if(user?.role === 'admin'){ -->
         <li routerLink="/main/user"><mat-icon>person</mat-icon> User</li>
         <!-- } -->
