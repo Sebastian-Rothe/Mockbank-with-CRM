@@ -9,7 +9,7 @@ export class Transfer {
     amount: number = 0;
     currency: string = 'EUR';
     createdAt: number;
-    description?: string;
+    description?: string = '';
   
   
     constructor(obj?: Partial<Transfer>) {

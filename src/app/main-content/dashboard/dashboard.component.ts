@@ -153,6 +153,8 @@ isImageSelected = false; // Status, ob ein Bild ausgewählt wurde
           }
         }
 
+        this.transfers.sort((a, b) => b.createdAt - a.createdAt);
+        
         console.log('Processed transfers:', this.transfers);
       } else {
         console.error('User is null');
