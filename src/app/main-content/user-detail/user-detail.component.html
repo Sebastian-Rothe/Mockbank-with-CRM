@@ -1,40 +1,131 @@
-<div>
+<div class="user-profile">
+  <!-- User Overview Section -->
   <mat-card appearance="outlined" class="card-header m-32">
-    <button mat-icon-button class="address-menu-btn" [matMenuTriggerFor]="userDetail" aria-label="open address data for changes" >
-      <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #userDetail="matMenu">
-      <button mat-menu-item (click)="editUserDetail()">Edit</button>
-      <button mat-menu-item>Item 2</button>
-    </mat-menu>
-    <!-- <mat-card-content>Simple card</mat-card-content> -->
-    <div>
-      <img src="assets/img/avatar-7964941_1280.png" alt="Customer-Avatar" />
-      <div>
+    <div class="card-header-actions">
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="userDetail"
+        aria-label="Open user details menu"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #userDetail="matMenu">
+        <button mat-menu-item (click)="editUserDetail()">Edit</button>
+        <button mat-menu-item>Delete</button>
+      </mat-menu>
+    </div>
+    <div class="user-overview">
+      <div class="profile-image-wrapper">
+        @if(user?.profilePictureUrl) {
+        <img
+          [src]="user?.profilePictureUrl"
+          alt="Profile Picture"
+          class="profile-picture"
+        />
+        } @else {
+        <img
+          src="assets/img/avatar-7964941_1280.png"
+          alt="Profile Picture"
+          class="profile-picture"
+        />
+        }
+      </div>
+      <div class="user-basic-info">
         <h3>{{ user?.firstName }} {{ user?.lastName }}</h3>
-        <p>{{ user?.uid }}</p>
-        <!-- kundennummer -->
+        <p>Birthday: {{ getFormattedBirthDate() }}</p>
       </div>
     </div>
   </mat-card>
+
+  <!-- Address Section -->
   <mat-card appearance="outlined" class="m-32">
-    <h4>Address</h4>
-    <button mat-icon-button class="address-menu-btn" [matMenuTriggerFor]="userAddress" aria-label="open address data for changes" >
-      <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #userAddress="matMenu">
-      <button mat-menu-item (click)="editUserAddress()">Edit</button>
-      <button mat-menu-item>Item 2</button>
-    </mat-menu>
-   
-    <mat-card-content>{{ user?.streetAddress }}</mat-card-content>
+    <div class="section-header">
+      <h4>Address</h4>
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="userAddress"
+        aria-label="Open address menu"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #userAddress="matMenu">
+        <button mat-menu-item (click)="editUserAddress()">Edit</button>
+        <button mat-menu-item>Delete</button>
+      </mat-menu>
+    </div>
+    <div class="section-content">
+      <div class="detail-item">
+        <label>Street Address:</label>
+        <span>{{ user?.streetAddress }}</span>
+      </div>
+      <div class="detail-item">
+        <label>Zip Code:</label>
+        <span>{{ user?.zipCode }}</span>
+      </div>
+      <div class="detail-item">
+        <label>City:</label>
+        <span>{{ user?.city }}</span>
+      </div>
+    </div>
+  </mat-card>
 
-    <mat-card-content>{{ user?.zipCode }}</mat-card-content>
+  <!-- Contact Section -->
+  <mat-card appearance="outlined" class="m-32">
+    <div class="section-header">
+      <h4>Contact</h4>
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="userContact"
+        aria-label="Open contact menu"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #userContact="matMenu">
+        <button mat-menu-item (click)="editUserContact()">Edit</button>
+        <button mat-menu-item>Delete</button>
+      </mat-menu>
+    </div>
+    <div class="section-content">
+      <div class="detail-item">
+        <label>Email:</label>
+        <span>{{ user?.email }}</span>
+      </div>
+      <div class="detail-item">
+        <label>Phone Number:</label>
+        <span>{{ user?.phoneNumber }}</span>
+      </div>
+    </div>
+  </mat-card>
 
-    <mat-card-content>{{ getFormattedBirthDate() }}</mat-card-content>
-
-    <mat-card-content>{{ user?.city }}</mat-card-content>
-
-    <mat-card-content>{{ user?.city }}</mat-card-content>
+  <!-- Additional Details Section -->
+  <mat-card appearance="outlined" class="m-32">
+    <div class="section-header">
+      <h4>Details</h4>
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="userDetailsMenu"
+        aria-label="Open details menu"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #userDetailsMenu="matMenu">
+        <button mat-menu-item (click)="editUserDetails()">Edit</button>
+        <button mat-menu-item>Delete</button>
+      </mat-menu>
+    </div>
+    <div class="section-content">
+      <div class="detail-item">
+        <label>Nationality:</label>
+        <span>{{ user?.nationality }}</span>
+      </div>
+      <div class="detail-item">
+        <label>Tax ID:</label>
+        <span>{{ user?.taxId }}</span>
+      </div>
+      <div class="detail-item">
+        <label>Occupation:</label>
+        <span>{{ user?.occupation }}</span>
+      </div>
+    </div>
   </mat-card>
 </div>

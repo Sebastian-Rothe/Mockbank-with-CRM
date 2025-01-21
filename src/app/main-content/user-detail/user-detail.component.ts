@@ -78,4 +78,11 @@ export class UserDetailComponent implements OnInit {
   getFormattedBirthDate(): string {
     return this.sharedService.formatTimestampToDate(this.user?.birthDate || 0);
   }
+
+  editUserContact() {
+    console.log('Edit User Contact');
+  }
+  editUserDetails() {
+    console.log('Edit User Details');
+  }
 }
