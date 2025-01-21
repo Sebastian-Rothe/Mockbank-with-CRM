@@ -8,7 +8,7 @@ import { updateDoc, doc } from 'firebase/firestore';
 import { from } from 'rxjs';
 
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -19,31 +19,50 @@ import { provideNativeDateAdapter } from '@angular/material/core';
   selector: 'app-dialog-edit-user-detail',
   standalone: true,
   providers: [provideNativeDateAdapter()],
-  imports: [ MatDialogModule,
+  imports: [
+    MatDialogModule,
     // MatDialogClose,
     MatFormFieldModule,
-    
+
     MatInputModule,
     MatDatepickerModule,
     MatButtonModule,
-    FormsModule],
+    FormsModule,
+  ],
   templateUrl: './dialog-edit-user-detail.component.html',
-  styleUrl: './dialog-edit-user-detail.component.scss'
+  styleUrl: './dialog-edit-user-detail.component.scss',
 })
 export class DialogEditUserDetailComponent {
   user = new User();
   birthDate: Date = new Date();
 
-  constructor(private firebaseService: FirebaseService, public dialogRef: MatDialogRef<DialogEditUserDetailComponent>) {}
-  
+  constructor(
+    private firebaseService: FirebaseService,
+    public dialogRef: MatDialogRef<DialogEditUserDetailComponent>
+  ) {}
+
+  ngOnInit() {
+    if (this.user.birthDate) {
+      this.user.birthDate = new Date(this.user.birthDate).getTime(); // Konvertiere Timestamp zu Date
+    }
+  }
+  // saveNewUser(user: any): Observable<void> {
+  //   const ref = doc(this.firebaseService.firestore, 'users', user.uid);
+  //   this.closeDialog();
+  //   return from(updateDoc(ref, { ...user }));
+  // }
   saveNewUser(user: any): Observable<void> {
     const ref = doc(this.firebaseService.firestore, 'users', user.uid);
-    this.closeDialog();
-    return from(updateDoc(ref, { ...user }));
- }
+    const updatedUser = {
+      ...user,
+      birthDate: user.birthDate instanceof Date ? user.birthDate.getTime() : user.birthDate,
+    };
   
+    this.closeDialog();
+    return from(updateDoc(ref, updatedUser));
+  }
+
   closeDialog(): void {
-    this.dialogRef.close(); 
+    this.dialogRef.close();
   }
 }
-

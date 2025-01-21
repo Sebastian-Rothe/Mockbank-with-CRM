@@ -140,7 +140,11 @@ export class OpenNewAccountComponent {
             this.secondFormGroup.get('firstName')?.value || '';
           this.user.lastName =
             this.secondFormGroup.get('lastName')?.value || '';
-          this.user.birthDate = this.birthDate.getTime();
+          const birthDateValue = this.secondFormGroup.get('birthDate')?.value;
+          this.user.birthDate = birthDateValue
+            ? new Date(birthDateValue).getTime()
+            : 0;
+
           this.user.streetAddress =
             this.secondFormGroup.get('streetAddress')?.value || '';
           this.user.zipCode = this.secondFormGroup.get('zipCode')?.value || '';
