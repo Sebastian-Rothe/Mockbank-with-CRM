@@ -15,20 +15,26 @@ import { FirebaseService } from '../../../services/firebase.service';
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [MatIcon, MatCardModule, CommonModule, RouterLink],
+  imports: [
+    MatCardModule,
+    CommonModule,
+    RouterLink,
+  ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss',
 })
 export class UserComponent {
   user: User = new User();
   user$: Observable<User[]>;
- 
-  constructor(public dialog: MatDialog, private firebaseService: FirebaseService) {
+
+  constructor(
+    public dialog: MatDialog,
+    private firebaseService: FirebaseService
+  ) {
     this.user$ = this.firebaseService.getUsers();
   }
 
   // openDialog() {
   //   this.dialog.open(DialogAddUserComponent);
   // }
- 
 }
