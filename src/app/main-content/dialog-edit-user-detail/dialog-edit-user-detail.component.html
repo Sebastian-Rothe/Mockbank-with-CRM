@@ -18,7 +18,12 @@
   <div class="name-container">
     <mat-form-field class="mr-16" appearance="outline">
       <mat-label>Birth Date</mat-label>
-      <input [(ngModel)]="user.birthDate" matInput [matDatepicker]="picker" />
+      <input
+        [(ngModel)]="user.birthDate"
+        matInput
+        [matDatepicker]="picker"
+        placeholder="{{ getFormattedBirthDate() }}"
+      />
       <mat-datepicker-toggle
         matIconSuffix
         [for]="picker"
@@ -30,6 +35,6 @@
 </div>
 
 <mat-dialog-actions>
-    <button mat-button (click)="closeDialog()">Cancel</button>
-    <button mat-button (click)="saveNewUser(user)" cdkFocusInitial>Save</button>
-  </mat-dialog-actions>
+  <button mat-button (click)="closeDialog()">Cancel</button>
+  <button mat-button (click)="saveNewUser(user)" cdkFocusInitial>Save</button>
+</mat-dialog-actions>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FirebaseService } from '../../../services/firebase.service';
+import { SharedService } from '../../../services/shared.service';
 
 import { FormsModule } from '@angular/forms';
 
@@ -15,6 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { User } from '../../../models/user.class';
 import { provideNativeDateAdapter } from '@angular/material/core';
+
 @Component({
   selector: 'app-dialog-edit-user-detail',
   standalone: true,
@@ -38,6 +40,7 @@ export class DialogEditUserDetailComponent {
 
   constructor(
     private firebaseService: FirebaseService,
+    private sharedService: SharedService,
     public dialogRef: MatDialogRef<DialogEditUserDetailComponent>
   ) {}
 
@@ -64,5 +67,8 @@ export class DialogEditUserDetailComponent {
 
   closeDialog(): void {
     this.dialogRef.close();
+  }
+  getFormattedBirthDate(): string {
+    return this.sharedService.formatTimestampToDate(this.user?.birthDate || 0);
   }
 }

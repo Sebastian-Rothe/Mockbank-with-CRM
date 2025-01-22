@@ -85,4 +85,5 @@ export class UserDetailComponent implements OnInit {
   editUserDetails() {
     console.log('Edit User Details');
   }
+  
 }
