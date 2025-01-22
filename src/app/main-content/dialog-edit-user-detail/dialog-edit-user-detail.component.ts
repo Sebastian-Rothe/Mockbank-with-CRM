@@ -35,8 +35,11 @@ import { provideNativeDateAdapter } from '@angular/material/core';
   styleUrl: './dialog-edit-user-detail.component.scss',
 })
 export class DialogEditUserDetailComponent {
+  uid: string = ''; // oder von einem Dienst setzen
+
   user = new User();
   birthDate: Date = new Date();
+  profilePictureUrl: string = '';
 
   constructor(
     private firebaseService: FirebaseService,
@@ -71,4 +74,47 @@ export class DialogEditUserDetailComponent {
   getFormattedBirthDate(): string {
     return this.sharedService.formatTimestampToDate(this.user?.birthDate || 0);
   }
+
+  
+ onFileSelected(event: Event): void {
+  const input = event.target as HTMLInputElement;
+
+  if (!input.files || input.files.length === 0) {
+    return;
+  }
+
+  const file = input.files[0];
+  const allowedTypes = ['image/jpeg', 'image/png'];
+
+  if (!allowedTypes.includes(file.type)) {
+    alert('Bitte laden Sie eine gültige Bilddatei hoch (jpg, png).');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    this.profilePictureUrl = reader.result as string; 
+    if (this.user) {
+      this.user.profilePictureUrl = this.profilePictureUrl; 
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+  //  /**
+  //  * Speichert das Profilbild des Benutzers.
+  //  */
+  //  async saveProfilePicture(): Promise<void> {
+  //   const userId = this.uid;
+  //   if (this.user?.profilePictureUrl) { // Greife auf `this.user.profilePictureUrl` zu
+  //     try {
+  //       await this.firebaseService.updateUserProfilePicture(userId, this.user.profilePictureUrl);
+  //     } catch (error) {
+  //       console.error('Fehler beim Speichern des Profilbilds:', error);
+  //     }
+  //   } else {
+  //     alert('Bitte zuerst ein Bild auswählen.');
+  //   }
+  // }
+  
 }
