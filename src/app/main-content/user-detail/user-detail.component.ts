@@ -12,6 +12,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogEditUserAddressComponent } from '../dialog-edit-user-address/dialog-edit-user-address.component';
 import { DialogEditUserDetailComponent } from '../dialog-edit-user-detail/dialog-edit-user-detail.component';
+import { DialogEditUserDetailsComponent } from '../dialog-edit-user-details/dialog-edit-user-details.component';
 import { SharedService } from '../../../services/shared.service';
 
 import { doc, onSnapshot } from 'firebase/firestore';
@@ -21,7 +22,7 @@ import { doc, onSnapshot } from 'firebase/firestore';
   standalone: true,
   imports: [
     MatCard,
-    MatCardContent,
+    // MatCardContent,
     MatIcon,
     MatIconButton,
     MatButtonModule,
@@ -33,13 +34,12 @@ import { doc, onSnapshot } from 'firebase/firestore';
 export class UserDetailComponent implements OnInit {
   userId = '';
   user: User | null = null;
+
   constructor(
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private firebaseService: FirebaseService,
     private sharedService: SharedService
-
-
   ) {}
 
   ngOnInit() {
@@ -47,6 +47,7 @@ export class UserDetailComponent implements OnInit {
     console.log(this.userId);
     this.getUserDetails(this.userId);
   }
+
   getUserDetails(userId: string): void {
     const userRef = doc(this.firebaseService.firestore, 'users', userId);
 
@@ -62,6 +63,7 @@ export class UserDetailComponent implements OnInit {
       }
     });
   }
+
   editUserDetail() {
     if (this.user) {
       const dialog = this.dialog.open(DialogEditUserDetailComponent);
@@ -83,7 +85,10 @@ export class UserDetailComponent implements OnInit {
     console.log('Edit User Contact');
   }
   editUserDetails() {
-    console.log('Edit User Details');
+     if (this.user){
+      const dialog = this.dialog.open(DialogEditUserDetailsComponent);
+      dialog.componentInstance.user = new User(this.user.toPlainObject());
+    }
   }
   
 }
