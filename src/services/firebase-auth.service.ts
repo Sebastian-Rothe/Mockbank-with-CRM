@@ -14,6 +14,7 @@ import {
 } from '@angular/fire/auth';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { onAuthStateChanged } from 'firebase/auth';
+import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -22,7 +23,7 @@ export class FirebaseAuthService {
   private uidSubject = new BehaviorSubject<string | null>(null);
   uid$ = this.uidSubject.asObservable(); // Observable für UID-Änderungen
 
-  constructor(private auth: Auth) {
+  constructor(private auth: Auth,  private firestore: Firestore) {
     // Auth-State überwachen und UID setzen
     onAuthStateChanged(this.auth, (user) => {
       const uid = user?.uid || null;
@@ -116,15 +117,23 @@ async updateEmail(newEmail: string, password: string): Promise<void> {
     await this.reauthenticate(password);
     console.log('Benutzer erfolgreich erneut authentifiziert.');
 
+    await sendEmailVerification(user);
+    console.log('Verifizierungs-E-Mail für neue Adresse gesendet.');
+
     // Dann die E-Mail ändern
     await updateEmail(user, newEmail);
     console.log('E-Mail erfolgreich aktualisiert.');
+
+    // E-Mail auch im Firestore aktualisieren
+    const userDocRef = doc(this.firestore, 'users', user.uid);
+    await updateDoc(userDocRef, { email: newEmail });
+    console.log('E-Mail im Firestore erfolgreich aktualisiert.');
+
   } catch (error) {
     console.error('Fehler beim Aktualisieren der E-Mail:', error);
     throw error;
   }
 }
-
 
   /**
    * Aktualisiert das Passwort des Benutzers.
