@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>Konto bearbeiten</h2>
+<div mat-dialog-content>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Aktuelles Passwort</mat-label>
+    <input matInput [(ngModel)]="currentPassword" type="password" placeholder="Aktuelles Passwort" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Neue E-Mail</mat-label>
+    <input matInput [(ngModel)]="newEmail" type="email" placeholder="Neue E-Mail" />
+  </mat-form-field>
+
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Neues Passwort</mat-label>
+    <input matInput [(ngModel)]="newPassword" type="password" placeholder="Neues Passwort" />
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Abbrechen</button>
+  <button mat-button color="primary" (click)="changeEmail()">E-Mail ändern</button>
+  <button mat-button color="primary" (click)="changePassword()">Passwort ändern</button>
+</div>

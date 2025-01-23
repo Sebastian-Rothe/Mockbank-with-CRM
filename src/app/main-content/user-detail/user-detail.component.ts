@@ -1,8 +1,15 @@
+//  
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+// Firebase
+import { doc, onSnapshot } from 'firebase/firestore';
+// Services
 import { FirebaseService } from '../../../services/firebase.service';
+import { SharedService } from '../../../services/shared.service';
+// Models
 import { User } from '../../../models/user.class';
+// Angular Material
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
 import { MatIconButton } from '@angular/material/button';
@@ -10,12 +17,13 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+// Dialoge
 import { DialogEditUserAddressComponent } from '../dialog-edit-user-address/dialog-edit-user-address.component';
 import { DialogEditUserDetailComponent } from '../dialog-edit-user-detail/dialog-edit-user-detail.component';
 import { DialogEditUserDetailsComponent } from '../dialog-edit-user-details/dialog-edit-user-details.component';
-import { SharedService } from '../../../services/shared.service';
+import { DialogEditUserAuthDataComponent } from '../dialog-edit-user-auth-data/dialog-edit-user-auth-data.component';
 
-import { doc, onSnapshot } from 'firebase/firestore';
+
 // import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-user-detail',
@@ -87,6 +95,12 @@ export class UserDetailComponent implements OnInit {
   editUserDetails() {
      if (this.user){
       const dialog = this.dialog.open(DialogEditUserDetailsComponent);
+      dialog.componentInstance.user = new User(this.user.toPlainObject());
+    }
+  }
+  editUserAuth() {
+    if (this.user){
+      const dialog = this.dialog.open(DialogEditUserAuthDataComponent);
       dialog.componentInstance.user = new User(this.user.toPlainObject());
     }
   }

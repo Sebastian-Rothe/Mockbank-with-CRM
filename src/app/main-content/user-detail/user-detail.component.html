@@ -40,6 +40,36 @@
     </div>
   </mat-card>
 
+
+  <mat-card appearance="outlined" class="m-32">
+    <div class="section-header">
+      <h4>Login Data</h4>
+      <button
+        mat-icon-button
+        [matMenuTriggerFor]="userContact"
+        aria-label="Open contact menu"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #userContact="matMenu">
+        <button mat-menu-item (click)="editUserAuth()">Edit</button>
+        <button mat-menu-item>Delete</button>
+      </mat-menu>
+    </div>
+    <div class="section-content">
+      <div class="detail-item">
+        <label>Email:</label>
+        <span>{{ user?.email }}</span>
+      </div>
+      <div class="detail-item">
+        <label>Password:</label>
+        <span>*********</span>
+      </div>
+    </div>
+  </mat-card>
+
+
+
   <!-- Address Section -->
   <mat-card appearance="outlined" class="m-32">
     <div class="section-header">
