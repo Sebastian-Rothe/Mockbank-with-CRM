@@ -10,6 +10,7 @@ import { FirebaseService
 
  } from '../../../../services/firebase.service';
  import { SharedService } from '../../../../services/shared.service';
+ import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-transfer-detail',
   standalone: true,
@@ -28,6 +29,7 @@ export class TransferDetailComponent {
     public dialogRef: MatDialogRef<TransferDetailComponent>,
     private firebaseService: FirebaseService,
     private sharedService: SharedService,
+    private snackBar: MatSnackBar // Optional
   ) {
     this.transfer = data;
   }
@@ -52,8 +54,26 @@ export class TransferDetailComponent {
   getFormattedDate(transferDate: number): string {
     return this.sharedService.formatTimestampToDetailedDate(transferDate);
   }
+    closeDialog(): void {
+    this.dialogRef.close(); 
+  }
 
-  closeDialog(): void {
-    this.dialogRef.close();
+  async deleteTransfer(transferId: string): Promise<void> {
+    try {
+      // Call the deleteTransfer function from the service
+      await this.firebaseService.deleteTransfer(transferId);
+
+      // Optional: Display a notification for successful deletion
+      this.snackBar.open('Transfer successfully deleted!', 'Close', {
+        duration: 3000,
+      });
+      this.closeDialog();
+    } catch (error) {
+      // Handle errors
+      console.error('Error while deleting the transfer:', error);
+      this.snackBar.open('Failed to delete the transfer!', 'Close', {
+        duration: 3000,
+      });
+    }
   }
 }
