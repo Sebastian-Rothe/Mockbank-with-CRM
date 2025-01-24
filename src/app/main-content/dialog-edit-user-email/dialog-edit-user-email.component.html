@@ -1,0 +1,19 @@
+<mat-dialog-content>
+    <form>
+      <mat-form-field>
+        <mat-label>Neue E-Mail</mat-label>
+        <input matInput [(ngModel)]="newEmail" name="newEmail" required>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <mat-label>Aktuelles Passwort</mat-label>
+        <input matInput [(ngModel)]="currentPassword" name="currentPassword" type="password" required>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+  
+  <mat-dialog-actions>
+    <button mat-button (click)="closeDialog()">Abbrechen</button>
+    <button mat-button color="primary" (click)="changeEmail()">E-Mail ändern</button>
+  </mat-dialog-actions>
+  
