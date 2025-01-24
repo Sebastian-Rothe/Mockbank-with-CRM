@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { SharedService } from '../../../services/shared.service';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
 import { DialogConfirmDeleteAccComponent } from './dialog-confirm-delete-acc/dialog-confirm-delete-acc.component';
+import { TransfersComponent } from './transfers/transfers.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -30,6 +31,7 @@ import { DialogConfirmDeleteAccComponent } from './dialog-confirm-delete-acc/dia
     MatIcon,
     CommonModule,
     MatMenu,
+    TransfersComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],

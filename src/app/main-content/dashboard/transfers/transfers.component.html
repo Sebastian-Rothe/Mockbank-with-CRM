@@ -1,0 +1,55 @@
+<div class="transfers">
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Transfers</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <table>
+        <tbody>
+          @for(transfer of transfers; track $index) {
+          <mat-card>
+            <mat-card-content class="align-transfer-card">
+              <tr>
+                <td class="transfer-icon">
+                  @if(transfer.senderUserId === transfer.receiverUserId) {
+                  <mat-icon class="internal"> sync_alt </mat-icon>
+                  } @else if( user!.uid === transfer.senderUserId){
+                  <mat-icon class="negative">arrow_outward</mat-icon>
+                  } @else if( user!.uid === transfer.receiverUserId){
+                  <mat-icon class="positive">south_east</mat-icon>
+                  }
+                </td>
+                <td>{{ transfer.description }}</td>
+                <!-- <td>
+                    {{
+                      transfer.senderAccountName
+                        ? transfer.senderAccountName
+                        : transfer.senderAccountId
+                    }}
+                  </td>
+                
+                  <td>
+                    {{
+                      transfer.receiverAccountName
+                        ? transfer.receiverAccountName
+                        : transfer.receiverAccountId
+                    }}
+                  </td> -->
+                <td
+                  [ngClass]="{
+                    negative: transfer.type === 'sent',
+                    positive: transfer.type === 'received'
+                  }"
+                >
+                  {{ transfer.amount }}€
+                </td>
+                <td>{{ getFormattedDate(transfer.createdAt) }}</td>
+              </tr>
+            </mat-card-content>
+          </mat-card>
+          }
+        </tbody>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>
