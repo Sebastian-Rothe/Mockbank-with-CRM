@@ -9,6 +9,9 @@ import { FirebaseAuthService } from '../../../../services/firebase-auth.service'
 import { User } from '../../../../models/user.class';
 import { Account } from '../../../../models/account.class';
 import { FirebaseService } from '../../../../services/firebase.service';
+import { MatDialog } from '@angular/material/dialog';
+import { TransferDetailComponent } from '../transfer-detail/transfer-detail.component';
+
 
 @Component({
   selector: 'app-transfers',
@@ -16,11 +19,12 @@ import { FirebaseService } from '../../../../services/firebase.service';
   imports: [    MatCard,
       MatIconModule,
       MatCardContent,
-      
+  
       MatButtonModule,
       MatCardModule,
       MatIcon,
       CommonModule,
+  
       ],
   templateUrl: './transfers.component.html',
   styleUrl: './transfers.component.scss'
@@ -33,7 +37,8 @@ export class TransfersComponent {
   constructor(
     private authService: FirebaseAuthService,
     private firebaseService: FirebaseService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -121,5 +126,11 @@ export class TransfersComponent {
 
   getFormattedDate(transferDate: number): string {
     return this.sharedService.formatTimestampToDate(transferDate);
+  }
+
+  openTransferPopup(transferId: string) {
+    this.dialog.open(TransferDetailComponent, {
+      data: { transferId }, // Hier kannst du auch weitere Daten übergeben
+    });
   }
 }

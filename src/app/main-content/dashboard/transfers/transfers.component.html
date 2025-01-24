@@ -6,7 +6,7 @@
       <mat-card-content>
         <div class="transfer-list">
             @for(transfer of transfers; track $index){
-                <mat-card class="transfer-card">
+                <mat-card class="transfer-card" (click)="openTransferPopup(transfer.transferId)">
                     <div class="transfer-content">
                       <!-- Icon Section -->
                       <div
