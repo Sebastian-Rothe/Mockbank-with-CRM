@@ -4,10 +4,10 @@
     <p><strong>Transfer ID:</strong> {{ data.transferId }}</p>
     <p><strong>Sender Account Name:</strong> {{ data.senderAccountName }}</p>
     <p><strong>Sender Account ID:</strong> {{ data.senderAccountId }}</p>
-    <p><strong>Sender User ID:</strong> {{ data.senderUserId }}</p>
+    <p><strong>Sender:</strong> {{ senderName }}</p>
     <p><strong>Receiver Account Name:</strong> {{ data.receiverAccountName }}</p>
     <p><strong>Receiver Account ID:</strong> {{ data.receiverAccountId }}</p>
-    <p><strong>Receiver User ID:</strong> {{ data.receiverUserId }}</p>
+    <p><strong>Receiver:</strong> {{ receiverName }}</p>
     <p><strong>Amount:</strong> {{ data.amount + data.currency}}</p>
     <p><strong>Description:</strong> {{ data.description || 'No description provided' }}</p>
     <p><strong>Created At:</strong> {{ data.createdAt }}</p>
