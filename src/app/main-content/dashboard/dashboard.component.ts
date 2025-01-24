@@ -40,8 +40,8 @@ export class DashboardComponent implements OnInit {
   totalBalance: number = 0; // Gesamtsumme der Konten
   userAccounts: Account[] = []; // Array von Account-Objekten, statt nur einem Account-Objekt
   transfers: any[] = []; // Eine Liste für die Transfers des Benutzers
-profilePictureUrl: string = ''; // URL des Profilbilds
-isImageSelected = false; // Status, ob ein Bild ausgewählt wurde
+  profilePictureUrl: string = ''; // URL des Profilbilds
+  isImageSelected = false; // Status, ob ein Bild ausgewählt wurde
   constructor(
     private sharedService: SharedService,
     private authService: FirebaseAuthService,
@@ -59,7 +59,6 @@ isImageSelected = false; // Status, ob ein Bild ausgewählt wurde
       }
     });
   }
-  
 
   async loadUser(uid: string): Promise<void> {
     try {
@@ -97,7 +96,9 @@ isImageSelected = false; // Status, ob ein Bild ausgewählt wurde
   async loadAccounts(accountIds: string[]): Promise<void> {
     try {
       const accounts = await Promise.all(
-        accountIds.map(accountId => this.firebaseService.getAccount(accountId))
+        accountIds.map((accountId) =>
+          this.firebaseService.getAccount(accountId)
+        )
       );
       this.userAccounts = accounts.map(Account.fromJson);
       this.totalBalance = this.userAccounts.reduce(
@@ -108,7 +109,6 @@ isImageSelected = false; // Status, ob ein Bild ausgewählt wurde
       console.error('Error loading accounts:', error);
     }
   }
-  
 
   async loadTransfers(): Promise<void> {
     try {
@@ -154,7 +154,7 @@ isImageSelected = false; // Status, ob ein Bild ausgewählt wurde
         }
 
         this.transfers.sort((a, b) => b.createdAt - a.createdAt);
-        
+
         console.log('Processed transfers:', this.transfers);
       } else {
         console.error('User is null');
@@ -190,7 +190,7 @@ isImageSelected = false; // Status, ob ein Bild ausgewählt wurde
       data: { accountID: accountID }, // Übergabe der Account-ID
     });
   }
-  
+
   deleteAccount(accountId: string, userId: string): void {
     const dialogRef = this.dialog.open(DialogConfirmDeleteAccComponent, {
       width: '400px',
@@ -199,57 +199,67 @@ isImageSelected = false; // Status, ob ein Bild ausgewählt wurde
         message: `Are you sure you want to delete the account with ID ${accountId}? The money in the account will be lost.`,
       },
     });
-  
+
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
         // Lösche das Konto aus der Account-Sammlung
-        this.firebaseService.deleteAccount(accountId).then(() => {
-          // Entferne die accountId aus dem Benutzerobjekt
-          return this.firebaseService.removeAccountFromUser(userId, accountId);
-        }).then(() => {
-          console.log('Account deleted and removed from user successfully');
-        }).catch((error) => {
-          console.error('Error deleting account:', error);
-        });
+        this.firebaseService
+          .deleteAccount(accountId)
+          .then(() => {
+            // Entferne die accountId aus dem Benutzerobjekt
+            return this.firebaseService.removeAccountFromUser(
+              userId,
+              accountId
+            );
+          })
+          .then(() => {
+            console.log('Account deleted and removed from user successfully');
+          })
+          .catch((error) => {
+            console.error('Error deleting account:', error);
+          });
       }
     });
   }
-  
 
- onFileSelected(event: Event): void {
-  const input = event.target as HTMLInputElement;
-  this.isImageSelected = true; 
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.isImageSelected = true;
 
-  if (!input.files || input.files.length === 0) {
-    return;
-  }
-
-  const file = input.files[0];
-  const allowedTypes = ['image/jpeg', 'image/png'];
-
-  if (!allowedTypes.includes(file.type)) {
-    alert('Bitte laden Sie eine gültige Bilddatei hoch (jpg, png).');
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    this.profilePictureUrl = reader.result as string; 
-    if (this.user) {
-      this.user.profilePictureUrl = this.profilePictureUrl; 
+    if (!input.files || input.files.length === 0) {
+      return;
     }
-  };
-  reader.readAsDataURL(file);
-}
 
-   /**
+    const file = input.files[0];
+    const allowedTypes = ['image/jpeg', 'image/png'];
+
+    if (!allowedTypes.includes(file.type)) {
+      alert('Bitte laden Sie eine gültige Bilddatei hoch (jpg, png).');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.profilePictureUrl = reader.result as string;
+      if (this.user) {
+        this.user.profilePictureUrl = this.profilePictureUrl;
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /**
    * Speichert das Profilbild des Benutzers.
    */
-   async saveProfilePicture(): Promise<void> {
+  async saveProfilePicture(): Promise<void> {
     const userId = this.uid;
-    if (this.user?.profilePictureUrl) { // Greife auf `this.user.profilePictureUrl` zu
+    if (this.user?.profilePictureUrl) {
+      // Greife auf `this.user.profilePictureUrl` zu
       try {
-        await this.firebaseService.updateUserProfilePicture(userId, this.user.profilePictureUrl);
+        await this.firebaseService.updateUserProfilePicture(
+          userId,
+          this.user.profilePictureUrl
+        );
       } catch (error) {
         console.error('Fehler beim Speichern des Profilbilds:', error);
       }
@@ -258,6 +268,4 @@ isImageSelected = false; // Status, ob ein Bild ausgewählt wurde
     }
     this.isImageSelected = false;
   }
-  
-  
 }

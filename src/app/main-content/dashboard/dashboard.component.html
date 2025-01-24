@@ -125,18 +125,10 @@
       </mat-card-header>
       <mat-card-content>
         <table>
-          <thead>
-            <tr>
-              <th>From</th>
-              <th>To</th>
-              <th>Amount</th>
-              <th>Date</th>
-            </tr>
-          </thead>
           <tbody>
             @for(transfer of transfers; track $index) {
             <mat-card>
-              <mat-card-content>
+              <mat-card-content class="align-transfer-card">
                 <tr>
                   <td class="transfer-icon">
                     @if(transfer.senderUserId === transfer.receiverUserId) {
@@ -146,11 +138,11 @@
                     } @else if( user.uid === transfer.senderUserId){
                       <mat-icon class="negative">arrow_outward</mat-icon>
                     } @else if( user.uid === transfer.receiverUserId){
-                      <mat-icon class="positive">arrow_inward</mat-icon>
+                      <mat-icon class="positive">south_east</mat-icon>
                     }
                   </td>
                   <td>{{ transfer.description }}</td>
-                  <td>
+                  <!-- <td>
                     {{
                       transfer.senderAccountName
                         ? transfer.senderAccountName
@@ -164,7 +156,7 @@
                         ? transfer.receiverAccountName
                         : transfer.receiverAccountId
                     }}
-                  </td>
+                  </td> -->
                   <td
                     [ngClass]="{
                       negative: transfer.type === 'sent',
