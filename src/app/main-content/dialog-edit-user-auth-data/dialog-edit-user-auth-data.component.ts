@@ -72,45 +72,28 @@ export class DialogEditUserAuthDataComponent {
   }
   async changeEmail(): Promise<void> {
     try {
-      // Schritt 1: Benutzer reauthentifizieren
       await this.authService.reauthenticate(this.currentPassword);
-  
-      // Schritt 2: Verifizierungs-E-Mail senden
       await this.authService.sendEmailVerification();
-      alert(
-        'Eine Verifizierungs-E-Mail wurde an die neue Adresse gesendet. Bitte überprüfen Sie diese, bevor Sie die Änderung vornehmen.'
-      );
-  
-      // Schritt 3: Überprüfen, ob die E-Mail bestätigt wurde
+
       const interval = setInterval(async () => {
         const isVerified = await this.authService.checkEmailVerification();
         if (isVerified) {
           clearInterval(interval);
-          clearTimeout(timeout); // Timeout abbrechen
-  
-          try {
-            // Schritt 4: E-Mail-Adresse aktualisieren (nur wenn die E-Mail verifiziert ist)
-            await this.authService.updateEmail(this.newEmail, this.currentPassword);
-            alert('E-Mail erfolgreich bestätigt und aktualisiert!');
-            this.dialogRef.close();
-          } catch (updateError: any) {
-            alert(
-              'E-Mail konnte nicht aktualisiert werden: ' + updateError.message
-            );
-          }
+          await this.authService.updateEmail(this.newEmail, this.currentPassword);
+          alert('E-Mail erfolgreich bestätigt und aktualisiert!');
+          this.dialogRef.close();
         }
-      }, 5000); // Alle 5 Sekunden prüfen
-  
-      // Timeout für das Polling
-      const timeout = setTimeout(() => {
+      }, 5000);
+
+      setTimeout(() => {
         clearInterval(interval);
         alert('Die Verifizierung hat zu lange gedauert. Bitte erneut versuchen.');
-      }, 60000); // Timeout nach 60 Sekunden
+      }, 60000);
     } catch (error: any) {
       alert('Fehler beim Aktualisieren der E-Mail: ' + error.message);
     }
   }
-  
+
   
   
 }

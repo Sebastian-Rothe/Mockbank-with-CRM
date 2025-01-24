@@ -106,6 +106,7 @@ export class FirebaseAuthService {
 /**
  * Aktualisiert die E-Mail des Benutzers.
  */
+
 async updateEmail(newEmail: string, password: string): Promise<void> {
   const user = this.auth.currentUser;
   if (!user) {
@@ -117,23 +118,21 @@ async updateEmail(newEmail: string, password: string): Promise<void> {
     await this.reauthenticate(password);
     console.log('Benutzer erfolgreich erneut authentifiziert.');
 
-    await sendEmailVerification(user);
-    console.log('Verifizierungs-E-Mail für neue Adresse gesendet.');
-
-    // Dann die E-Mail ändern
-    await updateEmail(user, newEmail);
-    console.log('E-Mail erfolgreich aktualisiert.');
-
     // E-Mail auch im Firestore aktualisieren
     const userDocRef = doc(this.firestore, 'users', user.uid);
     await updateDoc(userDocRef, { email: newEmail });
     console.log('E-Mail im Firestore erfolgreich aktualisiert.');
 
+    // Dann die E-Mail ändern
+    await updateEmail(user, newEmail);
+    await this.logout();
+    console.log('E-Mail erfolgreich aktualisiert.');
   } catch (error) {
     console.error('Fehler beim Aktualisieren der E-Mail:', error);
     throw error;
   }
 }
+
 
   /**
    * Aktualisiert das Passwort des Benutzers.
