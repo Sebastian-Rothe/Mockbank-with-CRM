@@ -1,18 +1,24 @@
 <h2 mat-dialog-title class="dialog-title">Transfer Details</h2>
+<p class="transferId"><strong>Transfer ID:</strong> {{ data.transferId }}</p>
 <mat-dialog-content>
   <div class="transfer-detail">
-    <p><strong>Transfer ID:</strong> {{ data.transferId }}</p>
-    <p><strong>Sender Account Name:</strong> {{ data.senderAccountName }}</p>
-    <p><strong>Sender Account ID:</strong> {{ data.senderAccountId }}</p>
     <p><strong>Sender:</strong> {{ senderName }}</p>
-    <p><strong>Receiver Account Name:</strong> {{ data.receiverAccountName }}</p>
-    <p><strong>Receiver Account ID:</strong> {{ data.receiverAccountId }}</p>
+    @if(data.senderAccountName){
+        <p><strong>Sender Account Name:</strong> {{ data.senderAccountName }}</p>
+    } @else {
+        <p><strong>Sender Account ID:</strong> {{ data.senderAccountId }}</p>
+    }
     <p><strong>Receiver:</strong> {{ receiverName }}</p>
-    <p><strong>Amount:</strong> {{ data.amount + data.currency}}</p>
+    @if(data.receiverAccountName){
+        <p><strong>Receiver Account Name:</strong> {{ data.receiverAccountName }}</p>
+    }@else {
+        <p><strong>Receiver Account ID:</strong> {{ data.receiverAccountId }}</p>
+    }
+    <p><strong>Amount: </strong> {{ data.amount +' '+ data.currency}}</p>
     <p><strong>Description:</strong> {{ data.description || 'No description provided' }}</p>
-    <p><strong>Created At:</strong> {{ data.createdAt }}</p>
+    <p><strong>Created At:</strong> {{ getFormattedDate(data.createdAt) }}</p>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions class="dialog-actions">
-  <button mat-button mat-dialog-close>Close</button>
+  <button mat-button mat-dialog-close (click)="closeDialog()">Close</button>
 </mat-dialog-actions>

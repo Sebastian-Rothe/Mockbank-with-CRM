@@ -9,6 +9,7 @@ import {
 import { FirebaseService
 
  } from '../../../../services/firebase.service';
+ import { SharedService } from '../../../../services/shared.service';
 @Component({
   selector: 'app-transfer-detail',
   standalone: true,
@@ -25,7 +26,8 @@ export class TransferDetailComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Transfer,
     public dialogRef: MatDialogRef<TransferDetailComponent>,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private sharedService: SharedService,
   ) {
     this.transfer = data;
   }
@@ -47,7 +49,9 @@ export class TransferDetailComponent {
       console.error('Fehler beim Abrufen der User-Daten:', error);
     }
   }
-
+  getFormattedDate(transferDate: number): string {
+    return this.sharedService.formatTimestampToDetailedDate(transferDate);
+  }
 
   closeDialog(): void {
     this.dialogRef.close();
