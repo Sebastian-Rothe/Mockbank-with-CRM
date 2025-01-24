@@ -21,7 +21,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogEditUserAddressComponent } from '../dialog-edit-user-address/dialog-edit-user-address.component';
 import { DialogEditUserDetailComponent } from '../dialog-edit-user-detail/dialog-edit-user-detail.component';
 import { DialogEditUserDetailsComponent } from '../dialog-edit-user-details/dialog-edit-user-details.component';
-import { DialogEditUserAuthDataComponent } from '../dialog-edit-user-auth-data/dialog-edit-user-auth-data.component';
+import { DialogEditUserEmailComponent } from '../dialog-edit-user-email/dialog-edit-user-email.component';
+import { DialogEditUserPasswordComponent } from '../dialog-edit-user-password/dialog-edit-user-password.component';
 
 
 // import { CommonModule } from '@angular/common';
@@ -98,11 +99,18 @@ export class UserDetailComponent implements OnInit {
       dialog.componentInstance.user = new User(this.user.toPlainObject());
     }
   }
-  editUserAuth() {
-    if (this.user){
-      const dialog = this.dialog.open(DialogEditUserAuthDataComponent);
-      dialog.componentInstance.user = new User(this.user.toPlainObject());
-    }
+ 
+
+  openEmailDialog(): void {
+    this.dialog.open(DialogEditUserEmailComponent, {
+      width: '400px',
+    });
+  }
+
+  openPasswordDialog(): void {
+    this.dialog.open(DialogEditUserPasswordComponent, {
+      width: '400px',
+    });
   }
   
 }

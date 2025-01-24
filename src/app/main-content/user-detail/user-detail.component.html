@@ -52,8 +52,8 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #userContact="matMenu">
-        <button mat-menu-item (click)="editUserAuth()">Edit</button>
-        <button mat-menu-item>Delete</button>
+        <button mat-menu-item (click)="openEmailDialog()">Change Email</button>
+        <button mat-menu-item (click)="openPasswordDialog()">Change Password</button>
       </mat-menu>
     </div>
     <div class="section-content">
