@@ -1,9 +1,18 @@
-<h2 mat-dialog-title>Transfer Details</h2>
+<h2 mat-dialog-title class="dialog-title">Transfer Details</h2>
 <mat-dialog-content>
-  <p>Transfer ID: {{ data.transferId }}</p>
-  <p>Weitere Details hier...</p>
-  <!-- Weitere Details des Transfers hier einfügen -->
+  <div class="transfer-detail">
+    <p><strong>Transfer ID:</strong> {{ data.transferId }}</p>
+    <p><strong>Sender Account Name:</strong> {{ data.senderAccountName }}</p>
+    <p><strong>Sender Account ID:</strong> {{ data.senderAccountId }}</p>
+    <p><strong>Sender User ID:</strong> {{ data.senderUserId }}</p>
+    <p><strong>Receiver Account Name:</strong> {{ data.receiverAccountName }}</p>
+    <p><strong>Receiver Account ID:</strong> {{ data.receiverAccountId }}</p>
+    <p><strong>Receiver User ID:</strong> {{ data.receiverUserId }}</p>
+    <p><strong>Amount:</strong> {{ data.amount + data.currency}}</p>
+    <p><strong>Description:</strong> {{ data.description || 'No description provided' }}</p>
+    <p><strong>Created At:</strong> {{ data.createdAt }}</p>
+  </div>
 </mat-dialog-content>
-<mat-dialog-actions>
+<mat-dialog-actions class="dialog-actions">
   <button mat-button mat-dialog-close>Close</button>
 </mat-dialog-actions>

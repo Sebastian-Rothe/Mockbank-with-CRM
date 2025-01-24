@@ -1,0 +1,50 @@
+.dialog-title {
+    text-align: center; // Überschrift mittig
+    font-size: 18px;
+    font-weight: bold;
+    margin: 16px 0;
+    color: #222;
+  }
+  
+  mat-dialog-content {
+    padding: 16px;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    max-width: 400px;
+  
+    .transfer-detail {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      color: #333;
+  
+      p {
+        margin: 8px 0;
+      }
+  
+      strong {
+        color: #555;
+      }
+    }
+  }
+  
+  .dialog-actions {
+    display: flex;
+    justify-content: center; // Button mittig ausrichten
+    // margin-top: 16px;
+  
+    button {
+      font-size: 14px;
+      padding: 8px 16px;
+      border-radius: 4px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+    //   cursor: pointer;
+  
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  }
+  

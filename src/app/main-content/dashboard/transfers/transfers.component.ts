@@ -11,6 +11,7 @@ import { Account } from '../../../../models/account.class';
 import { FirebaseService } from '../../../../services/firebase.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TransferDetailComponent } from '../transfer-detail/transfer-detail.component';
+import { Transfer } from '../../../../models/transfer.class';
 
 
 @Component({
@@ -128,9 +129,9 @@ export class TransfersComponent {
     return this.sharedService.formatTimestampToDate(transferDate);
   }
 
-  openTransferPopup(transferId: string) {
+  openTransferDetailDialog(transfer: Transfer): void {
     this.dialog.open(TransferDetailComponent, {
-      data: { transferId }, // Hier kannst du auch weitere Daten übergeben
+      data: transfer, // Übergebe das gesamte Transfer-Objekt
     });
   }
 }
