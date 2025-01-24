@@ -1,4 +1,3 @@
-
 .transfers {
     padding: 16px;
   
@@ -7,110 +6,120 @@
       border: 1px solid #e0e0e0;
       border-radius: 12px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
   
-      mat-card-header {
+      &-header {
         background-color: #f7f7f7;
         padding: 16px;
         border-bottom: 1px solid #ddd;
+  
         mat-card-title {
           font-size: 1.5rem;
           font-weight: 600;
         }
       }
   
-      mat-card-content {
+      &-content {
         padding: 16px;
   
-        table {
-          width: 100%;
-          border-spacing: 0;
-          border-collapse: separate;
+        .transfer-list {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
   
-          tbody {
+        .transfer-card {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 16px;
+          background-color: #ffffff;
+          border-radius: 12px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          transition: transform 0.2s, box-shadow 0.2s;
+  
+          &:hover {
+            cursor: pointer;
+            transform: translateY(-4px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+          }
+  
+          .transfer-content {
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            width: 100%;
             gap: 16px;
   
-            mat-card {
-              display: flex;
-              flex-wrap: wrap;
-              justify-content: space-between;
+            .transfer-icon {
+              background-color: #eeeeee;
+              padding: 8px;
+              border-radius: 50%;
+              display: inline-flex;
               align-items: center;
-              padding: 16px;
-              background-color: #ffffff;
-              border-radius: 12px;
-              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-              transition: transform 0.2s, box-shadow 0.2s;
+              justify-content: center;
+              width: 36px;
+              height: 36px;
+              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   
-              &:hover {
-                cursor: pointer;
-                transform: translateY(-4px);
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+              mat-icon {
+                font-size: 20px;
               }
   
-              mat-card-content {
-                display: flex;
-                align-items: center;
-                width: 100%;
-                gap: 16px;
+              &.internal {
+                background-color: #d0e4ff;
   
-                tr {
-                  display: flex;
-                  align-items: center;
-                  width: 100%;
-                  justify-content: space-between;
-  
-                  td {
-                    flex: 1;
-                    text-align: center;
-                    font-size: 1rem;
-  
-                    &:nth-child(1) {
-                      flex: 0 0 40px;
-                    }
-  
-                    &:nth-child(2) {
-                      flex: 2;
-                      text-align: left;
-                      font-weight: 500;
-                      margin-left: 12px;
-                      max-height: 80px;
-                      overflow: scroll;
-    
-                      &::-webkit-scrollbar {
-                        display: none;
-                      }
-  
-                      & {
-                        -ms-overflow-style: none;
-                        scrollbar-width: none; 
-                      }
-                    }
-  
-                    &:nth-child(3) {
-                      flex: 1;
-                      font-weight: 600;
-                      text-align: right;
-  
-                      &.negative {
-                        color: red;
-                      }
-  
-                      &.positive {
-                        color: green;
-                      }
-                    }
-  
-                    &:nth-child(4) {
-                      flex: 1;
-                      font-size: 0.9rem;
-                      color: #666;
-                      text-align: right;
-                    }
-                  }
+                mat-icon {
+                  color: #004085;
                 }
               }
+  
+              &.negative {
+                background-color: #ffebe6;
+  
+                mat-icon {
+                  color: red;
+                }
+              }
+  
+              &.positive {
+                background-color: #e6f4e6;
+  
+                mat-icon {
+                  color: green;
+                }
+              }
+            }
+  
+            .transfer-description {
+              flex: 2;
+              font-weight: 500;
+              margin-left: 12px;
+              max-height: 80px;
+              overflow: hidden;
+  
+              &::-webkit-scrollbar {
+                display: none;
+              }
+            }
+  
+            .transfer-amount {
+              flex: 1;
+              font-weight: 600;
+              text-align: right;
+  
+              &.negative {
+                color: red;
+              }
+  
+              &.positive {
+                color: green;
+              }
+            }
+  
+            .transfer-date {
+              flex: .5;
+              font-size: 0.9rem;
+              color: #666;
+              text-align: right;
             }
           }
         }
@@ -118,53 +127,3 @@
     }
   }
   
-  .transfer-icon {
-    background-color: #eeeeee;
-    padding: 8px;
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  
-    mat-icon {
-      font-size: 20px;
-      line-height: 1;
-      margin: 0;
-    }
-  
-    &.internal {
-      background-color: #d0e4ff;
-      mat-icon {
-        color: #004085;
-      }
-    }
-  
-    &.negative {
-      background-color: #ffebe6;
-      mat-icon {
-        color: red;
-      }
-    }
-  
-    &.positive {
-      background-color: #e6f4e6;
-      mat-icon {
-        color: green;
-      }
-    }
-  }
-
-  .negative {
-    color: red;
-  }
-  
-  .positive {
-    color: green;
-  }
-  
-  .internal {
-    color: blue;
-  }
