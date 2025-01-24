@@ -6,20 +6,27 @@ import {
   MatDialogActions,
   MatDialogContent,
 } from '@angular/material/dialog';
-import { FirebaseService
-
- } from '../../../../services/firebase.service';
- import { SharedService } from '../../../../services/shared.service';
- import { MatSnackBar } from '@angular/material/snack-bar';
+import { FirebaseService } from '../../../../services/firebase.service';
+import { SharedService } from '../../../../services/shared.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatMenu, MatMenuModule } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 @Component({
   selector: 'app-transfer-detail',
   standalone: true,
-  imports: [MatDialogContent, MatDialogActions],
+  imports: [
+    MatDialogContent,
+    MatDialogActions,
+    // MatMenu,
+    MatIcon,
+    MatMenuModule,
+    MatButtonModule,
+  ],
   templateUrl: './transfer-detail.component.html',
   styleUrl: './transfer-detail.component.scss',
 })
 export class TransferDetailComponent {
-
   transfer: Transfer;
   senderName: string = ''; // Sender-Name
   receiverName: string = ''; // Empfänger-Name
@@ -38,14 +45,22 @@ export class TransferDetailComponent {
     try {
       // Holen der Sender-Daten
       if (this.transfer.senderUserId) {
-        const sender = await this.firebaseService.getUser(this.transfer.senderUserId);
-        this.senderName = sender ? `${sender.firstName} ${sender.lastName}` : 'Unbekannt';
+        const sender = await this.firebaseService.getUser(
+          this.transfer.senderUserId
+        );
+        this.senderName = sender
+          ? `${sender.firstName} ${sender.lastName}`
+          : 'Unbekannt';
       }
 
       // Holen der Empfänger-Daten
       if (this.transfer.receiverUserId) {
-        const receiver = await this.firebaseService.getUser(this.transfer.receiverUserId);
-        this.receiverName = receiver ? `${receiver.firstName} ${receiver.lastName}` : 'Unbekannt';
+        const receiver = await this.firebaseService.getUser(
+          this.transfer.receiverUserId
+        );
+        this.receiverName = receiver
+          ? `${receiver.firstName} ${receiver.lastName}`
+          : 'Unbekannt';
       }
     } catch (error) {
       console.error('Fehler beim Abrufen der User-Daten:', error);
@@ -54,8 +69,8 @@ export class TransferDetailComponent {
   getFormattedDate(transferDate: number): string {
     return this.sharedService.formatTimestampToDetailedDate(transferDate);
   }
-    closeDialog(): void {
-    this.dialogRef.close(); 
+  closeDialog(): void {
+    this.dialogRef.close();
   }
 
   async deleteTransfer(transferId: string): Promise<void> {

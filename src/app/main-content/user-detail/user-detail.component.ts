@@ -33,7 +33,6 @@ import { DialogEditUserPasswordComponent } from '../dialog-edit-user-password/di
     MatCard,
     // MatCardContent,
     MatIcon,
-    MatIconButton,
     MatButtonModule,
     MatMenuModule,
   ],
