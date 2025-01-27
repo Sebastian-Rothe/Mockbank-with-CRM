@@ -17,6 +17,7 @@ import { SharedService } from '../../../services/shared.service';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
 import { DialogConfirmDeleteAccComponent } from './dialog-confirm-delete-acc/dialog-confirm-delete-acc.component';
 import { TransfersComponent } from './transfers/transfers.component';
+import { FirstChartsComponent } from '../../first-charts/first-charts.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -31,7 +32,8 @@ import { TransfersComponent } from './transfers/transfers.component';
     MatIcon,
     CommonModule,
     MatMenu,
-    TransfersComponent
+    TransfersComponent,
+    FirstChartsComponent // first charts component
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
