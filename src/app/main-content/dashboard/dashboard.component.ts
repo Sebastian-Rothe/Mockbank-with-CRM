@@ -50,7 +50,7 @@ export class DashboardComponent implements OnInit {
     private sharedService: SharedService,
     private authService: FirebaseAuthService,
     private firebaseService: FirebaseService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -169,29 +169,56 @@ export class DashboardComponent implements OnInit {
   }
 
   openSendMoneyDialog(accountId: string): void {
-    this.dialog.open(DialogSendMoneyComponent, {
+    const dialogRef = this.dialog.open(DialogSendMoneyComponent, {
       data: { senderAccountId: accountId }, // Übergabe der Account-ID
+    });
+  
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        // Accounts oder Transfers neu laden
+        this.loadUser(this.uid); // Oder: this.loadTransfers();
+      }
     });
   }
 
   openNewPocketDialog(): void {
-    this.dialog.open(DialogOpenNewPocketComponent);
+    const dialogRef = this.dialog.open(DialogOpenNewPocketComponent);
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        // Accounts neu laden, wenn ein neues Konto erstellt wurde
+        this.loadUser(this.uid); // Oder: this.loadAccounts(this.user?.accounts || []);
+      }
+    });
   }
 
   openMoveMoneyDialog(accountId: string): void {
-    this.dialog.open(DialogMoveMoneyComponent, {
+    const dialogRef = this.dialog.open(DialogMoveMoneyComponent, {
       data: { senderAccountId: accountId }, // Übergabe der Account-ID
     });
-    console.log('Sender Account ID:', accountId);
+  
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        // Accounts oder Transfers neu laden, wenn Geld verschoben wurde
+        this.loadUser(this.uid); // Oder: this.loadTransfers();
+      }
+    });
   }
 
   getFormattedDate(transferDate: number): string {
     let date: number = transferDate;
     return this.sharedService.formatTimestampToDate(date);
   }
-  editAccount(accountID: string) {
-    this.dialog.open(DialogEditAccountComponent, {
+  
+  editAccount(accountID: string): void {
+    const dialogRef = this.dialog.open(DialogEditAccountComponent, {
       data: { accountID: accountID }, // Übergabe der Account-ID
+    });
+  
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        // Accounts neu laden, wenn Änderungen vorgenommen wurden
+        this.loadUser(this.uid); // Oder: this.loadAccounts(this.user?.accounts || []);
+      }
     });
   }
 
@@ -218,6 +245,7 @@ export class DashboardComponent implements OnInit {
           })
           .then(() => {
             console.log('Account deleted and removed from user successfully');
+            return this.loadUser(this.uid); 
           })
           .catch((error) => {
             console.error('Error deleting account:', error);
