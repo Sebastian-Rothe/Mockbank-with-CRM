@@ -10,7 +10,7 @@ export class Transfer {
   currency: string = 'EUR';
   createdAt: number;
   description?: string = '';
-  category: string = 'Sonstiges'; // Standardwert "Sonstiges"
+  category: string = 'Others'; // Standardwert "Sonstiges"
 
   constructor(obj?: Partial<Transfer>) {
     if (obj) {

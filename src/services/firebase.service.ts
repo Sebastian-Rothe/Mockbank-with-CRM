@@ -196,50 +196,45 @@ async transferFunds(
   senderAccountId: string,
   receiverAccountId: string,
   amount: number,
-  description?: string
+  description?: string,
+  category?: string // Neuer Parameter
 ): Promise<void> {
   try {
-    // Zugriff auf Sender- und Empfänger-Dokumente
     const senderDocRef = doc(this.accountCollection, senderAccountId);
     const receiverDocRef = doc(this.accountCollection, receiverAccountId);
 
     const senderSnap = await getDoc(senderDocRef);
     const receiverSnap = await getDoc(receiverDocRef);
 
-    // Sicherstellen, dass beide Dokumente existieren
     if (!senderSnap.exists() || !receiverSnap.exists()) {
       throw new Error('Sender or receiver account not found.');
     }
 
-    // Daten in typisierte Account-Objekte umwandeln
     const senderData = Account.fromJson(senderSnap.data());
     const receiverData = Account.fromJson(receiverSnap.data());
 
-    // Prüfen, ob der Sender genügend Guthaben hat
     if (senderData.balance < amount) {
       throw new Error('Insufficient funds.');
     }
 
-    // Transfer-Daten erstellen
     const transfer = new Transfer({
       senderAccountId,
       senderAccountName: senderData.accountName,
-      senderUserId: senderData.userId, // Benutzer-ID des Senders
+      senderUserId: senderData.userId,
       receiverAccountId,
       receiverAccountName: receiverData.accountName,
-      receiverUserId: receiverData.userId, // Benutzer-ID des Empfängers
+      receiverUserId: receiverData.userId,
       amount,
       description,
+      category, // Kategorie wird hinzugefügt
     });
 
-    // Transfer in Firestore speichern
     const transferDocRef = doc(
       collection(this.firestore, 'transfers'),
       transfer.transferId
     );
     await setDoc(transferDocRef, transfer.toPlainObject());
 
-    // Kontostände aktualisieren
     await updateDoc(senderDocRef, { balance: senderData.balance - amount });
     await updateDoc(receiverDocRef, { balance: receiverData.balance + amount });
 
@@ -249,6 +244,7 @@ async transferFunds(
     throw error;
   }
 }
+
 
 async deleteTransfer(transferId: string): Promise<void> {
   try {

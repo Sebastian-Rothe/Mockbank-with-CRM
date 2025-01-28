@@ -40,8 +40,25 @@ export class DialogSendMoneyComponent {
   userAccounts: Account[] = []; // Array von Account-Objekten, statt nur einem Account-Objekt
   users: User[] = [];
   selectedUser: string | null = null;
-  senderAccountId: string; //
-
+  senderAccountId: string; 
+  categories: string[] = [
+    'Groceries',
+    'Rent',
+    'Utilities',
+    'Transportation',
+    'Dining',
+    'Shopping',
+    'Health',
+    'Entertainment',
+    'Travel',
+    'Education',
+    'Investments',
+    'Insurance',
+    'Gifts',
+    'Donations',
+    'Subscriptions',
+    'Others'
+  ];
   constructor(
     private firebaseService: FirebaseService,
     private authService: FirebaseAuthService,
@@ -83,7 +100,7 @@ export class DialogSendMoneyComponent {
       console.error('No accounts to load.');
       return;
     }
-  
+
     try {
       const accounts = await Promise.all(
         accountIds.map(async (accountId) => {
@@ -91,15 +108,14 @@ export class DialogSendMoneyComponent {
           return Account.fromJson(accountData); // Umwandlung in Account-Objekt
         })
       );
-  
+
       this.userAccounts = accounts; // Speichere die geladenen Konten
       console.log('Loaded accounts:', this.userAccounts);
     } catch (error) {
       console.error('Error loading accounts:', error);
     }
   }
-  
-  
+
   async loadFirstAccountsFromAllUsers(): Promise<void> {
     try {
       const users = await this.firebaseService.getAllUsers();
@@ -127,28 +143,25 @@ export class DialogSendMoneyComponent {
   onUserSelect(userId: string): void {
     console.log('Selected user UID:', userId);
     this.selectedUser = userId;
-    const user = this.users.find(user => user.uid === userId);
+    const user = this.users.find((user) => user.uid === userId);
     console.log('Selected user:', user);
-  
+
     if (user) {
       this.loadAccounts(user.accounts);
     } else {
       this.userAccounts = [];
     }
   }
-  
-  
-  
-  
 
   sendMoney(): void {
-    if (this.senderAccountId &&  this.transfer.receiverAccountId) {
+    if (this.senderAccountId && this.transfer.receiverAccountId) {
       this.firebaseService
         .transferFunds(
           this.senderAccountId,
           this.transfer.receiverAccountId,
           this.transfer.amount,
-          this.transfer.description
+          this.transfer.description,
+          this.transfer.category // Kategorie übergeben
         )
         .then(() => {
           console.log('Money transferred successfully.');
@@ -161,6 +174,7 @@ export class DialogSendMoneyComponent {
       console.error('Sender or receiver account ID missing.');
     }
   }
+  
 
   closeDialog(): void {
     this.dialogRef.close();
