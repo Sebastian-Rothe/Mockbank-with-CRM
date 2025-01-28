@@ -17,7 +17,7 @@ import { SharedService } from '../../../services/shared.service';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
 import { DialogConfirmDeleteAccComponent } from './dialog-confirm-delete-acc/dialog-confirm-delete-acc.component';
 import { TransfersComponent } from './transfers/transfers.component';
-import { FirstChartsComponent } from '../../first-charts/first-charts.component';
+import { FirstChartsComponent } from '../../../charts/first-charts/first-charts.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -218,6 +218,8 @@ export class DashboardComponent implements OnInit {
       if (result) {
         // Accounts neu laden, wenn Änderungen vorgenommen wurden
         this.loadUser(this.uid); // Oder: this.loadAccounts(this.user?.accounts || []);
+        console.log("thank you");
+        
       }
     });
   }
