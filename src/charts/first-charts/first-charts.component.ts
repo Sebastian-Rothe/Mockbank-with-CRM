@@ -7,7 +7,7 @@ import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 @Component({
   selector: 'app-first-charts',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, CanvasJSAngularChartsModule],
+  imports: [CommonModule, CanvasJSAngularChartsModule],
   templateUrl: './first-charts.component.html',
   styleUrl: './first-charts.component.scss'
 })
@@ -23,7 +23,7 @@ export class FirstChartsComponent {
 		  text: "Median hours/week"
 	  }],
 	  data: [{
-		  type: "pie", //change type to column, line, area, doughnut, etc
+		  type: "doughnut", //change type to column, line, area, doughnut, etc
 		  indexLabel: "{name}: {y}%",
 		  dataPoints: [
 		  	{ name: "Overhead", y: 9.1 },
