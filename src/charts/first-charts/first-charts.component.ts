@@ -31,45 +31,53 @@ export class FirstChartsComponent {
       }
     });
   }
-
   async loadUserAndTransfers(userId: string): Promise<void> {
-    try {
-      const user = await this.firebaseService.getUser(userId);
-      if (!user) {
-        console.error('User not found.');
-        return;
-      }
-
-      this.user = user;
-      const transfers: Transfer[] =
-        await this.firebaseService.getTransfersForUser(this.user);
-      const categoryMap: { [key: string]: number } = {};
-
-      // Group transfers by category
-      transfers.forEach((transfer) => {
-        if (transfer.category) {
-          categoryMap[transfer.category] =
-            (categoryMap[transfer.category] || 0) + transfer.amount;
-        }
-      });
-
-      // Prepare data for the chart
-      const dataPoints = Object.keys(categoryMap).map((category) => ({
-        name: category,
-        y: categoryMap[category],
-      }));
-
-      // Set chart options
-      this.chartOptions = {
-        animationEnabled: true,
-        theme: 'dark2',
-        exportEnabled: true,
-        title: { text: 'Transfers by Category' },
-        subtitles: [{ text: 'Distribution by Amount' }],
-        data: [{ type: 'doughnut', indexLabel: '{name}: {y}€', dataPoints }],
-      };
-    } catch (error) {
-      console.error('Error loading transfers:', error);
-    }
+	try {
+	  const user = await this.firebaseService.getUser(userId);
+	  if (!user) {
+		console.error('User not found.');
+		return;
+	  }
+  
+	  this.user = user;
+  
+	  // Fetch all transfers for the user
+	  const allTransfers: Transfer[] =
+		await this.firebaseService.getTransfersForUser(this.user);
+  
+	  // Filter out transfers where sender and receiver have the same userId
+	  const filteredTransfers = allTransfers.filter(
+		(transfer) => transfer.senderUserId !== transfer.receiverUserId
+	  );
+  
+	  const categoryMap: { [key: string]: number } = {};
+  
+	  // Group filtered transfers by category
+	  filteredTransfers.forEach((transfer) => {
+		if (transfer.category) {
+		  categoryMap[transfer.category] =
+			(categoryMap[transfer.category] || 0) + transfer.amount;
+		}
+	  });
+  
+	  // Prepare data for the chart
+	  const dataPoints = Object.keys(categoryMap).map((category) => ({
+		name: category,
+		y: categoryMap[category],
+	  }));
+  
+	  // Set chart options
+	  this.chartOptions = {
+		animationEnabled: true,
+		theme: 'dark2',
+		exportEnabled: true,
+		title: { text: 'Transfers by Category' },
+		subtitles: [{ text: 'Distribution by Amount' }],
+		data: [{ type: 'doughnut', indexLabel: '{name}: {y}€', dataPoints }],
+	  };
+	} catch (error) {
+	  console.error('Error loading transfers:', error);
+	}
   }
+  
 }
