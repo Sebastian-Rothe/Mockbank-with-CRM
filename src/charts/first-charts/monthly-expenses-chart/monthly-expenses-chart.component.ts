@@ -45,7 +45,10 @@ export class MonthlyExpensesChartComponent {
       const allTransfers: Transfer[] = await this.firebaseService.getTransfersForUser(this.user);
       const monthlyStats: { [month: string]: { income: number; expenses: number } } = {};
   
-      allTransfers.forEach((transfer) => {
+      const filteredTransfers = allTransfers.filter(
+        (transfer) => transfer.senderUserId !== transfer.receiverUserId
+        );
+     filteredTransfers.forEach((transfer) => {
         const date = new Date(transfer.createdAt);
         const monthKey = `${date.getFullYear()}-${date.getMonth() + 1}`; // Format: YYYY-MM
   
