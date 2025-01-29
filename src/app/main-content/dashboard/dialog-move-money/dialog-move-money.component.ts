@@ -41,6 +41,7 @@ export class DialogMoveMoneyComponent {
   userAccounts: Account[] = []; // Array von Account-Objekten, statt nur einem Account-Objekt
 
   senderAccountId: string; //
+  category: string = 'Internal Transfer';
 
   constructor(
     private firebaseService: FirebaseService,
@@ -99,7 +100,8 @@ export class DialogMoveMoneyComponent {
           this.senderAccountId,
           this.transfer.receiverAccountId,
           this.transfer.amount,
-          this.transfer.description
+          this.transfer.description,
+          this.category
         )
         .then(() => {
           console.log('Money transferred successfully.');
