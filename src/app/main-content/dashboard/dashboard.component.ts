@@ -18,6 +18,7 @@ import { MatMenu, MatMenuModule } from '@angular/material/menu';
 import { DialogConfirmDeleteAccComponent } from './dialog-confirm-delete-acc/dialog-confirm-delete-acc.component';
 import { TransfersComponent } from './transfers/transfers.component';
 import { FirstChartsComponent } from '../../../charts/first-charts/first-charts.component';
+import { MonthlyExpensesChartComponent } from '../../../charts/first-charts/monthly-expenses-chart/monthly-expenses-chart.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -33,7 +34,8 @@ import { FirstChartsComponent } from '../../../charts/first-charts/first-charts.
     CommonModule,
     MatMenu,
     TransfersComponent,
-    FirstChartsComponent // first charts component
+    FirstChartsComponent, // first charts component
+    MonthlyExpensesChartComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],

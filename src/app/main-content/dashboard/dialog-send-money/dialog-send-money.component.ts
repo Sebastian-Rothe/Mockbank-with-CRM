@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+// Material Design
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -7,13 +9,13 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+// modules
 import { Transfer } from '../../../../models/transfer.class';
 import { User } from '../../../../models/user.class';
 import { Account } from '../../../../models/account.class';
+// Firebase Services
 import { FirebaseService } from '../../../../services/firebase.service';
 import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Inject } from '@angular/core';
 
 @Component({
   selector: 'app-dialog-sent-money',
@@ -33,14 +35,14 @@ import { Inject } from '@angular/core';
   styleUrl: './dialog-send-money.component.scss',
 })
 export class DialogSendMoneyComponent {
-  uid: string | null = null; // User-ID
+  uid: string | null = null;
   user: User | null = null;
-  transfer = new Transfer(); // Neuer Transfer
-  totalBalance: number = 0; // Gesamtsumme der Konten
-  userAccounts: Account[] = []; // Array von Account-Objekten, statt nur einem Account-Objekt
   users: User[] = [];
+  userAccounts: Account[] = [];
+  transfer = new Transfer();
+  totalBalance: number = 0;
   selectedUser: string | null = null;
-  senderAccountId: string; 
+  senderAccountId: string;
   categories: string[] = [
     'Groceries',
     'Rent',
@@ -57,8 +59,9 @@ export class DialogSendMoneyComponent {
     'Gifts',
     'Donations',
     'Subscriptions',
-    'Others'
+    'Others',
   ];
+
   constructor(
     private firebaseService: FirebaseService,
     private authService: FirebaseAuthService,
@@ -95,6 +98,7 @@ export class DialogSendMoneyComponent {
       console.error('Error loading user:', error);
     }
   }
+
   async loadAccounts(accountIds: string[]): Promise<void> {
     if (!accountIds || accountIds.length === 0) {
       console.error('No accounts to load.');
@@ -161,7 +165,7 @@ export class DialogSendMoneyComponent {
           this.transfer.receiverAccountId,
           this.transfer.amount,
           this.transfer.description,
-          this.transfer.category // Kategorie übergeben
+          this.transfer.category
         )
         .then(() => {
           console.log('Money transferred successfully.');
@@ -174,7 +178,6 @@ export class DialogSendMoneyComponent {
       console.error('Sender or receiver account ID missing.');
     }
   }
-  
 
   closeDialog(): void {
     this.dialogRef.close();
