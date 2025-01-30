@@ -1,4 +1,5 @@
 h2 {
+  padding: 18px;
   text-align: center;
 }
 
@@ -12,6 +13,7 @@ mat-dialog-content {
 
 mat-form-field {
   padding-top: 8px;
+  max-width: 360px;
   width: 100%;
 }
 
@@ -22,4 +24,26 @@ mat-dialog-actions {
   gap: 20%;
 }
 
+
+
+form {
+padding: 24px;
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+gap: 16px;
+justify-content: center;
+align-items: center;
+max-width: 800px;
+margin: 0 auto;
+}
+
+
+
+
+
+@media (max-width: 780px) {
+form {
+  grid-template-columns: 1fr; 
+}
+}
 

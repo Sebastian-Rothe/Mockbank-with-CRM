@@ -1,7 +1,6 @@
 <h2>Move money to different account</h2>
 <form (ngSubmit)="sendMoney()" #sentMoneyForm="ngForm">
-  
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="outline">
     <mat-label>User</mat-label>
     <mat-select
       [(ngModel)]="selectedUser"
@@ -18,9 +17,13 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="outline">
     <mat-label>Account</mat-label>
-    <mat-select [(ngModel)]="transfer.receiverAccountId" name="account" required>
+    <mat-select
+      [(ngModel)]="transfer.receiverAccountId"
+      name="account"
+      required
+    >
       @for(a of userAccounts; track $index) {
       <mat-option value="{{ a.accountId }}">{{
         a.accountName ? a.accountName : a.accountId
@@ -30,21 +33,17 @@
     </mat-select>
   </mat-form-field>
 
-
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="outline">
     <mat-label>Category</mat-label>
     <mat-select [(ngModel)]="transfer.category" name="category" required>
       @for(category of categories; track $index) {
-      <mat-option value="{{ category }}">{{
-        category
-      }}</mat-option>
+      <mat-option value="{{ category }}">{{ category }}</mat-option>
 
       }
     </mat-select>
   </mat-form-field>
 
-
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="outline">
     <mat-label>Description</mat-label>
 
     <textarea
@@ -55,8 +54,7 @@
     >
     </textarea>
   </mat-form-field>
-  <mat-form-field appearance="fill">
-
+  <mat-form-field appearance="outline">
     <mat-label>Amount</mat-label>
     <input
       matInput
@@ -68,7 +66,7 @@
     />
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="outline">
     <mat-label>Currency</mat-label>
     <mat-select [(ngModel)]="transfer.currency" name="currency" required>
       <mat-option value="EUR">EUR</mat-option>
@@ -77,8 +75,8 @@
     </mat-select>
   </mat-form-field>
 
-  <div class="actions">
+  <mat-dialog-actions>
     <button mat-button type="button" (click)="closeDialog()">Cancel</button>
     <button mat-raised-button color="primary" type="submit">Create</button>
-  </div>
+  </mat-dialog-actions>
 </form>
