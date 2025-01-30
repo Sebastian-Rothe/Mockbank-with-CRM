@@ -1,12 +1,11 @@
-<div class="align-dialog">
-  <h2>Create New Account</h2>
+<h2>Create New Account</h2>
 <form (ngSubmit)="createAccount()">
   <!-- <mat-form-field appearance="fill">
     <mat-label>Account Name</mat-label>
     <input matInput [(ngModel)]="account.accountId" name="accountId" required />
   </mat-form-field> -->
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="outline">
     <mat-label>Initial Balance</mat-label>
     <input
       matInput
@@ -17,7 +16,7 @@
       min="1"
     />
   </mat-form-field>
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="outline">
     <mat-label>Name</mat-label>
     <input
       matInput
@@ -28,19 +27,16 @@
     />
   </mat-form-field>
 
-  <mat-form-field appearance="fill">
+  <mat-form-field appearance="outline">
     <mat-label>Currency</mat-label>
-    <mat-select [(ngModel)]="account.currency" name="currency" required>
+    <mat-select [(ngModel)]="account.currency" name="currency"  disabled>
       <mat-option value="EUR">EUR</mat-option>
       <mat-option value="USD">USD</mat-option>
       <mat-option value="GBP">GBP</mat-option>
     </mat-select>
   </mat-form-field>
-
-  <div class="actions">
-    <button mat-button type="button" (click)="closeDialog()">Cancel</button>
-    <button mat-raised-button color="primary" type="submit">Create</button>
-  </div>
 </form>
-
-</div>
+<mat-dialog-actions>
+  <button mat-button type="button" (click)="closeDialog()">Cancel</button>
+  <button mat-raised-button color="primary" type="submit">Create</button>
+</mat-dialog-actions>

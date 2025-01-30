@@ -1,17 +1,7 @@
-.align-dialog{
-    padding: 20px;
-}
-h2{
-   margin: 16px 0 0 20px;
-}
+@import '../../styles/dialog-style.scss';
 
-form{
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-}
-.actions{
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
+
+
+mat-dialog-actions{
+    margin-bottom: 12px;
 }
