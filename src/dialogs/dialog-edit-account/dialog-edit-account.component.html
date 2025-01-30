@@ -1,32 +1,20 @@
-<div class="dialog-container">
-    <div class="dialog-header">
-      Edit Account Name
-    </div>
-    <div class="dialog-content">
-      <mat-form-field>
-        <mat-label>Account Name</mat-label>
-        <input
-          matInput
-          [(ngModel)]="account.accountName"
-          placeholder="{{account.accountName}}"
-        />
-      </mat-form-field>
-    </div>
-    <div class="dialog-actions">
-      <button
-        mat-raised-button
-        class="cancel-btn"
-        (click)="closeDialog()"
-      >
-        Cancel
-      </button>
-      <button
-        mat-raised-button
-        class="save-btn"
-        (click)="saveChanges()"
-      >
-        Save
-      </button>
-    </div>
-  </div>
-  
+<h2 mat-dialog-title>Edit Account Name</h2>
+
+<mat-dialog-content>
+  <mat-form-field appearance="outline">
+    <mat-label>Account Name</mat-label>
+    <input
+      matInput
+      [(ngModel)]="account.accountName"
+      placeholder="{{ account.accountName }}"
+    />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-raised-button class="cancel-btn" (click)="closeDialog()">
+    Cancel
+  </button>
+  <button mat-raised-button class="save-btn" (click)="saveChanges()">
+    Save
+  </button>
+</mat-dialog-actions>

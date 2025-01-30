@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Account } from '../../models/account.class';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FirebaseService } from '../../services/firebase.service';
@@ -12,7 +12,7 @@ import { MatInput } from '@angular/material/input';
 @Component({
   selector: 'app-dialog-edit-account',
   standalone: true,
-  imports: [MatFormFieldModule, FormsModule, MatButtonModule, MatInput],
+  imports: [MatFormFieldModule, FormsModule, MatButtonModule, MatInput, MatDialogModule],
   templateUrl: './dialog-edit-account.component.html',
   styleUrl: './dialog-edit-account.component.scss',
 })
