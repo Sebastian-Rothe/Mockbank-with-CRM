@@ -1,22 +1,27 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+// services
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import { FirebaseService } from '../../../services/firebase.service';
+import { SharedService } from '../../../services/shared.service';
+// models
 import { User } from '../../../models/user.class';
+import { Account } from '../../../models/account.class';
+// material
+import { MatDialog } from '@angular/material/dialog';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
+import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatMenu, MatMenuModule } from '@angular/material/menu';
+// components
 import { DialogSendMoneyComponent } from './dialog-send-money/dialog-send-money.component';
 import { DialogOpenNewPocketComponent } from './dialog-open-new-pocket/dialog-open-new-pocket.component';
 import { DialogMoveMoneyComponent } from './dialog-move-money/dialog-move-money.component';
 import { DialogEditAccountComponent } from './dialog-edit-account/dialog-edit-account.component';
-import { MatCardModule } from '@angular/material/card';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
-import { Account } from '../../../models/account.class';
-import { CommonModule } from '@angular/common';
-import { SharedService } from '../../../services/shared.service';
-import { MatMenu, MatMenuModule } from '@angular/material/menu';
 import { DialogConfirmDeleteAccComponent } from './dialog-confirm-delete-acc/dialog-confirm-delete-acc.component';
 import { TransfersComponent } from './transfers/transfers.component';
+// charts
 import { FirstChartsComponent } from '../../../charts/first-charts/first-charts.component';
 import { MonthlyExpensesChartComponent } from '../../../charts/first-charts/monthly-expenses-chart/monthly-expenses-chart.component';
 
