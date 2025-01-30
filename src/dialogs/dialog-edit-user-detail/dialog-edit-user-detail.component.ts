@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { FirebaseService } from '../../../services/firebase.service';
-import { SharedService } from '../../../services/shared.service';
+import { FirebaseService } from '../../services/firebase.service';
+import { SharedService } from '../../services/shared.service';
 
 import { FormsModule } from '@angular/forms';
 
@@ -14,7 +14,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { User } from '../../../models/user.class';
+import { User } from '../../models/user.class';
 import { provideNativeDateAdapter } from '@angular/material/core';
 
 @Component({

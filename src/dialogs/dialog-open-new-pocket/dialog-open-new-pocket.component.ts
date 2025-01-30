@@ -6,9 +6,9 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { Account } from '../../../../models/account.class';
-import { FirebaseService } from '../../../../services/firebase.service';
-import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
+import { Account } from '../../models/account.class';
+import { FirebaseService } from '../../services/firebase.service';
+import { FirebaseAuthService } from '../../services/firebase-auth.service';
 
 @Component({
   selector: 'app-dialog-open-new-pocket',

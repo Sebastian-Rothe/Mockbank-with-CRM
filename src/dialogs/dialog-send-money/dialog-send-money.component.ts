@@ -10,12 +10,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 // modules
-import { Transfer } from '../../../../models/transfer.class';
-import { User } from '../../../../models/user.class';
-import { Account } from '../../../../models/account.class';
+import { Transfer } from '../../models/transfer.class';
+import { User } from '../../models/user.class';
+import { Account } from '../../models/account.class';
 // Firebase Services
-import { FirebaseService } from '../../../../services/firebase.service';
-import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
+import { FirebaseService } from '../../services/firebase.service';
+import { FirebaseAuthService } from '../../services/firebase-auth.service';
 
 @Component({
   selector: 'app-dialog-sent-money',

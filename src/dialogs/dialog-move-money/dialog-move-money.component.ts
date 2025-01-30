@@ -7,11 +7,11 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { Transfer } from '../../../../models/transfer.class';
-import { User } from '../../../../models/user.class';
-import { Account } from '../../../../models/account.class';
-import { FirebaseService } from '../../../../services/firebase.service';
-import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
+import { Transfer } from '../../models/transfer.class';
+import { User } from '../../models/user.class';
+import { Account } from '../../models/account.class';
+import { FirebaseService } from '../../services/firebase.service';
+import { FirebaseAuthService } from '../../services/firebase-auth.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
 

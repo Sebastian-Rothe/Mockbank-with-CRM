@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { FirebaseAuthService } from '../../../services/firebase-auth.service';
+import { FirebaseAuthService } from '../../services/firebase-auth.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';

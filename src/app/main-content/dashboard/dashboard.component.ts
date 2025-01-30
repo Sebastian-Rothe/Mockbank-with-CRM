@@ -15,11 +15,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
 // components
-import { DialogSendMoneyComponent } from './dialog-send-money/dialog-send-money.component';
-import { DialogOpenNewPocketComponent } from './dialog-open-new-pocket/dialog-open-new-pocket.component';
-import { DialogMoveMoneyComponent } from './dialog-move-money/dialog-move-money.component';
-import { DialogEditAccountComponent } from './dialog-edit-account/dialog-edit-account.component';
-import { DialogConfirmDeleteAccComponent } from './dialog-confirm-delete-acc/dialog-confirm-delete-acc.component';
+import { DialogSendMoneyComponent } from '../../../dialogs/dialog-send-money/dialog-send-money.component';
+import { DialogOpenNewPocketComponent } from '../../../dialogs/dialog-open-new-pocket/dialog-open-new-pocket.component';
+import { DialogMoveMoneyComponent } from '../../../dialogs/dialog-move-money/dialog-move-money.component';
+import { DialogEditAccountComponent } from '../../../dialogs/dialog-edit-account/dialog-edit-account.component';
+import { DialogConfirmDeleteAccComponent } from '../../../dialogs/dialog-confirm-delete-acc/dialog-confirm-delete-acc.component';
 import { TransfersComponent } from './transfers/transfers.component';
 // charts
 import { FirstChartsComponent } from '../../../charts/first-charts/first-charts.component';
