@@ -1,28 +1,23 @@
-
-
 <h2 mat-dialog-title>Edit User Details</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="outline">
+    <mat-label>Nationality:</mat-label>
+    <input [(ngModel)]="user.nationality" matInput placeholder="German" />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label>Tax ID:</mat-label>
+    <input [(ngModel)]="user.taxId" matInput placeholder="taxId" />
+  </mat-form-field>
 
-<div mat-dialog-content>
-  
-
-  <div>
-    <mat-form-field class="full-width" appearance="outline">
-      <mat-label>Nationality:</mat-label>
-      <input [(ngModel)]="user.nationality" matInput placeholder="German" />
-    </mat-form-field>
-  </div>
-  <div>
-    <mat-form-field class="mr-16" appearance="outline">
-      <mat-label>Tax ID:</mat-label>
-      <input [(ngModel)]="user.taxId" matInput placeholder="taxId" />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Occupation:</mat-label>
-      <input [(ngModel)]="user.occupation" matInput placeholder="Frontend Developer" />
-    </mat-form-field>
-  </div>
-</div>
+  <mat-form-field appearance="outline">
+    <mat-label>Occupation:</mat-label>
+    <input
+      [(ngModel)]="user.occupation"
+      matInput
+      placeholder="Frontend Developer"
+    />
+  </mat-form-field>
+</mat-dialog-content>
 
 <mat-dialog-actions>
   <button mat-button (click)="closeDialog()">Cancel</button>

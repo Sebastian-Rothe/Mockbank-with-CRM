@@ -1,22 +1,18 @@
-<h2 mat-dialog-title>Add User</h2>
+<h2 mat-dialog-title>Edit User Profile</h2>
+<mat-dialog-content>
 
-<div mat-dialog-content>
-  <div class="name-container">
-    <mat-form-field class="mr-16" appearance="outline">
+    <mat-form-field appearance="outline">
       <mat-label>First Name</mat-label>
       <input [(ngModel)]="user.firstName" matInput placeholder="First Name" />
-      <!-- <mat-hint>Please enter your first name</mat-hint> -->
     </mat-form-field>
-
+  
     <mat-form-field appearance="outline">
       <mat-label>Last Name</mat-label>
       <input [(ngModel)]="user.lastName" matInput placeholder="Last Name" />
-      <!-- <mat-hint>Please enter your last name</mat-hint> -->
     </mat-form-field>
-  </div>
-
+  
   <div class="name-container">
-    <mat-form-field class="mr-16" appearance="outline">
+    <mat-form-field appearance="outline">
       <mat-label>Birth Date</mat-label>
       <input
         [(ngModel)]="user.birthDate"
@@ -44,7 +40,9 @@
       />
     </label>
   </div>
-</div>
+
+</mat-dialog-content>  
+
 
 <mat-dialog-actions>
   <button mat-button (click)="closeDialog()">Cancel</button>
