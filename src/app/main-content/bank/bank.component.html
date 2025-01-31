@@ -1,0 +1,33 @@
+<mat-card appearance="outlined" class="bank-card">
+    <div class="bank-header">
+      <h2><mat-icon>account_balance</mat-icon> {{ bank?.name || 'Bank' }}</h2>
+      <p class="bank-id">ID: {{ bank?.id }}</p>
+    </div>
+  
+    <div class="bank-stats">
+      <div class="stat-box">
+        <p class="stat-title">Gesamtkapital</p>
+        <h3>{{ bank?.totalBalance | currency }}</h3>
+      </div>
+      <div class="stat-box">
+        <p class="stat-title">Zinssatz</p>
+        <h3>{{ bank!.interestRate * 100 }}%</h3>
+      </div>
+      <div class="stat-box">
+        <p class="stat-title">Transaktionsgebühr</p>
+        <h3>{{ bank?.transactionFee | currency }}</h3>
+      </div>
+      <!-- <div class="stat-box">
+        <p class="stat-title">Letzte Aktualisierung</p>
+        <h3>{{ bank?.lastUpdated  }}</h3>
+      </div> -->
+    </div>
+  
+    <!-- Admin-Funktion: Bearbeiten -->
+    <div class="bank-actions" >
+      <button mat-raised-button color="primary" (click)="openEditDialog()">
+        <mat-icon>edit</mat-icon> Bearbeiten
+      </button>
+    </div>
+  </mat-card>
+  

@@ -21,6 +21,7 @@ import { DialogMoveMoneyComponent } from '../../../dialogs/dialog-move-money/dia
 import { DialogEditAccountComponent } from '../../../dialogs/dialog-edit-account/dialog-edit-account.component';
 import { DialogConfirmDeleteAccComponent } from '../../../dialogs/dialog-confirm-delete-acc/dialog-confirm-delete-acc.component';
 import { TransfersComponent } from './transfers/transfers.component';
+import { BankComponent } from '../bank/bank.component';
 // charts
 import { FirstChartsComponent } from '../../../charts/first-charts/first-charts.component';
 import { MonthlyExpensesChartComponent } from '../../../charts/first-charts/monthly-expenses-chart/monthly-expenses-chart.component';
@@ -40,7 +41,8 @@ import { MonthlyExpensesChartComponent } from '../../../charts/first-charts/mont
     MatMenu,
     TransfersComponent,
     FirstChartsComponent, // first charts component
-    MonthlyExpensesChartComponent
+    MonthlyExpensesChartComponent,
+    BankComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
