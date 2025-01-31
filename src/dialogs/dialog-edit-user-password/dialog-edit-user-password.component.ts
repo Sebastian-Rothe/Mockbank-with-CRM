@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dialog-edit-user-password',
@@ -15,6 +16,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     MatInputModule,
     MatButtonModule,
     FormsModule,
+    MatIcon
   ],
   templateUrl: './dialog-edit-user-password.component.html',
   styleUrls: ['./dialog-edit-user-password.component.scss'],

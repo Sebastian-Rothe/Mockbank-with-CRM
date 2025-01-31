@@ -9,10 +9,11 @@ import { FirebaseService } from '../../services/firebase.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
 import { MatInput } from '@angular/material/input';
+import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-dialog-edit-account',
   standalone: true,
-  imports: [MatFormFieldModule, FormsModule, MatButtonModule, MatInput, MatDialogModule],
+  imports: [MatFormFieldModule, FormsModule, MatButtonModule, MatInput, MatDialogModule, MatIcon],
   templateUrl: './dialog-edit-account.component.html',
   styleUrl: './dialog-edit-account.component.scss',
 })

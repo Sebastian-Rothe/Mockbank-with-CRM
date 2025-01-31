@@ -14,7 +14,11 @@
 
 
   <mat-dialog-actions>
-    <button mat-button (click)="closeDialog()">Cancel</button>
-    <button mat-button color="primary" (click)="changeEmail()">Change E-Mail</button>
+    <button mat-button (click)="closeDialog()">
+      <mat-icon>cancel</mat-icon>
+      Cancel</button>
+    <button mat-button color="primary" (click)="changeEmail()">
+      <mat-icon>save</mat-icon>
+      Change E-Mail</button>
   </mat-dialog-actions>
   

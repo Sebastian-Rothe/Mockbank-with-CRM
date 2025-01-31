@@ -14,6 +14,7 @@ import { FirebaseService } from '../../services/firebase.service';
 import { FirebaseAuthService } from '../../services/firebase-auth.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dialog-move-money',
@@ -28,6 +29,7 @@ import { Inject } from '@angular/core';
     MatDatepickerModule,
     MatButtonModule,
     FormsModule,
+    MatIcon
   ],
   templateUrl: './dialog-move-money.component.html',
   styleUrl: './dialog-move-money.component.scss',

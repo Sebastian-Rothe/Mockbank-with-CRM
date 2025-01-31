@@ -2,8 +2,10 @@
     <h2 mat-dialog-title>{{ data.title }}</h2>
     <mat-dialog-content>{{ data.message }}</mat-dialog-content>
     <mat-dialog-actions>
-      <button class="cancel-btn" (click)="onCancel()">Cancel</button>
-      <button  class="delete-btn" (click)="onConfirm()">Delete</button>
+      <button mat-stroked-button (click)="onCancel()">
+        <mat-icon>cancel</mat-icon>
+        Cancel</button>
+      <button  mat-raised-button color="warn" (click)="onConfirm()"><mat-icon>delete</mat-icon>Delete</button>
     </mat-dialog-actions>
  
   

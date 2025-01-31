@@ -16,6 +16,7 @@ import { Account } from '../../models/account.class';
 // Firebase Services
 import { FirebaseService } from '../../services/firebase.service';
 import { FirebaseAuthService } from '../../services/firebase-auth.service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dialog-sent-money',
@@ -30,6 +31,7 @@ import { FirebaseAuthService } from '../../services/firebase-auth.service';
     MatDatepickerModule,
     MatButtonModule,
     FormsModule,
+    MatIcon
   ],
   templateUrl: './dialog-send-money.component.html',
   styleUrl: './dialog-send-money.component.scss',

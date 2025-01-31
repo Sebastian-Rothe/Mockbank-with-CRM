@@ -5,6 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dialog-edit-user-email',
@@ -15,6 +16,7 @@ import { FormsModule } from '@angular/forms';
       MatInputModule,
       MatButtonModule,
       FormsModule,
+      MatIcon
     ],
   templateUrl: './dialog-edit-user-email.component.html',
   styleUrls: ['./dialog-edit-user-email.component.scss'],

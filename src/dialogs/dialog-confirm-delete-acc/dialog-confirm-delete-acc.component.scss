@@ -10,22 +10,3 @@ mat-dialog-actions{
     border-radius: 8px;
   }
 }
-.delete-btn {
-  padding: 8px;
-  background-color: red;
-  color: #fff;
-
-  &:hover {
-    background-color: #145ea8;
-  }
-}
-
-.cancel-btn {
-  padding: 8px;
-  background-color: #f5f5f5;
-  color: #333;
-
-  &:hover {
-    background-color: #e0e0e0;
-  }
-}

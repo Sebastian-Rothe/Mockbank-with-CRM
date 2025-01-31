@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { User } from '../../models/user.class';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-dialog-edit-user-address',
   standalone: true,
@@ -21,7 +22,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
   imports: [MatDialogModule,
     // MatDialogClose,
     MatFormFieldModule,
-    
+    MatIcon,
     MatInputModule,
     MatDatepickerModule,
     MatButtonModule,

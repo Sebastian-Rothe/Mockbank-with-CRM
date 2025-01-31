@@ -9,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { Account } from '../../models/account.class';
 import { FirebaseService } from '../../services/firebase.service';
 import { FirebaseAuthService } from '../../services/firebase-auth.service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dialog-open-new-pocket',
@@ -21,6 +22,7 @@ import { FirebaseAuthService } from '../../services/firebase-auth.service';
     MatInputModule,
     MatButtonModule,
     FormsModule,
+    MatIcon
   ],
   templateUrl: './dialog-open-new-pocket.component.html',
   styleUrls: ['./dialog-open-new-pocket.component.scss'],

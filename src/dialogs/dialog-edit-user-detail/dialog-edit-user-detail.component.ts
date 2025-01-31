@@ -16,6 +16,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { User } from '../../models/user.class';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dialog-edit-user-detail',
@@ -25,7 +26,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
     MatDialogModule,
     // MatDialogClose,
     MatFormFieldModule,
-
+    MatIcon,
     MatInputModule,
     MatDatepickerModule,
     MatButtonModule,
@@ -61,9 +62,12 @@ export class DialogEditUserDetailComponent {
     const ref = doc(this.firebaseService.firestore, 'users', user.uid);
     const updatedUser = {
       ...user,
-      birthDate: user.birthDate instanceof Date ? user.birthDate.getTime() : user.birthDate,
+      birthDate:
+        user.birthDate instanceof Date
+          ? user.birthDate.getTime()
+          : user.birthDate,
     };
-  
+
     this.closeDialog();
     return from(updateDoc(ref, updatedUser));
   }
@@ -75,31 +79,30 @@ export class DialogEditUserDetailComponent {
     return this.sharedService.formatTimestampToDate(this.user?.birthDate || 0);
   }
 
-  
- onFileSelected(event: Event): void {
-  const input = event.target as HTMLInputElement;
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
 
-  if (!input.files || input.files.length === 0) {
-    return;
-  }
-
-  const file = input.files[0];
-  const allowedTypes = ['image/jpeg', 'image/png'];
-
-  if (!allowedTypes.includes(file.type)) {
-    alert('Bitte laden Sie eine gültige Bilddatei hoch (jpg, png).');
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = () => {
-    this.profilePictureUrl = reader.result as string; 
-    if (this.user) {
-      this.user.profilePictureUrl = this.profilePictureUrl; 
+    if (!input.files || input.files.length === 0) {
+      return;
     }
-  };
-  reader.readAsDataURL(file);
-}
+
+    const file = input.files[0];
+    const allowedTypes = ['image/jpeg', 'image/png'];
+
+    if (!allowedTypes.includes(file.type)) {
+      alert('Bitte laden Sie eine gültige Bilddatei hoch (jpg, png).');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.profilePictureUrl = reader.result as string;
+      if (this.user) {
+        this.user.profilePictureUrl = this.profilePictureUrl;
+      }
+    };
+    reader.readAsDataURL(file);
+  }
 
   //  /**
   //  * Speichert das Profilbild des Benutzers.
@@ -116,5 +119,4 @@ export class DialogEditUserDetailComponent {
   //     alert('Bitte zuerst ein Bild auswählen.');
   //   }
   // }
-  
 }

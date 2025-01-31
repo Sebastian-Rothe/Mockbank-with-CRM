@@ -20,6 +20,10 @@
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button mat-button (click)="closeDialog()">Cancel</button>
-  <button mat-button (click)="saveNewUser(user)" cdkFocusInitial>Save</button>
+  <button mat-button (click)="closeDialog()">
+    <mat-icon>cancel</mat-icon>
+    Cancel</button>
+  <button mat-button (click)="saveNewUser(user)" cdkFocusInitial>
+    <mat-icon>save</mat-icon>
+    Save</button>
 </mat-dialog-actions>
