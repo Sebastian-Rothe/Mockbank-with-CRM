@@ -10,8 +10,8 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #userDetail="matMenu">
-        <button mat-menu-item (click)="editUserDetail()">Edit</button>
-        <button mat-menu-item>Delete</button>
+        <button mat-menu-item (click)="editUserDetail()"> <mat-icon class="mr-l6">edit</mat-icon>Edit</button>
+        <!-- <button mat-menu-item>Delete</button> -->
       </mat-menu>
     </div>
     <div class="user-overview">
@@ -52,8 +52,8 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #userContact="matMenu">
-        <button mat-menu-item (click)="openEmailDialog()">Change Email</button>
-        <button mat-menu-item (click)="openPasswordDialog()">Change Password</button>
+        <button mat-menu-item (click)="openEmailDialog()"><mat-icon class="mr-l6">mail</mat-icon>Change Email</button>
+        <button mat-menu-item (click)="openPasswordDialog()"><mat-icon class="mr-l6">password</mat-icon>Change Password</button>
       </mat-menu>
     </div>
     <div class="section-content">
@@ -82,8 +82,8 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #userAddress="matMenu">
-        <button mat-menu-item (click)="editUserAddress()">Edit</button>
-        <button mat-menu-item>Delete</button>
+        <button mat-menu-item (click)="editUserAddress()"><mat-icon class="mr-l6">edit</mat-icon>Edit</button>
+        <!-- <button mat-menu-item>Delete</button> -->
       </mat-menu>
     </div>
     <div class="section-content">
@@ -103,7 +103,7 @@
   </mat-card>
 
   <!-- Contact Section -->
-  <mat-card appearance="outlined" class="m-32">
+  <!-- <mat-card appearance="outlined" class="m-32">
     <div class="section-header">
       <h4>Contact</h4>
       <button
@@ -114,8 +114,7 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #userContact="matMenu">
-        <button mat-menu-item (click)="editUserContact()">Edit</button>
-        <button mat-menu-item>Delete</button>
+        <button mat-menu-item (click)="editUserContact()"><mat-icon class="mr-l6">edit</mat-icon>Edit</button>
       </mat-menu>
     </div>
     <div class="section-content">
@@ -123,12 +122,9 @@
         <label>Email:</label>
         <span>{{ user?.email }}</span>
       </div>
-      <div class="detail-item">
-        <label>Phone Number:</label>
-        <span>{{ user?.phoneNumber }}</span>
-      </div>
+    
     </div>
-  </mat-card>
+  </mat-card> -->
 
   <!-- Additional Details Section -->
   <mat-card appearance="outlined" class="m-32">
@@ -142,11 +138,15 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #userDetailsMenu="matMenu">
-        <button mat-menu-item (click)="editUserDetails()">Edit</button>
-        <button mat-menu-item>Delete</button>
+        <button mat-menu-item (click)="editUserDetails()"><mat-icon class="mr-l6">edit</mat-icon>Edit</button>
+        <!-- <button mat-menu-item>Delete</button> -->
       </mat-menu>
     </div>
     <div class="section-content">
+      <div class="detail-item">
+        <label>Phone Number:</label>
+        <span>{{ user?.phoneNumber }}</span>
+      </div>
       <div class="detail-item">
         <label>Nationality:</label>
         <span>{{ user?.nationality }}</span>

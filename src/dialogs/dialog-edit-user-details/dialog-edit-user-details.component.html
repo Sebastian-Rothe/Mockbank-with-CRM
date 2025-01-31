@@ -1,12 +1,16 @@
 <h2 mat-dialog-title>Edit User Details</h2>
 <mat-dialog-content>
   <mat-form-field appearance="outline">
+    <mat-label>Phone:</mat-label>
+    <input [(ngModel)]="user.phoneNumber" matInput placeholder="{{user.phoneNumber}}" />
+  </mat-form-field>
+  <mat-form-field appearance="outline">
     <mat-label>Nationality:</mat-label>
-    <input [(ngModel)]="user.nationality" matInput placeholder="German" />
+    <input [(ngModel)]="user.nationality" matInput placeholder="{{user.nationality}}" />
   </mat-form-field>
   <mat-form-field appearance="outline">
     <mat-label>Tax ID:</mat-label>
-    <input [(ngModel)]="user.taxId" matInput placeholder="taxId" />
+    <input [(ngModel)]="user.taxId" matInput placeholder="{{user.taxId}}" />
   </mat-form-field>
 
   <mat-form-field appearance="outline">
@@ -14,7 +18,7 @@
     <input
       [(ngModel)]="user.occupation"
       matInput
-      placeholder="Frontend Developer"
+      placeholder="{{user.occupation}}"
     />
   </mat-form-field>
 </mat-dialog-content>
@@ -23,7 +27,7 @@
   <button mat-button (click)="closeDialog()">
     <mat-icon>cancel</mat-icon>
     Cancel</button>
-  <button mat-button (click)="saveNewUser(user)" cdkFocusInitial>
+  <button mat-button color="primary" (click)="saveNewUser(user)" cdkFocusInitial>
     <mat-icon>save</mat-icon>
     Save</button>
 </mat-dialog-actions>
