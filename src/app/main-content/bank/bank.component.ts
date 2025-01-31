@@ -27,13 +27,26 @@ import {MatTableModule} from '@angular/material/table';
 export class BankComponent implements OnInit {
   // bank$!: Observable<Bank | undefined>;
   bank: Bank | null = null; // Bankdaten speichern
+  totalUserCapital: number = 0;
   constructor(private bankService: BankService){}
   ngOnInit() {
     this.loadBankData();
+    this.loadTotalUserCapital();
   }
 
   async loadBankData() {
     this.bank = await this.bankService.getBankData();
   }
+  async loadTotalUserCapital() {
+    this.totalUserCapital = await this.bankService.getTotalUserCapital();
+  }
   openEditDialog(){}
+
+  getFormattedCurrency(value: number): string {
+    return new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency: 'EUR',
+      currencyDisplay: 'narrowSymbol' // Sorgt für "100 €"
+    }).format(value);
+  }
 }

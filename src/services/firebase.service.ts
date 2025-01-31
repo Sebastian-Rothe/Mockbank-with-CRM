@@ -426,5 +426,20 @@ async updateUserProfilePicture(userId: string, profilePictureUrl: string): Promi
     throw error; // Fehler weitergeben, um sie an der aufrufenden Stelle zu behandeln
   }
 }
+async getTotalUserCapital(): Promise<number> {
+  try {
+    const accountsSnapshot = await getDocs(this.accountCollection);
+    let totalCapital = 0;
 
+    accountsSnapshot.forEach((doc) => {
+      const accountData = doc.data() as Account;
+      totalCapital += accountData.balance;
+    });
+
+    return totalCapital;
+  } catch (error) {
+    console.error('Error calculating total user capital:', error);
+    return 0;
+  }
+}
 }

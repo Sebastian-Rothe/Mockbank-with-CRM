@@ -19,6 +19,7 @@ import {
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Bank } from '../models/bank.interface';
+import { FirebaseService } from './firebase.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -26,7 +27,7 @@ export class BankService {
   firestore: Firestore = inject(Firestore);
   private bankCollection = collection(this.firestore, 'bank');
 
-  constructor() { }
+  constructor(private firebaseService: FirebaseService) {}
 
   getBankData() {
     const bankDocRef = doc(this.bankCollection, 'mainBank');
@@ -41,5 +42,8 @@ export class BankService {
   getBankObservable(): Observable<Bank | undefined> {
     const bankDocRef = doc(this.bankCollection, 'mainBank');
     return docData(bankDocRef, { idField: 'id' }) as Observable<Bank | undefined>;
+  }
+  async getTotalUserCapital(): Promise<number> {
+    return this.firebaseService.getTotalUserCapital();
   }
 }

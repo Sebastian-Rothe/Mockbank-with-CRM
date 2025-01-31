@@ -7,7 +7,7 @@
     <div class="bank-stats">
       <div class="stat-box">
         <p class="stat-title">Gesamtkapital</p>
-        <h3>{{ bank?.totalBalance | currency }}</h3>
+        <h3>{{ getFormattedCurrency(bank!.totalBalance) }}</h3>
       </div>
       <div class="stat-box">
         <p class="stat-title">Zinssatz</p>
@@ -17,10 +17,10 @@
         <p class="stat-title">Transaktionsgebühr</p>
         <h3>{{ bank?.transactionFee | currency }}</h3>
       </div>
-      <!-- <div class="stat-box">
-        <p class="stat-title">Letzte Aktualisierung</p>
-        <h3>{{ bank?.lastUpdated  }}</h3>
-      </div> -->
+      <div class="stat-box">
+        <p class="stat-title">Total Capital of Users</p>
+        <h3>{{ getFormattedCurrency(totalUserCapital) }}</h3>
+      </div>
     </div>
   
     <!-- Admin-Funktion: Bearbeiten -->
