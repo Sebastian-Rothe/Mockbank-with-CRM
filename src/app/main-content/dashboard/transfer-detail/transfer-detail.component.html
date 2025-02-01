@@ -30,7 +30,7 @@
       }@else {
       <p><strong>Receiver Account ID:</strong> {{ data.receiverAccountId }}</p>
       }
-      <p><strong>Amount: </strong> {{ data.amount + " " + data.currency }}</p>
+      <p><strong>Amount: </strong> {{getFormattedCurrency(data.amount)}}</p>
       <p>
         <strong>Description:</strong>
         {{ data.description || "No description provided" }}

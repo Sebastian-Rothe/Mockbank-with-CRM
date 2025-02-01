@@ -91,4 +91,7 @@ export class TransferDetailComponent {
       });
     }
   }
+  getFormattedCurrency(value: number) {
+    return this.sharedService.getFormattedCurrency(value);
+  }
 }

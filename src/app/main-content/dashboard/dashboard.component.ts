@@ -311,4 +311,7 @@ export class DashboardComponent implements OnInit {
     }
     this.isImageSelected = false;
   }
+  getFormattedCurrency(value: number) {
+    return this.sharedService.getFormattedCurrency(value);
+  }
 }

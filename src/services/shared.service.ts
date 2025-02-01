@@ -45,8 +45,8 @@ export class SharedService {
     return new Intl.NumberFormat('de-DE', {
       style: 'currency',
       currency: 'EUR',
-      currencyDisplay: 'narrowSymbol', // Sorgt für "100 €"
-    }).format(value);
+      currencyDisplay: 'narrowSymbol',
+    }).format(value).replace(/\s€/g, '€'); // 🔹 Entfernt Leerzeichen vor €
   }
   
 }

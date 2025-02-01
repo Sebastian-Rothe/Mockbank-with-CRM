@@ -13,10 +13,9 @@
   <app-monthly-expenses-chart></app-monthly-expenses-chart> -->
 
   <mat-card appearance="outlined" class="card-header m-32">
-    
     <div>
       <div class="total-balance">
-        <h4>Total Balance: {{ totalBalance }}€</h4>
+        <h4>Total Balance: {{ getFormattedCurrency(totalBalance) }}</h4>
       </div>
       <div class="profile-container">
         <div class="profile-image-wrapper">
@@ -86,8 +85,12 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #account$index="matMenu">
-        <button mat-menu-item (click)="editAccount(account.accountId)">Edit Account</button>
-        <button mat-menu-item (click)="deleteAccount(account.accountId, uid)">Close Account</button>
+        <button mat-menu-item (click)="editAccount(account.accountId)">
+          Edit Account
+        </button>
+        <button mat-menu-item (click)="deleteAccount(account.accountId, uid)">
+          Close Account
+        </button>
       </mat-menu>
       <mat-card-content>
         <div class="account-header">
@@ -95,7 +98,9 @@
           <h3 class="align-name">{{ account.accountName }}</h3>
           <!-- } -->
           <h3>{{ account.accountId }}</h3>
-          <p class="align-balance">Balance: {{ account.balance }}€</p>
+          <p class="align-balance">
+            Balance: {{ getFormattedCurrency(account.balance) }}
+          </p>
         </div>
         <div class="account-actions">
           <button
@@ -116,9 +121,7 @@
     }
   </div>
 
-
   <app-transfers></app-transfers>
-
 </div>
 
 } @else {<ng-template #loading> <p>Lade Benutzerdaten...</p> </ng-template>} }

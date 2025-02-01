@@ -134,4 +134,7 @@ export class TransfersComponent {
       data: transfer, // Übergebe das gesamte Transfer-Objekt
     });
   }
+  getFormattedCurrency(value: number) {
+    return this.sharedService.getFormattedCurrency(value);
+  }
 }
