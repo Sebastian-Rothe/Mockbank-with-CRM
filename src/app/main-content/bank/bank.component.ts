@@ -10,6 +10,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import {MatTableModule} from '@angular/material/table';
+import { FirebaseService } from '../../../services/firebase.service';
 @Component({
   selector: 'app-bank',
   standalone: true,
@@ -28,10 +29,11 @@ export class BankComponent implements OnInit {
   // bank$!: Observable<Bank | undefined>;
   bank: Bank | null = null; // Bankdaten speichern
   totalUserCapital: number = 0;
-  constructor(private bankService: BankService){}
+  constructor(private bankService: BankService, private firebaseService: FirebaseService){}
   ngOnInit() {
     this.loadBankData();
     this.loadTotalUserCapital();
+    this.firebaseService.updateTotalBankBalance();
   }
 
   async loadBankData() {

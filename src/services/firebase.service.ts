@@ -42,7 +42,7 @@ export class FirebaseService {
       return new User({ ...data, uid: doc.id }); // User-Klasse instanziieren und die ID hinzufügen
     });
   }
-  
+
   //  /**
   //  * Fügt einen neuen Benutzer zur Firestore-Datenbank hinzu.
   //  * @param user Der Benutzer, der hinzugefügt werden soll.
@@ -114,7 +114,11 @@ export class FirebaseService {
       const userDocRef = doc(this.firestore, 'users', userId);
       const userDocSnap = await getDoc(userDocRef);
 
-      console.log('getUser - userDocSnap:', userDocSnap.exists(), userDocSnap.data());
+      console.log(
+        'getUser - userDocSnap:',
+        userDocSnap.exists(),
+        userDocSnap.data()
+      );
       // Prüfen, ob das Dokument existiert
       if (userDocSnap.exists()) {
         // Wenn das Dokument existiert, gebe es als User-Objekt zurück und setze die ID
@@ -132,171 +136,180 @@ export class FirebaseService {
     }
   }
 
- /**
+  /**
    * Ruft alle Transfers ab, die mit einem bestimmten Benutzer verknüpft sind (für alle Accounts)
    * @param user Der Benutzer, dessen Transfers abgerufen werden sollen
    * @returns Eine Liste von Transfers, die mit den Accounts des Benutzers in Verbindung stehen
    */
- async getTransfersForUser(user: User): Promise<Transfer[]> {
-  try {
-    const allTransfers: Transfer[] = [];
+  async getTransfersForUser(user: User): Promise<Transfer[]> {
+    try {
+      const allTransfers: Transfer[] = [];
 
-    // Durchlaufe alle Accounts des Benutzers
-    for (const accountId of user.accounts) {
-      const transfersForAccount = await this.getTransfersForAccount(accountId);
-      allTransfers.push(...transfersForAccount); // Füge die Transfers des aktuellen Accounts hinzu
+      // Durchlaufe alle Accounts des Benutzers
+      for (const accountId of user.accounts) {
+        const transfersForAccount = await this.getTransfersForAccount(
+          accountId
+        );
+        allTransfers.push(...transfersForAccount); // Füge die Transfers des aktuellen Accounts hinzu
+      }
+
+      return allTransfers;
+    } catch (error) {
+      console.error('Fehler beim Abrufen der Transfers:', error);
+      throw error;
     }
-
-    return allTransfers;
-  } catch (error) {
-    console.error('Fehler beim Abrufen der Transfers:', error);
-    throw error;
   }
-}
 
-/**
- * Ruft die Transfers für einen bestimmten Account ab
- * @param accountId Die ID des Accounts
- * @returns Eine Liste von Transfers, die mit diesem Account in Verbindung stehen
- */
-private async getTransfersForAccount(accountId: string): Promise<Transfer[]> {
-  const senderQuery = query(
-    collection(this.firestore, 'transfers'),
-    where('senderAccountId', '==', accountId)
-  );
-  
-  const receiverQuery = query(
-    collection(this.firestore, 'transfers'),
-    where('receiverAccountId', '==', accountId)
-  );
+  /**
+   * Ruft die Transfers für einen bestimmten Account ab
+   * @param accountId Die ID des Accounts
+   * @returns Eine Liste von Transfers, die mit diesem Account in Verbindung stehen
+   */
+  private async getTransfersForAccount(accountId: string): Promise<Transfer[]> {
+    const senderQuery = query(
+      collection(this.firestore, 'transfers'),
+      where('senderAccountId', '==', accountId)
+    );
 
-  const senderDocs = await getDocs(senderQuery);
-  const receiverDocs = await getDocs(receiverQuery);
+    const receiverQuery = query(
+      collection(this.firestore, 'transfers'),
+      where('receiverAccountId', '==', accountId)
+    );
 
-  const transfers: Transfer[] = [];
+    const senderDocs = await getDocs(senderQuery);
+    const receiverDocs = await getDocs(receiverQuery);
 
-  senderDocs.forEach((doc) => {
-    const transferData = doc.data();
-    const transfer = new Transfer(transferData);
-    transfers.push(transfer);
-  });
+    const transfers: Transfer[] = [];
 
-  receiverDocs.forEach((doc) => {
-    const transferData = doc.data();
-    const transfer = new Transfer(transferData);
-    transfers.push(transfer);
-  });
-
-  return transfers;
-}
-
-
-
-async transferFunds(
-  senderAccountId: string,
-  receiverAccountId: string,
-  amount: number,
-  description?: string,
-  category?: string // Neuer Parameter
-): Promise<void> {
-  try {
-    const senderDocRef = doc(this.accountCollection, senderAccountId);
-    const receiverDocRef = doc(this.accountCollection, receiverAccountId);
-
-    const senderSnap = await getDoc(senderDocRef);
-    const receiverSnap = await getDoc(receiverDocRef);
-
-    if (!senderSnap.exists() || !receiverSnap.exists()) {
-      throw new Error('Sender or receiver account not found.');
-    }
-
-    const senderData = Account.fromJson(senderSnap.data());
-    const receiverData = Account.fromJson(receiverSnap.data());
-
-    if (senderData.balance < amount) {
-      throw new Error('Insufficient funds.');
-    }
-
-    const transfer = new Transfer({
-      senderAccountId,
-      senderAccountName: senderData.accountName,
-      senderUserId: senderData.userId,
-      receiverAccountId,
-      receiverAccountName: receiverData.accountName,
-      receiverUserId: receiverData.userId,
-      amount,
-      description,
-      category, // Kategorie wird hinzugefügt
+    senderDocs.forEach((doc) => {
+      const transferData = doc.data();
+      const transfer = new Transfer(transferData);
+      transfers.push(transfer);
     });
 
-    const transferDocRef = doc(
-      collection(this.firestore, 'transfers'),
-      transfer.transferId
-    );
-    await setDoc(transferDocRef, transfer.toPlainObject());
+    receiverDocs.forEach((doc) => {
+      const transferData = doc.data();
+      const transfer = new Transfer(transferData);
+      transfers.push(transfer);
+    });
 
-    await updateDoc(senderDocRef, { balance: senderData.balance - amount });
-    await updateDoc(receiverDocRef, { balance: receiverData.balance + amount });
-
-    console.log('Transfer completed successfully!');
-  } catch (error) {
-    console.error('Error processing transfer:', error);
-    throw error;
+    return transfers;
   }
-}
 
+  async transferFunds(
+    senderAccountId: string,
+    receiverAccountId: string,
+    amount: number,
+    description?: string,
+    category?: string // Neuer Parameter
+  ): Promise<void> {
+    try {
+      const senderDocRef = doc(this.accountCollection, senderAccountId);
+      const receiverDocRef = doc(this.accountCollection, receiverAccountId);
 
-async deleteTransfer(transferId: string): Promise<void> {
-  try {
-    // Zugriff auf das spezifische Transfer-Dokument in Firestore
-    const transferDocRef = doc(this.firestore, 'transfers', transferId);
-    const transferSnap = await getDoc(transferDocRef);
+      const senderSnap = await getDoc(senderDocRef);
+      const receiverSnap = await getDoc(receiverDocRef);
 
-    // Prüfen, ob das Transfer-Dokument existiert
-    if (!transferSnap.exists()) {
-      throw new Error('Transfer not found.');
+      if (!senderSnap.exists() || !receiverSnap.exists()) {
+        throw new Error('Sender or receiver account not found.');
+      }
+
+      const senderData = Account.fromJson(senderSnap.data());
+      const receiverData = Account.fromJson(receiverSnap.data());
+
+      if (senderData.balance < amount) {
+        throw new Error('Insufficient funds.');
+      }
+
+      const transfer = new Transfer({
+        senderAccountId,
+        senderAccountName: senderData.accountName,
+        senderUserId: senderData.userId,
+        receiverAccountId,
+        receiverAccountName: receiverData.accountName,
+        receiverUserId: receiverData.userId,
+        amount,
+        description,
+        category, // Kategorie wird hinzugefügt
+      });
+
+      const transferDocRef = doc(
+        collection(this.firestore, 'transfers'),
+        transfer.transferId
+      );
+      await setDoc(transferDocRef, transfer.toPlainObject());
+
+      await updateDoc(senderDocRef, { balance: senderData.balance - amount });
+      await updateDoc(receiverDocRef, {
+        balance: receiverData.balance + amount,
+      });
+
+      console.log('Transfer completed successfully!');
+    } catch (error) {
+      console.error('Error processing transfer:', error);
+      throw error;
     }
-
-    // Transfer-Daten abrufen
-    const transferData = transferSnap.data() as Transfer;
-
-    // Zugriff auf Sender- und Empfängerkonten
-    const senderDocRef = doc(this.firestore, 'accounts', transferData.senderAccountId);
-    const receiverDocRef = doc(this.firestore, 'accounts', transferData.receiverAccountId);
-
-    const [senderSnap, receiverSnap] = await Promise.all([
-      getDoc(senderDocRef),
-      getDoc(receiverDocRef),
-    ]);
-
-    const updates: Promise<void>[] = [];
-
-    // Prüfen, ob das Senderkonto existiert
-    if (senderSnap.exists()) {
-      const senderAccount = Account.fromJson(senderSnap.data());
-      senderAccount.balance += transferData.amount; // Betrag zurückbuchen
-      updates.push(updateDoc(senderDocRef, senderAccount.toJson()));
-    }
-
-    // Prüfen, ob das Empfängerkonto existiert
-    if (receiverSnap.exists()) {
-      const receiverAccount = Account.fromJson(receiverSnap.data());
-      receiverAccount.balance -= transferData.amount; // Betrag abbuchen
-      updates.push(updateDoc(receiverDocRef, receiverAccount.toJson()));
-    }
-
-    // Transfer löschen
-    updates.push(deleteDoc(transferDocRef));
-
-    // Alle Aktionen parallel ausführen
-    await Promise.all(updates);
-
-    console.log(`Transfer ${transferId} successfully deleted.`);
-  } catch (error) {
-    console.error('Error deleting transfer:', error);
-    throw error;
   }
-}
+
+  async deleteTransfer(transferId: string): Promise<void> {
+    try {
+      // Zugriff auf das spezifische Transfer-Dokument in Firestore
+      const transferDocRef = doc(this.firestore, 'transfers', transferId);
+      const transferSnap = await getDoc(transferDocRef);
+
+      // Prüfen, ob das Transfer-Dokument existiert
+      if (!transferSnap.exists()) {
+        throw new Error('Transfer not found.');
+      }
+
+      // Transfer-Daten abrufen
+      const transferData = transferSnap.data() as Transfer;
+
+      // Zugriff auf Sender- und Empfängerkonten
+      const senderDocRef = doc(
+        this.firestore,
+        'accounts',
+        transferData.senderAccountId
+      );
+      const receiverDocRef = doc(
+        this.firestore,
+        'accounts',
+        transferData.receiverAccountId
+      );
+
+      const [senderSnap, receiverSnap] = await Promise.all([
+        getDoc(senderDocRef),
+        getDoc(receiverDocRef),
+      ]);
+
+      const updates: Promise<void>[] = [];
+
+      // Prüfen, ob das Senderkonto existiert
+      if (senderSnap.exists()) {
+        const senderAccount = Account.fromJson(senderSnap.data());
+        senderAccount.balance += transferData.amount; // Betrag zurückbuchen
+        updates.push(updateDoc(senderDocRef, senderAccount.toJson()));
+      }
+
+      // Prüfen, ob das Empfängerkonto existiert
+      if (receiverSnap.exists()) {
+        const receiverAccount = Account.fromJson(receiverSnap.data());
+        receiverAccount.balance -= transferData.amount; // Betrag abbuchen
+        updates.push(updateDoc(receiverDocRef, receiverAccount.toJson()));
+      }
+
+      // Transfer löschen
+      updates.push(deleteDoc(transferDocRef));
+
+      // Alle Aktionen parallel ausführen
+      await Promise.all(updates);
+
+      console.log(`Transfer ${transferId} successfully deleted.`);
+    } catch (error) {
+      console.error('Error deleting transfer:', error);
+      throw error;
+    }
+  }
 
   // async getAccount(accountId: string): Promise<{ name: string; balance: number }> {
   //   const accountDocRef = doc(this.firestore, 'accounts', accountId);
@@ -393,7 +406,10 @@ async deleteTransfer(transferId: string): Promise<void> {
       throw error;
     }
   }
-  async removeAccountFromUser(userId: string, accountId: string): Promise<void> {
+  async removeAccountFromUser(
+    userId: string,
+    accountId: string
+  ): Promise<void> {
     try {
       const userDocRef = doc(this.firestore, 'users', userId);
       await updateDoc(userDocRef, {
@@ -407,39 +423,68 @@ async deleteTransfer(transferId: string): Promise<void> {
   }
 
   /**
- * Aktualisiert das Profilbild eines Benutzers.
- * @param userId Die UID des Benutzers, dessen Profilbild aktualisiert werden soll.
- * @param profilePictureUrl Die URL des neuen Profilbildes.
- * @returns Promise<void>
- */
-async updateUserProfilePicture(userId: string, profilePictureUrl: string): Promise<void> {
-  try {
-    // Zugriff auf das Benutzer-Dokument in Firestore
-    const userDocRef = doc(this.firestore, 'users', userId);
+   * Aktualisiert das Profilbild eines Benutzers.
+   * @param userId Die UID des Benutzers, dessen Profilbild aktualisiert werden soll.
+   * @param profilePictureUrl Die URL des neuen Profilbildes.
+   * @returns Promise<void>
+   */
+  async updateUserProfilePicture(
+    userId: string,
+    profilePictureUrl: string
+  ): Promise<void> {
+    try {
+      // Zugriff auf das Benutzer-Dokument in Firestore
+      const userDocRef = doc(this.firestore, 'users', userId);
 
-    // Benutzer-Dokument mit der neuen Profilbild-URL aktualisieren
-    await updateDoc(userDocRef, { profilePictureUrl });
+      // Benutzer-Dokument mit der neuen Profilbild-URL aktualisieren
+      await updateDoc(userDocRef, { profilePictureUrl });
 
-    console.log('Profile picture updated successfully!');
-  } catch (error) {
-    console.error('Error updating profile picture:', error);
-    throw error; // Fehler weitergeben, um sie an der aufrufenden Stelle zu behandeln
+      console.log('Profile picture updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile picture:', error);
+      throw error; // Fehler weitergeben, um sie an der aufrufenden Stelle zu behandeln
+    }
   }
-}
-async getTotalUserCapital(): Promise<number> {
-  try {
-    const accountsSnapshot = await getDocs(this.accountCollection);
-    let totalCapital = 0;
+  async getTotalUserCapital(): Promise<number> {
+    try {
+      const accountsSnapshot = await getDocs(this.accountCollection);
+      let totalCapital = 0;
 
-    accountsSnapshot.forEach((doc) => {
-      const accountData = doc.data() as Account;
-      totalCapital += accountData.balance;
-    });
+      accountsSnapshot.forEach((doc) => {
+        const accountData = doc.data() as Account;
+        totalCapital += accountData.balance;
+      });
 
-    return totalCapital;
-  } catch (error) {
-    console.error('Error calculating total user capital:', error);
-    return 0;
+      return totalCapital;
+    } catch (error) {
+      console.error('Error calculating total user capital:', error);
+      return 0;
+    }
   }
-}
+  async updateTotalBankBalance(): Promise<void> {
+    try {
+      const totalUserCapital = await this.getTotalUserCapital(); // Kapital der User berechnen
+      const bankDocRef = doc(this.firestore, 'bank', 'mainBank'); // Bank-Dokument Referenz
+  
+      // Bank-Dokument abrufen
+      const bankSnap = await getDoc(bankDocRef);
+      if (!bankSnap.exists()) {
+        throw new Error('Bank document does not exist.');
+      }
+  
+      const bankData = bankSnap.data();
+      const currentTotalBalance = bankData['totalBalance'] ?? 0; // Fallback auf 0, falls undefined
+  
+      const updatedTotalBalance = currentTotalBalance + totalUserCapital; // Neues Gesamtguthaben berechnen
+  
+      // Bank-TotalBalance updaten
+      await updateDoc(bankDocRef, { totalBalance: updatedTotalBalance });
+  
+      console.log('Bank total balance updated successfully:', updatedTotalBalance);
+    } catch (error) {
+      console.error('Error updating bank total balance:', error);
+      throw error;
+    }
+  }
+  
 }
