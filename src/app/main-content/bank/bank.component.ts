@@ -6,6 +6,7 @@ import { Bank } from '../../../models/bank.interface';
 // services
 import { BankService } from '../../../services/bank.service';
 // import { FirebaseService } from '../../../services/firebase.service';
+import { SharedService } from '../../../services/shared.service';
 // material
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -34,11 +35,14 @@ export class BankComponent implements OnInit {
   // bank$!: Observable<Bank | undefined>;
   bank: Bank | null = null; // Bankdaten speichern
   totalUserCapital: number = 0;
-  constructor(private bankService: BankService) {}
+  constructor(
+    private bankService: BankService,
+    private sharedService: SharedService
+  ) {}
   ngOnInit() {
     this.loadBankData();
     this.loadTotalUserCapital();
-    this.bankService.updateTotalBankBalance();
+    // this.bankService.updateTotalBankBalance();
   }
 
   async loadBankData() {
@@ -49,11 +53,7 @@ export class BankComponent implements OnInit {
   }
   openEditDialog() {}
 
-  getFormattedCurrency(value: number): string {
-    return new Intl.NumberFormat('de-DE', {
-      style: 'currency',
-      currency: 'EUR',
-      currencyDisplay: 'narrowSymbol', // Sorgt für "100 €"
-    }).format(value);
+  getFormattedCurrency(value: number) {
+    return this.sharedService.getFormattedCurrency(value);
   }
 }

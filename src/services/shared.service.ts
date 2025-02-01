@@ -40,5 +40,13 @@ export class SharedService {
   
     return `${month}/${day}/${year} ${hours}:${minutes}:${seconds}`;
   }
+
+  getFormattedCurrency(value: number): string {
+    return new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency: 'EUR',
+      currencyDisplay: 'narrowSymbol', // Sorgt für "100 €"
+    }).format(value);
+  }
   
 }
