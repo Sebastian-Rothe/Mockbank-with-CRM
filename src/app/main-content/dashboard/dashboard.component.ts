@@ -42,7 +42,7 @@ import { MonthlyExpensesChartComponent } from '../../../charts/first-charts/mont
     TransfersComponent,
     FirstChartsComponent, // first charts component
     MonthlyExpensesChartComponent,
-    BankComponent
+    BankComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
@@ -59,7 +59,7 @@ export class DashboardComponent implements OnInit {
     private sharedService: SharedService,
     private authService: FirebaseAuthService,
     private firebaseService: FirebaseService,
-    public dialog: MatDialog,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -181,7 +181,7 @@ export class DashboardComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogSendMoneyComponent, {
       data: { senderAccountId: accountId }, // Übergabe der Account-ID
     });
-  
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         // Accounts oder Transfers neu laden
@@ -204,7 +204,7 @@ export class DashboardComponent implements OnInit {
     const dialogRef = this.dialog.open(DialogMoveMoneyComponent, {
       data: { senderAccountId: accountId }, // Übergabe der Account-ID
     });
-  
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         // Accounts oder Transfers neu laden, wenn Geld verschoben wurde
@@ -213,27 +213,22 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  getFormattedDate(transferDate: number): string {
-    let date: number = transferDate;
-    return this.sharedService.formatTimestampToDate(date);
-  }
-  
-  editAccount(accountID: string): void {
+  openEditAccountDialog(accountID: string): void {
     const dialogRef = this.dialog.open(DialogEditAccountComponent, {
+      width: '400px',
       data: { accountID: accountID }, // Übergabe der Account-ID
     });
-  
+
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         // Accounts neu laden, wenn Änderungen vorgenommen wurden
         this.loadUser(this.uid); // Oder: this.loadAccounts(this.user?.accounts || []);
-        console.log("thank you");
-        
+        console.log('thank you');
       }
     });
   }
 
-  deleteAccount(accountId: string, userId: string): void {
+  openDeleteAccountDialog(accountId: string, userId: string): void {
     const dialogRef = this.dialog.open(DialogConfirmDeleteAccComponent, {
       width: '400px',
       data: {
@@ -256,7 +251,7 @@ export class DashboardComponent implements OnInit {
           })
           .then(() => {
             console.log('Account deleted and removed from user successfully');
-            return this.loadUser(this.uid); 
+            return this.loadUser(this.uid);
           })
           .catch((error) => {
             console.error('Error deleting account:', error);
@@ -311,7 +306,12 @@ export class DashboardComponent implements OnInit {
     }
     this.isImageSelected = false;
   }
+  
   getFormattedCurrency(value: number) {
     return this.sharedService.getFormattedCurrency(value);
+  }
+
+  getFormattedDate(transferDate: number): string {
+    return this.sharedService.formatTimestampToDate(transferDate);
   }
 }

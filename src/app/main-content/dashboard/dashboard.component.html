@@ -85,10 +85,10 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #account$index="matMenu">
-        <button mat-menu-item (click)="editAccount(account.accountId)">
+        <button mat-menu-item (click)="openEditAccountDialog(account.accountId)">
           Edit Account
         </button>
-        <button mat-menu-item (click)="deleteAccount(account.accountId, uid)">
+        <button mat-menu-item (click)="openDeleteAccountDialog(account.accountId, uid)">
           Close Account
         </button>
       </mat-menu>
