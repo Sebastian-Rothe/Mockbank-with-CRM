@@ -40,7 +40,6 @@ import { User } from '../../../../models/user.class';
 export class AccountsComponent {
   uid: string = '';
   accounts: Account[] = [];
-  totalBalance: number = 0;
 
   constructor(
     private dashboardData: DashboardDataServiceService,
@@ -60,10 +59,6 @@ export class AccountsComponent {
     });
     this.dashboardData.accounts$.subscribe((accounts) => {
       this.accounts = accounts;
-      this.totalBalance = accounts.reduce(
-        (sum, account) => sum + account.balance,
-        0
-      );
     });
   }
 
@@ -83,11 +78,11 @@ export class AccountsComponent {
     const dialogRef = this.dialog.open(DialogOpenNewPocketComponent);
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // Accounts neu laden, wenn ein neues Konto erstellt wurde
-        // this.loadUser(this.uid); // Oder: this.loadAccounts(this.user?.accounts || []);
+        this.dashboardData.loadUser(this.uid); // Benutzer-Daten neu laden
       }
     });
   }
+  
 
   openMoveMoneyDialog(accountId: string): void {
     const dialogRef = this.dialog.open(DialogMoveMoneyComponent, {
@@ -96,8 +91,7 @@ export class AccountsComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // Accounts oder Transfers neu laden, wenn Geld verschoben wurde
-        // this.loadUser(this.uid); // Oder: this.loadTransfers
+        this.dashboardData.loadUser(this.uid); //
       }
     });
   }
@@ -110,9 +104,7 @@ export class AccountsComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // Accounts neu laden, wenn Änderungen vorgenommen wurden
-        // this.loadUser(this.uid); // Oder: this.loadAccounts(this.user?.accounts || []);
-        console.log('thank you');
+        this.dashboardData.loadUser(this.uid); //
       }
     });
   }
@@ -125,29 +117,21 @@ export class AccountsComponent {
         message: `Are you sure you want to delete the account with ID ${accountId}? The money in the account will be lost.`,
       },
     });
-
+  
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
-        // Lösche das Konto aus der Account-Sammlung
         this.firebaseService
           .deleteAccount(accountId)
+          .then(() => this.firebaseService.removeAccountFromUser(userId, accountId))
           .then(() => {
-            // Entferne die accountId aus dem Benutzerobjekt
-            return this.firebaseService.removeAccountFromUser(
-              userId,
-              accountId
-            );
+            console.log('Account deleted successfully');
+            this.dashboardData.loadUser(this.uid); // 🚀 Accounts neu laden
           })
-          .then(() => {
-            console.log('Account deleted and removed from user successfully');
-            // return this.loadUser(this.uid);
-          })
-          .catch((error) => {
-            console.error('Error deleting account:', error);
-          });
+          .catch((error) => console.error('Error deleting account:', error));
       }
     });
   }
+  
 
   getFormattedCurrency(value: number) {
     return this.sharedService.getFormattedCurrency(value);

@@ -53,15 +53,9 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  uid: string = ''; // UID des Benutzers
-  user: User | null = null; // Benutzerdaten
-  totalBalance: number = 0; // Gesamtsumme der Konten
-  userAccounts: Account[] = []; // Array von Account-Objekten, statt nur einem Account-Objekt
-  transfers: any[] = []; // Eine Liste für die Transfers des Benutzers
-  profilePictureUrl: string = ''; // URL des Profilbilds
-  isImageSelected = false; // Status, ob ein Bild ausgewählt wurde
+  user: User | null = null; 
+
   constructor(
-    private sharedService: SharedService,
     private authService: FirebaseAuthService,
     private firebaseService: FirebaseService,
     private dashboardData: DashboardDataServiceService,
@@ -74,7 +68,6 @@ export class DashboardComponent implements OnInit {
       console.log(uid, 'at dash');
       if (uid) {
         this.loadUser(uid);
-        // this.uid = uid;
         this.dashboardData.loadUser(uid);
       }
     });
@@ -83,67 +76,10 @@ export class DashboardComponent implements OnInit {
   async loadUser(uid: string): Promise<void> {
     try {
       this.user = await this.firebaseService.getUser(uid);
-      // console.log('Loaded user:', this.user);
-
       }
      catch (error) {
       console.error('Error loading user:', error);
     }
   }
 
-
-  onFileSelected(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.isImageSelected = true;
-
-    if (!input.files || input.files.length === 0) {
-      return;
-    }
-
-    const file = input.files[0];
-    const allowedTypes = ['image/jpeg', 'image/png'];
-
-    if (!allowedTypes.includes(file.type)) {
-      alert('Bitte laden Sie eine gültige Bilddatei hoch (jpg, png).');
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      this.profilePictureUrl = reader.result as string;
-      if (this.user) {
-        this.user.profilePictureUrl = this.profilePictureUrl;
-      }
-    };
-    reader.readAsDataURL(file);
-  }
-
-  /**
-   * Speichert das Profilbild des Benutzers.
-   */
-  async saveProfilePicture(): Promise<void> {
-    const userId = this.uid;
-    if (this.user?.profilePictureUrl) {
-      // Greife auf `this.user.profilePictureUrl` zu
-      try {
-        await this.firebaseService.updateUserProfilePicture(
-          userId,
-          this.user.profilePictureUrl
-        );
-      } catch (error) {
-        console.error('Fehler beim Speichern des Profilbilds:', error);
-      }
-    } else {
-      alert('Bitte zuerst ein Bild auswählen.');
-    }
-    this.isImageSelected = false;
-  }
-  
-  getFormattedCurrency(value: number) {
-    return this.sharedService.getFormattedCurrency(value);
-  }
-
-  getFormattedDate(transferDate: number): string {
-    return this.sharedService.formatTimestampToDate(transferDate);
-  }
 }

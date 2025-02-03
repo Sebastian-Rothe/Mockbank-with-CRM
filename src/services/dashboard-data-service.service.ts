@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { FirebaseService } from './firebase.service';
 import { User } from '../models/user.class';
 import { Account } from '../models/account.class';
+import { Transfer } from '../models/transfer.class';
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +14,7 @@ export class DashboardDataServiceService {
   private accountsSubject = new BehaviorSubject<Account[]>([]);
   accounts$ = this.accountsSubject.asObservable();
 
-  private transfersSubject = new BehaviorSubject<any[]>([]);
+  private transfersSubject = new BehaviorSubject<Transfer[]>([]);
   transfers$ = this.transfersSubject.asObservable();
 
   constructor(private firebaseService: FirebaseService) {}
