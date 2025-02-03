@@ -1,0 +1,52 @@
+<div class="align-btn">
+    <button mat-raised-button (click)="openNewPocketDialog()">
+      Open new Pocket
+    </button>
+  </div>
+  <div class="align-cards-container">
+    @for(account of accounts; track $index) {
+    <mat-card appearance="outlined" class="align-card">
+      <button
+        mat-icon-button
+        class="align-account-menu-btn"
+        [matMenuTriggerFor]="account$index"
+        aria-label="open address data for changes"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #account$index="matMenu">
+        <button mat-menu-item (click)="openEditAccountDialog(account.accountId)">
+          Edit Account
+        </button>
+        <button mat-menu-item (click)="openDeleteAccountDialog(account.accountId, uid)">
+          Close Account
+        </button>
+      </mat-menu>
+      <mat-card-content>
+        <div class="account-header">
+          <!-- @if(account.accountName){ -->
+          <h3 class="align-name">{{ account.accountName }}</h3>
+          <!-- } -->
+          <h3>{{ account.accountId }}</h3>
+          <p class="align-balance">
+            Balance: {{ getFormattedCurrency(account.balance) }}
+          </p>
+        </div>
+        <div class="account-actions">
+          <button
+            mat-icon-button
+            (click)="openSendMoneyDialog(account.accountId)"
+          >
+            <mat-icon>send</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            (click)="openMoveMoneyDialog(account.accountId)"
+          >
+            <mat-icon>swap_horiz</mat-icon>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    }
+  </div>

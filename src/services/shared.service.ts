@@ -6,13 +6,7 @@ import { Injectable } from '@angular/core';
 export class SharedService {
   private uid: string | null = null;
 
-  setUid(uid: string | null): void {
-    this.uid = uid;
-  }
 
-  getUid(): string | null {
-    return this.uid;
-  }
 
   /**
    * Formatiert einen Unix-Timestamp in das Format DD/MM/YYYY.

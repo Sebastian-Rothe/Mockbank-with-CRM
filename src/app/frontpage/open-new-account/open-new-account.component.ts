@@ -24,7 +24,7 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import jsPDF from 'jspdf'; // PDF-Bibliothek installieren: `npm install jspdf`
 import { Router } from '@angular/router';
-import { SuccessDialogComponent } from '../success-dialog/success-dialog.component';
+import { SuccessDialogComponent } from '../../../dialogs/success-dialog/success-dialog.component';
 
 @Component({
   selector: 'app-open-new-account',

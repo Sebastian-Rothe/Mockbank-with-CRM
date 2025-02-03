@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import { FirebaseService } from '../../../services/firebase.service';
 import { SharedService } from '../../../services/shared.service';
+import { DashboardDataServiceService } from '../../../services/dashboard-data-service.service';
 // models
 import { User } from '../../../models/user.class';
 import { Account } from '../../../models/account.class';
@@ -25,6 +26,7 @@ import { BankComponent } from '../bank/bank.component';
 // charts
 import { FirstChartsComponent } from '../../../charts/first-charts/first-charts.component';
 import { MonthlyExpensesChartComponent } from '../../../charts/first-charts/monthly-expenses-chart/monthly-expenses-chart.component';
+import { AccountsComponent } from './accounts/accounts.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,17 +34,18 @@ import { MonthlyExpensesChartComponent } from '../../../charts/first-charts/mont
   imports: [
     MatCard,
     MatIconModule,
-    MatCardContent,
+    // MatCardContent,
     MatMenuModule,
     MatButtonModule,
     MatCardModule,
-    MatIcon,
+    // MatIcon,
     CommonModule,
-    MatMenu,
+    // MatMenu,
     TransfersComponent,
     FirstChartsComponent, // first charts component
     MonthlyExpensesChartComponent,
     BankComponent,
+    AccountsComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
@@ -59,16 +62,18 @@ export class DashboardComponent implements OnInit {
     private sharedService: SharedService,
     private authService: FirebaseAuthService,
     private firebaseService: FirebaseService,
+    private dashboardData: DashboardDataServiceService,
     public dialog: MatDialog
   ) {}
 
+ 
   ngOnInit(): void {
-    // Auf UID-Änderungen reagieren
     this.authService.uid$.subscribe((uid) => {
-      console.log('Aktuelle UID:', uid);
+      console.log(uid, 'at dash');
       if (uid) {
-        this.uid = uid; // UID setzen
-        this.loadUser(uid); // Daten laden
+        this.loadUser(uid);
+        this.uid = uid;
+        this.dashboardData.loadUser(uid);
       }
     });
   }
@@ -78,11 +83,8 @@ export class DashboardComponent implements OnInit {
       this.user = await this.firebaseService.getUser(uid);
       // console.log('Loaded user:', this.user);
 
-      if (this.user && this.user.accounts.length > 0) {
-        await this.loadAccounts(this.user.accounts);
-        await this.loadTransfers();
       }
-    } catch (error) {
+     catch (error) {
       console.error('Error loading user:', error);
     }
   }
@@ -106,159 +108,161 @@ export class DashboardComponent implements OnInit {
   //     console.error('Error loading accounts:', error);
   //   }
   // }
-  async loadAccounts(accountIds: string[]): Promise<void> {
-    try {
-      const accounts = await Promise.all(
-        accountIds.map((accountId) =>
-          this.firebaseService.getAccount(accountId)
-        )
-      );
-      this.userAccounts = accounts.map(Account.fromJson);
-      this.totalBalance = this.userAccounts.reduce(
-        (sum, account) => sum + account.balance,
-        0
-      );
-    } catch (error) {
-      console.error('Error loading accounts:', error);
-    }
-  }
 
-  async loadTransfers(): Promise<void> {
-    try {
-      if (this.user) {
-        const transfers = await this.firebaseService.getTransfersForUser(
-          this.user
-        );
 
-        this.transfers = [];
+  // async loadAccounts(accountIds: string[]): Promise<void> {
+  //   try {
+  //     const accounts = await Promise.all(
+  //       accountIds.map((accountId) =>
+  //         this.firebaseService.getAccount(accountId)
+  //       )
+  //     );
+  //     this.userAccounts = accounts.map(Account.fromJson);
+  //     this.totalBalance = this.userAccounts.reduce(
+  //       (sum, account) => sum + account.balance,
+  //       0
+  //     );
+  //   } catch (error) {
+  //     console.error('Error loading accounts:', error);
+  //   }
+  // }
 
-        // Für jeden Transfer erstellen wir zwei Einträge: einen als "sent" und einen als "received".
-        for (const transfer of transfers) {
-          const isSender = this.userAccounts.some(
-            (account) => account.accountId === transfer.senderAccountId
-          );
+  // async loadTransfers(): Promise<void> {
+  //   try {
+  //     if (this.user) {
+  //       const transfers = await this.firebaseService.getTransfersForUser(
+  //         this.user
+  //       );
 
-          const isReceiver = this.userAccounts.some(
-            (account) => account.accountId === transfer.receiverAccountId
-          );
+  //       this.transfers = [];
 
-          // Überprüfen, ob der Transfer bereits hinzugefügt wurde
-          const exists = this.transfers.some(
-            (t) => t.transferId === transfer.transferId
-          );
+  //       // Für jeden Transfer erstellen wir zwei Einträge: einen als "sent" und einen als "received".
+  //       for (const transfer of transfers) {
+  //         const isSender = this.userAccounts.some(
+  //           (account) => account.accountId === transfer.senderAccountId
+  //         );
 
-          if (!exists) {
-            if (isSender) {
-              this.transfers.push({
-                ...transfer,
-                amount: -transfer.amount, // Negativ für "sent"
-                type: 'sent',
-              });
-            }
+  //         const isReceiver = this.userAccounts.some(
+  //           (account) => account.accountId === transfer.receiverAccountId
+  //         );
 
-            if (isReceiver) {
-              this.transfers.push({
-                ...transfer,
-                amount: transfer.amount, // Positiv für "received"
-                type: 'received',
-              });
-            }
-          }
-        }
+  //         // Überprüfen, ob der Transfer bereits hinzugefügt wurde
+  //         const exists = this.transfers.some(
+  //           (t) => t.transferId === transfer.transferId
+  //         );
 
-        this.transfers.sort((a, b) => b.createdAt - a.createdAt);
+  //         if (!exists) {
+  //           if (isSender) {
+  //             this.transfers.push({
+  //               ...transfer,
+  //               amount: -transfer.amount, // Negativ für "sent"
+  //               type: 'sent',
+  //             });
+  //           }
 
-        console.log('Processed transfers:', this.transfers);
-      } else {
-        console.error('User is null');
-      }
-    } catch (error) {
-      console.error('Error loading transfers:', error);
-    }
-  }
+  //           if (isReceiver) {
+  //             this.transfers.push({
+  //               ...transfer,
+  //               amount: transfer.amount, // Positiv für "received"
+  //               type: 'received',
+  //             });
+  //           }
+  //         }
+  //       }
 
-  openSendMoneyDialog(accountId: string): void {
-    const dialogRef = this.dialog.open(DialogSendMoneyComponent, {
-      data: { senderAccountId: accountId }, // Übergabe der Account-ID
-    });
+  //       this.transfers.sort((a, b) => b.createdAt - a.createdAt);
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        // Accounts oder Transfers neu laden
-        this.loadUser(this.uid); // Oder: this.loadTransfers();
-      }
-    });
-  }
+  //       console.log('Processed transfers:', this.transfers);
+  //     } else {
+  //       console.error('User is null');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error loading transfers:', error);
+  //   }
+  // }
 
-  openNewPocketDialog(): void {
-    const dialogRef = this.dialog.open(DialogOpenNewPocketComponent);
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        // Accounts neu laden, wenn ein neues Konto erstellt wurde
-        this.loadUser(this.uid); // Oder: this.loadAccounts(this.user?.accounts || []);
-      }
-    });
-  }
+  // openSendMoneyDialog(accountId: string): void {
+  //   const dialogRef = this.dialog.open(DialogSendMoneyComponent, {
+  //     data: { senderAccountId: accountId }, // Übergabe der Account-ID
+  //   });
 
-  openMoveMoneyDialog(accountId: string): void {
-    const dialogRef = this.dialog.open(DialogMoveMoneyComponent, {
-      data: { senderAccountId: accountId }, // Übergabe der Account-ID
-    });
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     if (result) {
+  //       // Accounts oder Transfers neu laden
+  //       this.loadUser(this.uid); // Oder: this.loadTransfers();
+  //     }
+  //   });
+  // }
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        // Accounts oder Transfers neu laden, wenn Geld verschoben wurde
-        this.loadUser(this.uid); // Oder: this.loadTransfers();
-      }
-    });
-  }
+  // openNewPocketDialog(): void {
+  //   const dialogRef = this.dialog.open(DialogOpenNewPocketComponent);
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     if (result) {
+  //       // Accounts neu laden, wenn ein neues Konto erstellt wurde
+  //       this.loadUser(this.uid); // Oder: this.loadAccounts(this.user?.accounts || []);
+  //     }
+  //   });
+  // }
 
-  openEditAccountDialog(accountID: string): void {
-    const dialogRef = this.dialog.open(DialogEditAccountComponent, {
-      width: '400px',
-      data: { accountID: accountID }, // Übergabe der Account-ID
-    });
+  // openMoveMoneyDialog(accountId: string): void {
+  //   const dialogRef = this.dialog.open(DialogMoveMoneyComponent, {
+  //     data: { senderAccountId: accountId }, // Übergabe der Account-ID
+  //   });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        // Accounts neu laden, wenn Änderungen vorgenommen wurden
-        this.loadUser(this.uid); // Oder: this.loadAccounts(this.user?.accounts || []);
-        console.log('thank you');
-      }
-    });
-  }
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     if (result) {
+  //       // Accounts oder Transfers neu laden, wenn Geld verschoben wurde
+  //       this.loadUser(this.uid); // Oder: this.loadTransfers();
+  //     }
+  //   });
+  // }
 
-  openDeleteAccountDialog(accountId: string, userId: string): void {
-    const dialogRef = this.dialog.open(DialogConfirmDeleteAccComponent, {
-      width: '400px',
-      data: {
-        title: 'Confirm Deletion',
-        message: `Are you sure you want to delete the account with ID ${accountId}? The money in the account will be lost.`,
-      },
-    });
+  // openEditAccountDialog(accountID: string): void {
+  //   const dialogRef = this.dialog.open(DialogEditAccountComponent, {
+  //     width: '400px',
+  //     data: { accountID: accountID }, // Übergabe der Account-ID
+  //   });
 
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        // Lösche das Konto aus der Account-Sammlung
-        this.firebaseService
-          .deleteAccount(accountId)
-          .then(() => {
-            // Entferne die accountId aus dem Benutzerobjekt
-            return this.firebaseService.removeAccountFromUser(
-              userId,
-              accountId
-            );
-          })
-          .then(() => {
-            console.log('Account deleted and removed from user successfully');
-            return this.loadUser(this.uid);
-          })
-          .catch((error) => {
-            console.error('Error deleting account:', error);
-          });
-      }
-    });
-  }
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     if (result) {
+  //       // Accounts neu laden, wenn Änderungen vorgenommen wurden
+  //       this.loadUser(this.uid); // Oder: this.loadAccounts(this.user?.accounts || []);
+  //       console.log('thank you');
+  //     }
+  //   });
+  // }
+
+  // openDeleteAccountDialog(accountId: string, userId: string): void {
+  //   const dialogRef = this.dialog.open(DialogConfirmDeleteAccComponent, {
+  //     width: '400px',
+  //     data: {
+  //       title: 'Confirm Deletion',
+  //       message: `Are you sure you want to delete the account with ID ${accountId}? The money in the account will be lost.`,
+  //     },
+  //   });
+
+  //   dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+  //     if (confirmed) {
+  //       // Lösche das Konto aus der Account-Sammlung
+  //       this.firebaseService
+  //         .deleteAccount(accountId)
+  //         .then(() => {
+  //           // Entferne die accountId aus dem Benutzerobjekt
+  //           return this.firebaseService.removeAccountFromUser(
+  //             userId,
+  //             accountId
+  //           );
+  //         })
+  //         .then(() => {
+  //           console.log('Account deleted and removed from user successfully');
+  //           return this.loadUser(this.uid);
+  //         })
+  //         .catch((error) => {
+  //           console.error('Error deleting account:', error);
+  //         });
+  //     }
+  //   });
+  // }
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
