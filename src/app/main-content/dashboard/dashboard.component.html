@@ -11,61 +11,8 @@
 
   <!-- <app-first-charts></app-first-charts>
   <app-monthly-expenses-chart></app-monthly-expenses-chart> -->
+  <app-user-dashboard></app-user-dashboard>
 
-  <mat-card appearance="outlined" class="card-header m-32">
-    <div>
-      <div class="total-balance">
-        <h4>Total Balance: {{ getFormattedCurrency(totalBalance) }}</h4>
-      </div>
-      <div class="profile-container">
-        <div class="profile-image-wrapper">
-          @if(user.profilePictureUrl) {
-          <img
-            [src]="user.profilePictureUrl"
-            alt="Profile Picture"
-            class="profile-picture"
-          />
-          } @else {
-          <img
-            src="assets/img/avatar.png"
-            alt="Profile Picture"
-            class="profile-picture"
-          />
-          }
-        </div>
-        <div class="profile-actions">
-          @if(!user.profilePictureUrl || isImageSelected) {
-          <label for="file" class="file-input-label"
-            >Choose File
-            <input
-              id="file"
-              type="file"
-              (change)="onFileSelected($event)"
-              accept=".jpg, .jpeg, .png"
-              hidden
-            />
-          </label>
-          } @if(isImageSelected) {
-          <button
-            (click)="saveProfilePicture()"
-            mat-raised-button
-            color="primary"
-            class="save"
-          >
-            Save
-          </button>
-          }
-        </div>
-      </div>
-
-      <div>
-        <h3>{{ user.firstName }} {{ user.lastName }}</h3>
-        <p>{{ user.email }}</p>
-        <!-- <p>{{ user.email }}</p> -->
-        <!-- kundennummer -->
-      </div>
-    </div>
-  </mat-card>
   <app-accounts></app-accounts>
 
   <app-transfers></app-transfers>

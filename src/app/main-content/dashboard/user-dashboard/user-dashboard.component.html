@@ -1,0 +1,56 @@
+<mat-card appearance="outlined" class="card-header m-32">
+    <div>
+      <div class="total-balance">
+        <h4>Total Balance: {{ getFormattedCurrency(totalBalance) }}</h4>
+      </div>
+      <div class="profile-container">
+        <div class="profile-image-wrapper">
+          <ng-container *ngIf="user?.profilePictureUrl; else defaultImage">
+            <img
+              [src]="user?.profilePictureUrl"
+              alt="Profile Picture"
+              class="profile-picture"
+            />
+          </ng-container>
+          <ng-template #defaultImage>
+            <img
+              src="assets/img/avatar.png"
+              alt="Profile Picture"
+              class="profile-picture"
+            />
+          </ng-template>
+        </div>
+        <div class="profile-actions">
+          <ng-container *ngIf="!user?.profilePictureUrl || isImageSelected">
+            <label for="file" class="file-input-label">
+              Choose File
+              <input
+                id="file"
+                type="file"
+                (change)="onFileSelected($event)"
+                accept=".jpg, .jpeg, .png"
+                hidden
+              />
+            </label>
+          </ng-container>
+          <ng-container *ngIf="isImageSelected">
+            <button
+              (click)="saveProfilePicture()"
+              mat-raised-button
+              color="primary"
+              class="save"
+            >
+              Save
+            </button>
+          </ng-container>
+        </div>
+      </div>
+  
+      <div>
+        <h3>{{ user?.firstName }} {{ user?.lastName }}</h3>
+        <p>{{ user?.email }}</p>
+        <!-- Weitere Felder (z.B. Kundennummer) können hier ergänzt werden -->
+      </div>
+    </div>
+  </mat-card>
+  

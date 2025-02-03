@@ -1,0 +1,145 @@
+.card-header {
+    background-color: aquamarine;
+    height: 30vh;
+    display: flex;
+    justify-content: flex-end;
+    padding: 24px;
+    margin-bottom: 32px;
+  
+    div {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+  
+      img {
+        height: 150px;
+        width: 150px;
+      }
+  
+      div {
+        margin-left: 12px;
+        flex-direction: column;
+        align-items: flex-start;
+  
+        h3 {
+          font-size: 2rem;
+        }
+      }
+    }
+  }
+  
+  mat-card-content {
+    padding: 18px;
+  }
+  
+  .align-btn {
+    margin-bottom: 32px;
+    display: flex;
+    justify-content: space-evenly;
+  }
+  
+  .total-balance {
+    position: absolute;
+    top: 44px;
+    right: 44px;
+    display: flex;
+  
+    > p {
+      text-align: right;
+    }
+  }
+  
+  
+  .align-account-menu-btn {
+    position: absolute;
+    top: 8px;
+    right: 4px;
+  }
+  
+  .align-balance {
+    position: absolute;
+    font-weight: 700;
+    bottom: 8px;
+    right: 24px;
+  }
+  
+  
+  
+  
+  .profile-container {
+    gap: 16px;
+  
+    .profile-image-wrapper {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid #ddd;
+    }
+  
+    .profile-actions {
+      position: absolute;
+      bottom: 8px;
+      display: flex;
+      flex-direction: row !important;
+      gap: 8px;
+  
+      button {
+        min-width: 100px;
+      }
+  
+      .save {
+        color: white;
+        padding: 6px 12px;
+        height: 32px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+  
+        &:hover {
+          background-color: #0056b3;
+          transform: scale(1.05);
+        }
+  
+        &:active {
+          background-color: #004085;
+          transform: scale(1);
+        }
+      }
+  
+      .file-input-label {
+        margin-left: 21px;
+        background-color: #007bff;
+        color: white;
+        padding: 6px 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+  
+        &:hover {
+          background-color: #0056b3;
+          transform: scale(1.05);
+        }
+  
+        &:active {
+          background-color: #004085;
+          transform: scale(1);
+        }
+  
+        input[type="file"] {
+          opacity: 0;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  

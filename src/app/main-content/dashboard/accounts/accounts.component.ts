@@ -38,7 +38,7 @@ import { User } from '../../../../models/user.class';
   styleUrl: './accounts.component.scss',
 })
 export class AccountsComponent {
-  uid: string = ''; 
+  uid: string = '';
   accounts: Account[] = [];
   totalBalance: number = 0;
 
@@ -50,14 +50,14 @@ export class AccountsComponent {
     private sharedService: SharedService
   ) {}
 
-  ngOnInit(): void {this.authService.uid$.subscribe((uid) => {
-    console.log(uid, 'at dash');
-    
-    if (uid) {
-      this.uid = uid;
-      this.dashboardData.loadUser(uid);
-    }
-  });
+  ngOnInit(): void {
+    this.authService.uid$.subscribe((uid) => {
+      console.log(uid, 'at dash');
+
+      if (uid) {
+        this.dashboardData.loadUser(uid);
+      }
+    });
     this.dashboardData.accounts$.subscribe((accounts) => {
       this.accounts = accounts;
       this.totalBalance = accounts.reduce(
@@ -66,7 +66,6 @@ export class AccountsComponent {
       );
     });
   }
-
 
   openSendMoneyDialog(accountId: string): void {
     const dialogRef = this.dialog.open(DialogSendMoneyComponent, {

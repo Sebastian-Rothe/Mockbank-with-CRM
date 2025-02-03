@@ -80,7 +80,6 @@ export class DashboardDataServiceService {
           }
         }
       }
-      // Sortieren nach Datum (neueste zuerst)
       processedTransfers.sort((a, b) => b.createdAt - a.createdAt);
       this.transfersSubject.next(processedTransfers);
     } catch (error) {
