@@ -1,129 +1,128 @@
 .transfers {
-    // padding: 16px;
-  
-    mat-card {
-      margin-top: 16px;
-      border: 1px solid #e0e0e0;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  
-      &-header {
-        background-color: #f7f7f7;
-        padding: 16px;
-        border-bottom: 1px solid #ddd;
-  
-        mat-card-title {
-          font-size: 1.5rem;
-          font-weight: 600;
-        }
+  // padding: 16px;
+
+  mat-card {
+    margin-top: 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    &-header {
+      background-color: #f7f7f7;
+      padding: 16px;
+      border-bottom: 1px solid #ddd;
+
+      mat-card-title {
+        font-size: 1.5rem;
+        font-weight: 600;
       }
-  
-      &-content {
+    }
+
+    &-content {
+      padding: 16px;
+
+      .transfer-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .transfer-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         padding: 16px;
-  
-        .transfer-list {
-          display: flex;
-          flex-direction: column;
-          gap: 16px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.2s, box-shadow 0.2s;
+
+        &:hover {
+          cursor: pointer;
+          transform: translateY(-4px);
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
-  
-        .transfer-card {
+
+        .transfer-content {
           display: flex;
           align-items: center;
-          justify-content: space-between;
-          padding: 16px;
-          background-color: #ffffff;
-          border-radius: 12px;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          transition: transform 0.2s, box-shadow 0.2s;
-  
-          &:hover {
-            cursor: pointer;
-            transform: translateY(-4px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-          }
-  
-          .transfer-content {
-            display: flex;
+          width: 100%;
+          gap: 16px;
+
+          .transfer-icon {
+            background-color: #eeeeee;
+            padding: 8px;
+            border-radius: 50%;
+            display: inline-flex;
             align-items: center;
-            width: 100%;
-            gap: 16px;
-  
-            .transfer-icon {
-              background-color: #eeeeee;
-              padding: 8px;
-              border-radius: 50%;
-              display: inline-flex;
-              align-items: center;
-              justify-content: center;
-              width: 36px;
-              height: 36px;
-              box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+            mat-icon {
+              font-size: 20px;
+            }
+
+            &.internal {
+              background-color: #d0e4ff;
+
               mat-icon {
-                font-size: 20px;
-              }
-  
-              &.internal {
-                background-color: #d0e4ff;
-  
-                mat-icon {
-                  color: #004085;
-                }
-              }
-  
-              &.negative {
-                background-color: #ffebe6;
-  
-                mat-icon {
-                  color: red;
-                }
-              }
-  
-              &.positive {
-                background-color: #e6f4e6;
-  
-                mat-icon {
-                  color: green;
-                }
+                color: #004085;
               }
             }
-  
-            .transfer-description {
-              flex: 2;
-              font-weight: 500;
-              margin-left: 12px;
-              max-height: 80px;
-              overflow: hidden;
-  
-              &::-webkit-scrollbar {
-                display: none;
-              }
-            }
-  
-            .transfer-amount {
-              flex: 1;
-              font-weight: 600;
-              text-align: right;
-  
-              &.negative {
+
+            &.negative {
+              background-color: #ffebe6;
+
+              mat-icon {
                 color: red;
               }
-  
-              &.positive {
+            }
+
+            &.positive {
+              background-color: #e6f4e6;
+
+              mat-icon {
                 color: green;
               }
             }
-  
-            .transfer-date {
-              flex: .5;
-              font-size: 0.9rem;
-              color: #666;
-              text-align: right;
+          }
+
+          .transfer-description {
+            flex: 2;
+            font-weight: 500;
+            margin-left: 12px;
+            max-height: 80px;
+            overflow: hidden;
+
+            &::-webkit-scrollbar {
+              display: none;
             }
+          }
+
+          .transfer-amount {
+            flex: 1;
+            font-weight: 600;
+            text-align: right;
+
+            &.negative {
+              color: red;
+            }
+
+            &.positive {
+              color: green;
+            }
+          }
+
+          .transfer-date {
+            flex: 0.5;
+            font-size: 0.9rem;
+            color: #666;
+            text-align: right;
           }
         }
       }
     }
   }
-  
+}

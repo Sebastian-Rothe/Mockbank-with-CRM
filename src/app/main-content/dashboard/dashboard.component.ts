@@ -7,27 +7,21 @@ import { SharedService } from '../../../services/shared.service';
 import { DashboardDataServiceService } from '../../../services/dashboard-data-service.service';
 // models
 import { User } from '../../../models/user.class';
-import { Account } from '../../../models/account.class';
 // material
 import { MatDialog } from '@angular/material/dialog';
-import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatCard, } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
 // components
-import { DialogSendMoneyComponent } from '../../../dialogs/dialog-send-money/dialog-send-money.component';
-import { DialogOpenNewPocketComponent } from '../../../dialogs/dialog-open-new-pocket/dialog-open-new-pocket.component';
-import { DialogMoveMoneyComponent } from '../../../dialogs/dialog-move-money/dialog-move-money.component';
-import { DialogEditAccountComponent } from '../../../dialogs/dialog-edit-account/dialog-edit-account.component';
-import { DialogConfirmDeleteAccComponent } from '../../../dialogs/dialog-confirm-delete-acc/dialog-confirm-delete-acc.component';
 import { TransfersComponent } from './transfers/transfers.component';
 import { BankComponent } from '../bank/bank.component';
+import { AccountsComponent } from './accounts/accounts.component';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 // charts
 import { FirstChartsComponent } from '../../../charts/first-charts/first-charts.component';
 import { MonthlyExpensesChartComponent } from '../../../charts/first-charts/monthly-expenses-chart/monthly-expenses-chart.component';
-import { AccountsComponent } from './accounts/accounts.component';
-import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 
 @Component({
   selector: 'app-dashboard',
