@@ -8,16 +8,16 @@
 
   <div class="bank-stats">
     <div class="stat-box">
-      <p class="stat-title">Gesamtkapital</p>
+      <p class="stat-title">Total Capital of MockBank</p>
       <h3>{{ getFormattedCurrency(bank.totalBalance) }}</h3>
     </div>
     <div class="stat-box">
-      <p class="stat-title">Zinssatz</p>
+      <p class="stat-title">Interest Rate</p>
       <h3>{{ bank!.interestRate * 100 }}%</h3>
     </div>
     <div class="stat-box">
-      <p class="stat-title">Transaktionsgebühr</p>
-      <h3>{{ bank.transactionFee | currency }}</h3>
+      <p class="stat-title">Transaction Fee</p>
+      <h3>{{ getFormattedCurrency(bank.transactionFee) }}</h3>
     </div>
     <div class="stat-box">
       <p class="stat-title">Total Capital of Users</p>
@@ -27,7 +27,7 @@
   <!-- Admin-Funktion: Bearbeiten -->
   <div class="bank-actions">
     <button mat-raised-button color="primary" (click)="openEditDialog()">
-      <mat-icon>edit</mat-icon> Bearbeiten
+      <mat-icon>edit</mat-icon> Edit
     </button>
   </div>
 </mat-card>

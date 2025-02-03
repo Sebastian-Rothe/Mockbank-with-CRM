@@ -1,16 +1,14 @@
 @if(user){ @if(user.role === 'admin') {
 <div>
-  <h1>Willkommen, {{ user.firstName }}</h1>
-  <p>Email: {{ user.email }}</p>
-  <p>Telefon: {{ user.phoneNumber }}</p>
-  <!-- Weitere Felder hier -->
+  <!-- admin dashboard: searchfunktion -->
+  <!-- charts -->
 </div>
 } @else if(user.role === 'user') {
 <div>
   <app-bank></app-bank>
 
-  <!-- <app-first-charts></app-first-charts>
-  <app-monthly-expenses-chart></app-monthly-expenses-chart> -->
+  <app-first-charts></app-first-charts>
+  <app-monthly-expenses-chart></app-monthly-expenses-chart>
   <app-user-dashboard></app-user-dashboard>
 
   <app-accounts></app-accounts>

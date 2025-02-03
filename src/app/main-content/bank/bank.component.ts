@@ -35,6 +35,7 @@ export class BankComponent implements OnInit {
   // bank$!: Observable<Bank | undefined>;
   bank: Bank | null = null; // Bankdaten speichern
   totalUserCapital: number = 0;
+  totalCapital: number = 0;
   constructor(
     private bankService: BankService,
     private sharedService: SharedService
@@ -42,7 +43,7 @@ export class BankComponent implements OnInit {
   ngOnInit() {
     this.loadBankData();
     this.loadTotalUserCapital();
-    // this.bankService.updateTotalBankBalance();
+    this.loadTotalCapital();
   }
 
   async loadBankData() {
@@ -51,9 +52,12 @@ export class BankComponent implements OnInit {
   async loadTotalUserCapital() {
     this.totalUserCapital = await this.bankService.getTotalUserCapital();
   }
-  openEditDialog() {}
-
+  async loadTotalCapital() {
+    this.totalCapital = await this.bankService.getTotalCapitalOfBank();
+  }
+  
   getFormattedCurrency(value: number) {
     return this.sharedService.getFormattedCurrency(value);
   }
+  openEditDialog() {}
 }

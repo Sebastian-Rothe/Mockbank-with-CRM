@@ -51,45 +51,41 @@ export class BankService {
   async getTotalUserCapital(): Promise<number> {
     try {
       const accountsSnapshot = await getDocs(this.accountCollection);
-      const bankDocRef = doc(this.firestore, 'bank', 'mainBank'); // Bank-Dokument Referenz
-      let totalCapital = 0;
+      let totalCapitalOfUsers = 0;
 
       accountsSnapshot.forEach((doc) => {
         const accountData = doc.data() as Account;
-        totalCapital += accountData.balance;
+        if(accountData.accountId === "ACC-1738235430074-182" ){
+          return
+        }
+        totalCapitalOfUsers += accountData.balance;
       });
 
       // `totalBalance` nur noch auf `totalUserCapital` setzen, keine Dopplung!
-      await updateDoc(bankDocRef, { totalBalance: totalCapital });
-      return totalCapital;
+
+      return totalCapitalOfUsers;
     } catch (error) {
       console.error('Error calculating total user capital:', error);
       return 0;
     }
   }
-  // async updateTotalBankBalance(): Promise<void> {
-  //   try {
-  //     const totalUserCapital = await this.getTotalUserCapital(); // Kapital der User berechnen
-  //     const bankDocRef = doc(this.firestore, 'bank', 'mainBank'); // Bank-Dokument Referenz
+async getTotalCapitalOfBank(): Promise<number>{
+  try {
+    const accountsSnapshot = await getDocs(this.accountCollection);
+    const bankDocRef = doc(this.firestore, 'bank', 'mainBank'); 
+    let totalCapital = 0;
 
-  //     // Bank-Dokument abrufen
-  //     const bankSnap = await getDoc(bankDocRef);
-  //     if (!bankSnap.exists()) {
-  //       throw new Error('Bank document does not exist.');
-  //     }
+    accountsSnapshot.forEach((doc) => {
+      const accountData = doc.data() as Account;
+     
+      totalCapital += accountData.balance;
+    });
 
-  //     const bankData = bankSnap.data();
-  //     const currentTotalBalance = bankData['totalBalance'] ?? 0; // Fallback auf 0, falls undefined
-
-  //     const updatedTotalBalance = currentTotalBalance + totalUserCapital; // Neues Gesamtguthaben berechnen
-
-  //     // Bank-TotalBalance updaten
-  //     await updateDoc(bankDocRef, { totalBalance: updatedTotalBalance });
-
-  //     console.log('Bank total balance updated successfully:', updatedTotalBalance);
-  //   } catch (error) {
-  //     console.error('Error updating bank total balance:', error);
-  //     throw error;
-  //   }
-  // }
+    await updateDoc(bankDocRef, { totalBalance: totalCapital });
+    return totalCapital;
+  } catch (error) {
+    console.error('Error calculating total user capital:', error);
+    return 0;
+  }
+}
 }
