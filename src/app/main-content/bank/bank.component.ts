@@ -15,6 +15,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
+import { FirebaseService } from '../../../services/firebase.service';
 @Component({
   selector: 'app-bank',
   standalone: true,
@@ -38,12 +39,16 @@ export class BankComponent implements OnInit {
   totalCapital: number = 0;
   constructor(
     private bankService: BankService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private firebaseService: FirebaseService
   ) {}
   ngOnInit() {
     this.loadBankData();
     this.loadTotalUserCapital();
     this.loadTotalCapital();
+    setInterval(() => {
+      this.firebaseService.calculateAndDistributeInterest();
+    }, 1 * 60 * 1000); // Alle 5
   }
 
   async loadBankData() {

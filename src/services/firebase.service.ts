@@ -446,6 +446,49 @@ export class FirebaseService {
       throw error; // Fehler weitergeben, um sie an der aufrufenden Stelle zu behandeln
     }
   }
+  async calculateAndDistributeInterest(): Promise<void> {
+    try {
+      // 1. Alle Benutzer abrufen, aber das Bankkonto ignorieren
+      let users = await this.getAllUsers();
+      users = users.filter(user => user.uid !== 'yBr3oAoV5HOBEHBxmTEcFwmR06H2'); // Falls die Bank ein eigenes Benutzerkonto hat
+  
+      if (users.length === 0) return;
+  
+      // 2. Zinssatz aus der "bank"-Collection abrufen
+      const bankDocRef = doc(this.firestore, 'bank', 'mainBank');
+      const bankSnap = await getDoc(bankDocRef);
+      if (!bankSnap.exists()) {
+        console.error('Bank data not found!');
+        return;
+      }
+      const bankData = bankSnap.data();
+      const interestRate = bankData['interestRate']; // Zinssatz in Prozent
+  
+      for (const user of users) {
+        if (!user.accounts || user.accounts.length === 0) continue;
+  
+        // 3. Gesamtvermögen des Benutzers berechnen
+        let totalBalance = 0;
+        for (const accountId of user.accounts) {
+          const accountData = await this.getAccount(accountId);
+          totalBalance += accountData.balance || 0;
+        }
+  
+        // 4. Zinsen berechnen
+        const interestAmount = (totalBalance * interestRate) / 100;
+        if (interestAmount <= 0) continue;
+  
+        // 5. Zinsen auf das erste Konto des Users überweisen
+        const primaryAccountId = user.accounts[0];
+        await this.transferFunds('ACC-1738235430074-182', primaryAccountId, interestAmount, 'Zinsgutschrift', 'Interest');
+  
+        console.log(`Interest of ${interestAmount} EUR credited to ${user.uid} (${primaryAccountId})`);
+      }
+    } catch (error) {
+      console.error('Error calculating interest:', error);
+    }
+  }
+  
   
   
 }

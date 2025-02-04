@@ -55,13 +55,11 @@ export class BankService {
 
       accountsSnapshot.forEach((doc) => {
         const accountData = doc.data() as Account;
-        if(accountData.accountId === "ACC-1738235430074-182" ){
-          return
+        if (accountData.accountId === 'ACC-1738235430074-182') {
+          return;
         }
         totalCapitalOfUsers += accountData.balance;
       });
-
-      // `totalBalance` nur noch auf `totalUserCapital` setzen, keine Dopplung!
 
       return totalCapitalOfUsers;
     } catch (error) {
@@ -69,23 +67,23 @@ export class BankService {
       return 0;
     }
   }
-async getTotalCapitalOfBank(): Promise<number>{
-  try {
-    const accountsSnapshot = await getDocs(this.accountCollection);
-    const bankDocRef = doc(this.firestore, 'bank', 'mainBank'); 
-    let totalCapital = 0;
+  async getTotalCapitalOfBank(): Promise<number> {
+    try {
+      const accountsSnapshot = await getDocs(this.accountCollection);
+      const bankDocRef = doc(this.firestore, 'bank', 'mainBank');
+      let totalCapital = 0;
 
-    accountsSnapshot.forEach((doc) => {
-      const accountData = doc.data() as Account;
-     
-      totalCapital += accountData.balance;
-    });
+      accountsSnapshot.forEach((doc) => {
+        const accountData = doc.data() as Account;
 
-    await updateDoc(bankDocRef, { totalBalance: totalCapital });
-    return totalCapital;
-  } catch (error) {
-    console.error('Error calculating total user capital:', error);
-    return 0;
+        totalCapital += accountData.balance;
+      });
+
+      await updateDoc(bankDocRef, { totalBalance: totalCapital });
+      return totalCapital;
+    } catch (error) {
+      console.error('Error calculating total user capital:', error);
+      return 0;
+    }
   }
-}
 }
