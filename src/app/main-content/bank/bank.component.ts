@@ -46,9 +46,6 @@ export class BankComponent implements OnInit {
     this.loadBankData();
     this.loadTotalUserCapital();
     this.loadTotalCapital();
-    setInterval(() => {
-      this.firebaseService.calculateAndDistributeInterest();
-    }, 1 * 60 * 1000); // Alle 5
   }
 
   async loadBankData() {

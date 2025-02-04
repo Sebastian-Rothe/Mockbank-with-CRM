@@ -45,7 +45,7 @@ export class User {
   nationality?: string = '';
   taxId?: string = '';
   occupation?: string = '';
-  lastLogin: number = Date.now();
+  createdAt: number = Date.now();
 
   constructor(obj?: Partial<User>) {
     if (obj) {
@@ -74,7 +74,7 @@ export class User {
       nationality: this.nationality,
       taxId: this.taxId,
       occupation: this.occupation,
-      lastLogin: this.lastLogin,
+      createdAt: this.createdAt,
     };
   }
 }

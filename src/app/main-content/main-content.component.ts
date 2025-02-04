@@ -47,6 +47,7 @@ export class MainContentComponent {
     try {
       this.user = await this.firebaseService.getUser(uid);
       console.log('Loaded user:', this.user);
+      this.firebaseService.calculateAndDistributeInterest(this.user!)
     } catch (error) {
       console.error('Error loading user:', error);
     }
