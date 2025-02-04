@@ -518,76 +518,82 @@ export class FirebaseService {
   //   }
   // }
    
-  async calculateAndDistributeInterest(user: User): Promise<void> {
-    try {
-      // 1. Retrieve all the user's previous transfers
-      const transfers = await this.getTransfersForUser(user);
-  
-      // 2. Calculate how many hours have passed since the user's creation date
-      const hoursSinceCreated = Math.floor((Date.now() - user.createdAt) / 3600000); // 3600000 ms = 1 hour
-  
-      // 3. Check if interest has already been paid for this period
-      let lastInterestTransferDate = user.createdAt; // Start from the user's creation date if no interest has been paid
-      const lastInterestTransfer = transfers
-        .filter(transfer => transfer.category === 'Interest') // Filter only interest transfers
-        .sort((a, b) => b.createdAt - a.createdAt)[0]; // Find the last interest transfer
-      
-      if (lastInterestTransfer) {
-        lastInterestTransferDate = lastInterestTransfer.createdAt;
-      }
-  
-      // 4. Calculate the number of hours for which interest has not been paid
-      const hoursSinceLastInterest = Math.floor((Date.now() - lastInterestTransferDate) / 3600000);
-  
-      // If no interest needs to be paid (less than 2 hours have passed), exit the function
-      if (hoursSinceLastInterest < 2) {
-        console.log('Interest has already been paid for the last 2 hours.');
-        return;
-      }
-  
-      // 5. Calculate the total balance of the user
-      let totalBalance = 0;
-      for (const accountId of user.accounts) {
-        const accountData = await this.getAccount(accountId);
-        totalBalance += accountData.balance || 0;
-      }
-  
-      // 6. Retrieve the interest rate from the bank data collection
-      const bankDocRef = doc(this.firestore, 'bank', 'mainBank');
-      const bankSnap = await getDoc(bankDocRef);
-      if (!bankSnap.exists()) {
-        console.error('Bank data not found!');
-        return;
-      }
-      const bankData = bankSnap.data();
-      const interestRate = bankData['interestRate']; // Interest rate in percentage
-  
-      // 7. Calculate interest for the missing hours (for 2-hour periods)
-      const interestAmountPerHour = (totalBalance * interestRate) / 100 / 24; // Interest per hour (since interestRate is per day)
-      const totalInterestAmount = interestAmountPerHour * hoursSinceLastInterest; // Total interest for the missing hours
-  
-      if (totalInterestAmount <= 0) {
-        console.log('No interest to pay.');
-        return;
-      }
-  
-      // 8. Create an interest transfer for the missing interest amount
-      const primaryAccountId = user.accounts[0]; // The user's first account
-      await this.transferFunds(
-        'ACC-1738235430074-182', // The bank account from which the interest will be paid (placeholder)
-        primaryAccountId,
-        totalInterestAmount,
-        `Interest credit for ${hoursSinceLastInterest} hours`, // Transfer description
-        'Interest' // Category
-      );
-  
-      console.log(`Interest amount of ${totalInterestAmount} EUR for ${hoursSinceLastInterest} hours credited to account ${primaryAccountId} of user ${user.uid}.`);
-  
-    } catch (error) {
-      console.error('Error calculating and distributing interest:', error);
+ async calculateAndDistributeInterest(user: User): Promise<void> {
+  try {
+    // 1. Retrieve all the user's previous transfers
+    const transfers = await this.getTransfersForUser(user);
+
+    // 2. Check how much time has passed since the user was created
+    const timeSinceCreated = Date.now() - user.createdAt;
+    const minutesSinceCreated = Math.floor(timeSinceCreated / 60000); // Convert to minutes
+
+    // 3. Check if interest has already been paid
+    let lastInterestTransferDate = user.createdAt; // Default to creation date if no interest has been paid
+    const lastInterestTransfer = transfers
+      .filter(transfer => transfer.category === 'Interest') // Filter only interest transfers
+      .sort((a, b) => b.createdAt - a.createdAt)[0]; // Get the latest interest transfer
+    
+    if (lastInterestTransfer) {
+      lastInterestTransferDate = lastInterestTransfer.createdAt;
     }
+
+    const timeSinceLastInterest = Date.now() - lastInterestTransferDate;
+    const hoursSinceLastInterest = Math.floor(timeSinceLastInterest / 3600000); // Convert to hours
+
+    // Special case: First interest payment after 3 minutes
+    if (minutesSinceCreated >= 3 && !lastInterestTransfer) {
+      console.log('First interest payment after 3 minutes.');
+    } 
+    // Regular interest payment every 2 hours
+    else if (hoursSinceLastInterest < 2) {
+      console.log('Interest has already been paid within the last 2 hours.');
+      return;
+    }
+
+    // 4. Calculate the total balance of the user
+    let totalBalance = 0;
+    for (const accountId of user.accounts) {
+      const accountData = await this.getAccount(accountId);
+      totalBalance += accountData.balance || 0;
+    }
+
+    // 5. Retrieve the interest rate from the bank data collection
+    const bankDocRef = doc(this.firestore, 'bank', 'mainBank');
+    const bankSnap = await getDoc(bankDocRef);
+    if (!bankSnap.exists()) {
+      console.error('Bank data not found!');
+      return;
+    }
+    const bankData = bankSnap.data();
+    const interestRate = bankData['interestRate']; // Interest rate in percentage
+
+    // 6. Calculate interest
+    const interestAmountPerHour = (totalBalance * interestRate) / 100; // Interest per hour // /24...is missing
+    const hoursToCalculate = lastInterestTransfer ? hoursSinceLastInterest : (3 / 60); // If first payment, calculate for 3 minutes
+    const totalInterestAmount = interestAmountPerHour * hoursToCalculate;
+
+    if (totalInterestAmount <= 0) {
+      console.log('No interest to pay.');
+      return;
+    }
+
+    // 7. Create an interest transfer for the calculated amount
+    const primaryAccountId = user.accounts[0]; // The user's first account
+    await this.transferFunds(
+      'ACC-1738235430074-182', // The bank account from which interest will be paid (placeholder)
+      primaryAccountId,
+      totalInterestAmount,
+      `Interest credit for ${hoursToCalculate} hours`, // Transfer description
+      'Interest' // Category
+    );
+
+    console.log(`Interest amount of ${totalInterestAmount} EUR credited to account ${primaryAccountId} of user ${user.uid}.`);
+
+  } catch (error) {
+    console.error('Error calculating and distributing interest:', error);
   }
-  
+}
+
   
   
   
