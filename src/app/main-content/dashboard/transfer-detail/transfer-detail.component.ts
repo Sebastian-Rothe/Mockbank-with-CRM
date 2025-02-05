@@ -30,7 +30,7 @@ export class TransferDetailComponent {
   transfer: Transfer;
   senderName: string = ''; // Sender-Name
   receiverName: string = ''; // Empfänger-Name
-
+  bankAccountId: string = 'ACC-1738235430074-182';
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Transfer,
     public dialogRef: MatDialogRef<TransferDetailComponent>,
@@ -93,5 +93,8 @@ export class TransferDetailComponent {
   }
   getFormattedCurrency(value: number) {
     return this.sharedService.getFormattedCurrency(value);
+  }
+  isBankAccount(accountId: string): boolean {
+    return accountId === this.bankAccountId;
   }
 }
