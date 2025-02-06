@@ -14,7 +14,7 @@ import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
   styleUrl: './first-charts.component.scss',
 })
 export class FirstChartsComponent {
-  uid: string = '';
+//   uid: string = '';
   chartOptions: any;
   user: User = new User();
 
@@ -24,11 +24,11 @@ export class FirstChartsComponent {
   ) {}
 
   ngOnInit(): void {
-    this.authService.uid$.subscribe((uid) => {
-      if (uid) {
-        this.uid = uid;
-      }
-    });
+    // this.authService.uid$.subscribe((uid) => {
+    //   if (uid) {
+    //     this.uid = uid;
+    //   }
+    // });
     this.authService.user$.subscribe((user) => {
 		if(user){
 			this.user = user;
@@ -38,7 +38,7 @@ export class FirstChartsComponent {
   }
   async loadUserAndTransfers(): Promise<void> {
     try {
-      //   const user = await this.firebaseService.getUser(userId);
+    
       if (!this.user) {
         console.error('User not found.');
         return;

@@ -5,19 +5,18 @@ import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import { Transfer } from '../../../models/transfer.class';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { User } from '../../../models/user.class';
-import { combineLatest } from 'rxjs';
+
 
 @Component({
   selector: 'app-monthly-expenses-chart',
   standalone: true,
   imports: [CommonModule, CanvasJSAngularChartsModule],
   templateUrl: './monthly-expenses-chart.component.html',
-  styleUrl: './monthly-expenses-chart.component.scss'
+  styleUrl: './monthly-expenses-chart.component.scss',
 })
 export class MonthlyExpensesChartComponent {
-  uid: string = '';
   chartOptions: any;
-   user: User = new User();
+  user: User = new User();
 
   constructor(
     private firebaseService: FirebaseService,
@@ -25,40 +24,41 @@ export class MonthlyExpensesChartComponent {
   ) {}
 
   ngOnInit(): void {
-    combineLatest([this.authService.uid$, this.authService.user$]).subscribe(
-      ([uid, user]) => {
-        if (uid && user) {
-          this.uid = uid;
-          this.user = user;
-          this.loadMonthlyStats();
-        }
+    this.authService.user$.subscribe((user) => {
+      if (user) {
+        this.user = user;
+        this.loadMonthlyStats();
       }
-    );
+    });
   }
   async loadMonthlyStats(): Promise<void> {
     try {
-      if (!this.user || !this.user.uid) { // ✅ Zusätzliche Prüfung auf `this.user.uid`
+      if (!this.user || !this.user.uid) {
+        // ✅ Zusätzliche Prüfung auf `this.user.uid`
         console.error('User not found or UID missing.');
         return;
       }
-  
+
       // this.user = user;
-  
+
       // Fetch all transfers for the user
-      const allTransfers: Transfer[] = await this.firebaseService.getTransfersForUser(this.user);
-      const monthlyStats: { [month: string]: { income: number; expenses: number } } = {};
-  
+      const allTransfers: Transfer[] =
+        await this.firebaseService.getTransfersForUser(this.user);
+      const monthlyStats: {
+        [month: string]: { income: number; expenses: number };
+      } = {};
+
       const filteredTransfers = allTransfers.filter(
         (transfer) => transfer.senderUserId !== transfer.receiverUserId
-        );
-     filteredTransfers.forEach((transfer) => {
+      );
+      filteredTransfers.forEach((transfer) => {
         const date = new Date(transfer.createdAt);
         const monthKey = `${date.getFullYear()}-${date.getMonth() + 1}`; // Format: YYYY-MM
-  
+
         if (!monthlyStats[monthKey]) {
           monthlyStats[monthKey] = { income: 0, expenses: 0 };
         }
-  
+
         // Categorize as income or expense
         if (transfer.receiverUserId === this.user.uid) {
           monthlyStats[monthKey].income += transfer.amount;
@@ -67,12 +67,18 @@ export class MonthlyExpensesChartComponent {
           monthlyStats[monthKey].expenses += transfer.amount;
         }
       });
-  
+
       // Prepare data for the chart
       const months = Object.keys(monthlyStats).sort();
-      const incomeDataPoints = months.map((month) => ({ label: month, y: monthlyStats[month].income }));
-      const expenseDataPoints = months.map((month) => ({ label: month, y: monthlyStats[month].expenses }));
-  
+      const incomeDataPoints = months.map((month) => ({
+        label: month,
+        y: monthlyStats[month].income,
+      }));
+      const expenseDataPoints = months.map((month) => ({
+        label: month,
+        y: monthlyStats[month].expenses,
+      }));
+
       // Set chart options
       this.chartOptions = {
         animationEnabled: true,
@@ -82,13 +88,22 @@ export class MonthlyExpensesChartComponent {
         axisX: { title: 'Month' },
         axisY: { title: 'Amount (€)', includeZero: true },
         data: [
-          { type: 'column', name: 'Income', showInLegend: true, dataPoints: incomeDataPoints },
-          { type: 'column', name: 'Expenses', showInLegend: true, dataPoints: expenseDataPoints },
+          {
+            type: 'column',
+            name: 'Income',
+            showInLegend: true,
+            dataPoints: incomeDataPoints,
+          },
+          {
+            type: 'column',
+            name: 'Expenses',
+            showInLegend: true,
+            dataPoints: expenseDataPoints,
+          },
         ],
       };
     } catch (error) {
       console.error('Error loading monthly stats:', error);
     }
   }
-  
 }
