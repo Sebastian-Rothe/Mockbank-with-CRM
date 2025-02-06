@@ -22,6 +22,7 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
 // charts
 import { FirstChartsComponent } from '../../../charts/first-charts/first-charts.component';
 import { MonthlyExpensesChartComponent } from '../../../charts/first-charts/monthly-expenses-chart/monthly-expenses-chart.component';
+import { UserGrowthChartComponent } from '../../../charts/user-growth-chart/user-growth-chart.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -41,7 +42,8 @@ import { MonthlyExpensesChartComponent } from '../../../charts/first-charts/mont
     MonthlyExpensesChartComponent,
     BankComponent,
     AccountsComponent,
-    UserDashboardComponent
+    UserDashboardComponent,
+    UserGrowthChartComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],

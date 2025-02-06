@@ -562,4 +562,5 @@ export class FirebaseService {
       console.error('Error calculating and distributing interest:', error);
     }
   }
+
 }
