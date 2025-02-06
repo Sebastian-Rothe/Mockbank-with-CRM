@@ -202,26 +202,52 @@ export class FirebaseService {
     receiverAccountId: string,
     amount: number,
     description?: string,
-    category?: string // Neuer Parameter
+    category?: string
   ): Promise<void> {
     try {
       const senderDocRef = doc(this.accountCollection, senderAccountId);
       const receiverDocRef = doc(this.accountCollection, receiverAccountId);
-
+  
       const senderSnap = await getDoc(senderDocRef);
       const receiverSnap = await getDoc(receiverDocRef);
-
+  
       if (!senderSnap.exists() || !receiverSnap.exists()) {
         throw new Error('Sender or receiver account not found.');
       }
-
+  
       const senderData = Account.fromJson(senderSnap.data());
       const receiverData = Account.fromJson(receiverSnap.data());
-
+  
       if (senderData.balance < amount) {
         throw new Error('Insufficient funds.');
       }
-
+  
+      const bankDocRef = doc(this.firestore, 'bank', 'mainBank');
+      const bankSnap = await getDoc(bankDocRef);
+      if (!bankSnap.exists()) {
+        throw new Error('Bank data not found.');
+      }
+  
+      const bankData = bankSnap.data();
+      const transactionFee = bankData['transactionFee'];
+      const bankAccountId = 'ACC-1738235430074-182';
+  
+      // Prüfen, ob die Bank involviert ist
+      const isBankTransfer = senderAccountId === bankAccountId || receiverAccountId === bankAccountId;
+      const isInternalTransfer = senderData.userId === receiverData.userId;
+  
+      // Gebührenberechnung
+      let feeAmount = 0;
+      if (!isBankTransfer) {
+        feeAmount = isInternalTransfer ? transactionFee * 0.1 : transactionFee; // 10% für interne Transfers, volle Gebühr für externe
+      }
+  
+      // Prüfen, ob Sender genug Geld für Transfer + Gebühr hat
+      if (senderData.balance < amount + feeAmount) {
+        throw new Error('Insufficient funds for transfer and fee.');
+      }
+  
+      // Haupt-Transfer erstellen
       const transfer = new Transfer({
         senderAccountId,
         senderAccountName: senderData.accountName,
@@ -230,27 +256,46 @@ export class FirebaseService {
         receiverAccountName: receiverData.accountName,
         receiverUserId: receiverData.userId,
         amount,
-        description,
-        category, // Kategorie wird hinzugefügt
+        description: description, // ... feeAmount > 0 ? `${description} (Fee: ${feeAmount})` :  lass ich erst mal weg
+        category,
       });
-
-      const transferDocRef = doc(
-        collection(this.firestore, 'transfers'),
-        transfer.transferId
-      );
+  
+      const transferDocRef = doc(collection(this.firestore, 'transfers'), transfer.transferId);
       await setDoc(transferDocRef, transfer.toPlainObject());
-
-      await updateDoc(senderDocRef, { balance: senderData.balance - amount });
-      await updateDoc(receiverDocRef, {
-        balance: receiverData.balance + amount,
-      });
-
+  
+      // Gebührentransfer zur Bank erstellen, falls nötig
+      if (feeAmount > 0) {
+        const bankTransfer = new Transfer({
+          senderAccountId,
+          senderAccountName: senderData.accountName,
+          senderUserId: senderData.userId,
+          receiverAccountId: bankAccountId,
+          receiverAccountName: 'Main Bank',
+          receiverUserId: 'yBr3oAoV5HOBEHBxmTEcFwmR06H2',
+          amount: feeAmount,
+          description: `Transaction Fee for Transfer ${transfer.transferId}`,
+          category: 'Fee',
+        });
+  
+        const bankTransferDocRef = doc(collection(this.firestore, 'transfers'), bankTransfer.transferId);
+        await setDoc(bankTransferDocRef, bankTransfer.toPlainObject());
+  
+        // Bank-Konto aktualisieren
+        await updateDoc(bankDocRef, { totalBalance: (bankData?.['totalBalance'] || 0) + feeAmount });
+      }
+  
+      // Kontostände aktualisieren
+      await updateDoc(senderDocRef, { balance: senderData.balance - amount - feeAmount });
+      await updateDoc(receiverDocRef, { balance: receiverData.balance + amount });
+  
       console.log('Transfer completed successfully!');
     } catch (error) {
       console.error('Error processing transfer:', error);
       throw error;
     }
   }
+  
+  
 
   async deleteTransfer(transferId: string): Promise<void> {
     try {
