@@ -34,7 +34,7 @@ export class UserProfileComponent {
   }
   async loadUser(uid: string): Promise<void> {
     try {
-      this.user = await this.firebaseService.getUser(uid);
+      // this.user = await this.firebaseService.getUser(uid);
       console.log('Loaded user:', this.user);
     } catch (error) {
       console.error('Error loading user:', error);

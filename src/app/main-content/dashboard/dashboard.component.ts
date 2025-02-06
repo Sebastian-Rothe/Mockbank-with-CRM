@@ -48,6 +48,9 @@ import { MonthlyExpensesChartComponent } from '../../../charts/first-charts/mont
 })
 export class DashboardComponent implements OnInit {
   user: User | null = null; 
+  user$ = this.authService.user$; // Direkt das Observable speichern
+  uid$ = this.authService.uid$; // Falls nur die UID benötigt wird
+
 
   constructor(
     private authService: FirebaseAuthService,
@@ -58,22 +61,25 @@ export class DashboardComponent implements OnInit {
 
  
   ngOnInit(): void {
-    this.authService.uid$.subscribe((uid) => {
-      console.log(uid, 'at dash');
-      if (uid) {
-        this.loadUser(uid);
-        this.dashboardData.loadUser(uid);
-      }
+    // Falls du in TypeScript direkt auf den User zugreifen willst
+    this.user$.subscribe(user => {
+      console.log('Aktueller User:', user);
+      this.user = user;
+    });
+
+    this.uid$.subscribe(uid => {
+      console.log('Aktuelle UID:', uid);
     });
   }
-
+  
   async loadUser(uid: string): Promise<void> {
     try {
-      this.user = await this.firebaseService.getUser(uid);
-      }
-     catch (error) {
+      // this.user = await this.firebaseService.getUser(uid);
+    }
+    catch (error) {
       console.error('Error loading user:', error);
     }
+ 
   }
 
 }

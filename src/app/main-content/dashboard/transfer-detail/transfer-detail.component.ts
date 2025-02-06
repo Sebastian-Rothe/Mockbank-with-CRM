@@ -12,6 +12,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatButtonModule } from '@angular/material/button';
+import { Observable, map } from 'rxjs';
+import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-transfer-detail',
   standalone: true,
@@ -22,49 +25,48 @@ import { MatButton, MatButtonModule } from '@angular/material/button';
     MatIcon,
     MatMenuModule,
     MatButtonModule,
+    CommonModule
   ],
   templateUrl: './transfer-detail.component.html',
   styleUrl: './transfer-detail.component.scss',
 })
 export class TransferDetailComponent {
   transfer: Transfer;
-  senderName: string = ''; // Sender-Name
-  receiverName: string = ''; // Empfänger-Name
   bankAccountId: string = 'ACC-1738235430074-182';
+
+  uid$: Observable<string | null>; // ✅ UID als Observable
+  senderName$: Observable<string>; // ✅ Sender als Observable
+  receiverName$: Observable<string>; // ✅ Empfänger als Observable
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Transfer,
     public dialogRef: MatDialogRef<TransferDetailComponent>,
-    private firebaseService: FirebaseService,
     private sharedService: SharedService,
-    private snackBar: MatSnackBar // Optional
+    private authService: FirebaseAuthService, // ✅ AuthService nutzen
+    private firebaseService: FirebaseService,
+    private snackBar: MatSnackBar
   ) {
     this.transfer = data;
-  }
+    this.uid$ = this.authService.uid$; // ✅ UID aus dem AuthService holen
 
-  async ngOnInit(): Promise<void> {
-    try {
-      // Holen der Sender-Daten
-      if (this.transfer.senderUserId) {
-        const sender = await this.firebaseService.getUser(
-          this.transfer.senderUserId
-        );
-        this.senderName = sender
-          ? `${sender.firstName} ${sender.lastName}`
-          : 'Unbekannt';
-      }
+    // ✅ Direkt die Namen als Observables berechnen:
+    this.senderName$ = this.authService.user$.pipe(
+      map((user) => {
+        if (user && user.uid === this.transfer.senderUserId) {
+          return `${user.firstName} ${user.lastName}`;
+        }
+        return 'Unbekannt';
+      })
+    );
 
-      // Holen der Empfänger-Daten
-      if (this.transfer.receiverUserId) {
-        const receiver = await this.firebaseService.getUser(
-          this.transfer.receiverUserId
-        );
-        this.receiverName = receiver
-          ? `${receiver.firstName} ${receiver.lastName}`
-          : 'Unbekannt';
-      }
-    } catch (error) {
-      console.error('Fehler beim Abrufen der User-Daten:', error);
-    }
+    this.receiverName$ = this.authService.user$.pipe(
+      map((user) => {
+        if (user && user.uid === this.transfer.receiverUserId) {
+          return `${user.firstName} ${user.lastName}`;
+        }
+        return 'Unbekannt';
+      })
+    );
   }
   getFormattedDate(transferDate: number): string {
     return this.sharedService.formatTimestampToDetailedDate(transferDate);

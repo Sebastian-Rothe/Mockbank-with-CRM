@@ -38,6 +38,7 @@ import { User } from '../../../../models/user.class';
   styleUrl: './accounts.component.scss',
 })
 export class AccountsComponent {
+  uid$ = this.authService.uid$; // Falls nur die UID benötigt wird
   uid: string = '';
   accounts: Account[] = [];
 
@@ -53,9 +54,9 @@ export class AccountsComponent {
     this.authService.uid$.subscribe((uid) => {
       console.log(uid, 'at dash');
 
-      if (uid) {
-        this.dashboardData.loadUser(uid);
-      }
+      this.uid$.subscribe(uid => {
+        console.log('Aktuelle UID:', uid);
+      });
     });
     this.dashboardData.accounts$.subscribe((accounts) => {
       this.accounts = accounts;
@@ -78,7 +79,7 @@ export class AccountsComponent {
     const dialogRef = this.dialog.open(DialogOpenNewPocketComponent);
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.dashboardData.loadUser(this.uid); // Benutzer-Daten neu laden
+        // this.dashboardData.loadUser(this.uid); // Benutzer-Daten neu laden
       }
     });
   }
@@ -91,7 +92,7 @@ export class AccountsComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.dashboardData.loadUser(this.uid); //
+        // this.dashboardData.loadUser(this.uid); //
       }
     });
   }
@@ -104,7 +105,7 @@ export class AccountsComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.dashboardData.loadUser(this.uid); //
+        // this.dashboardData.loadUser(this.uid); //
       }
     });
   }
@@ -125,7 +126,7 @@ export class AccountsComponent {
           .then(() => this.firebaseService.removeAccountFromUser(userId, accountId))
           .then(() => {
             console.log('Account deleted successfully');
-            this.dashboardData.loadUser(this.uid); // 🚀 Accounts neu laden
+            // this.dashboardData.loadUser(this.uid); // 🚀 Accounts neu laden
           })
           .catch((error) => console.error('Error deleting account:', error));
       }

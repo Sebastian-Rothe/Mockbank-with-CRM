@@ -4,6 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { SharedService } from '../../../../services/shared.service';
 import { FirebaseService } from '../../../../services/firebase.service';
+import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
 import { DashboardDataServiceService } from '../../../../services/dashboard-data-service.service';
 import { User } from '../../../../models/user.class';
 @Component({
@@ -22,12 +23,13 @@ export class UserDashboardComponent implements OnInit {
   constructor(
     private dashboardData: DashboardDataServiceService,
     private sharedService: SharedService,
+    private authService: FirebaseAuthService,
     private firebaseService: FirebaseService
   ) {}
 
   ngOnInit(): void {
     // Abonniere das Benutzer-Observable, das im DashboardDataService verwaltet wird
-    this.dashboardData.user$.subscribe((user) => {
+    this.authService.user$.subscribe((user) => {
       this.user = user;
     });
 

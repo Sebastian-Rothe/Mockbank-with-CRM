@@ -45,6 +45,7 @@ export class DialogSendMoneyComponent {
   totalBalance: number = 0;
   selectedUser: string | null = null;
   senderAccountId: string;
+  uid$ = this.authService.uid$;
   categories: string[] = [
     'Groceries',
     'Rent',
@@ -79,17 +80,25 @@ export class DialogSendMoneyComponent {
   }
 
   ngOnInit(): void {
-    this.uid = this.authService.getUid();
-    console.log('Current UID:', this.uid);
+    this.authService.uid$
+     
+      .subscribe((uid) => {
+        console.log('Aktuelle UID:', uid);
+        if (uid) {
+          this.uid = uid;
+          this.loadUser(uid);
+        }
+      });
+  }
     // if (this.users.length > 0) {
     //   this.selectedUser = this.users.find(user => user.uid === this.uid) || null;
     //   console.log('Selected user on init:', this.selectedUser);
     // }
-  }
+  
 
   async loadUser(uid: string): Promise<void> {
     try {
-      this.user = await this.firebaseService.getUser(uid);
+      // this.user = await this.firebaseService.getUser(uid);
       console.log('Loaded user:', this.user);
 
       if (this.user && this.user.accounts.length > 0) {

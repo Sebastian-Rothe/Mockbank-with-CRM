@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -9,6 +9,7 @@ import { FirebaseAuthService } from '../../services/firebase-auth.service';
 import { Router } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
 import { User } from '../../models/user.class';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-main-content',
@@ -26,7 +27,7 @@ import { User } from '../../models/user.class';
   templateUrl: './main-content.component.html',
   styleUrl: './main-content.component.scss',
 })
-export class MainContentComponent {
+export class MainContentComponent implements OnInit{
     uid: string | null = null;
     user: User | null = null; // Benutzerdaten
   constructor(
@@ -35,21 +36,21 @@ export class MainContentComponent {
     private firebaseService: FirebaseService
   ) {}
   ngOnInit(): void {
-    this.authService.uid$.subscribe((uid) => {
-      console.log('Aktuelle UID:', uid);
-      if (uid) {
-        this.uid = uid; 
-        this.loadUser(uid); 
+    combineLatest([this.authService.uid$, this.authService.user$]).subscribe(
+      ([uid, user]) => {
+        if (uid && user) {
+          this.uid = uid;
+          this.user = user;
+          this.calculateAndDistributeInterest();
+        }
       }
-    });
+    );
   }
-  async loadUser(uid: string): Promise<void> {
+  async calculateAndDistributeInterest(): Promise<void> {
     try {
-      this.user = await this.firebaseService.getUser(uid);
-      console.log('Loaded user:', this.user);
       this.firebaseService.calculateAndDistributeInterest(this.user!)
     } catch (error) {
-      console.error('Error loading user:', error);
+      console.error('Error with interest:', error);
     }
   }
   async logout(): Promise<void> {

@@ -12,24 +12,43 @@ import {
   sendEmailVerification,
   sendPasswordResetEmail,
 } from '@angular/fire/auth';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, of, switchMap } from 'rxjs';
 import { onAuthStateChanged } from 'firebase/auth';
-import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
+import { Firestore, doc, updateDoc, docData } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FirebaseAuthService {
-  private uidSubject = new BehaviorSubject<string | null>(null);
-  uid$ = this.uidSubject.asObservable(); // Observable für UID-Änderungen
+  user$: Observable<any | null>; // User-Observable
+  uid$: BehaviorSubject<string | null>; // ✅ Korrekt: BehaviorSubject erlaubt `.next()`
 
-  constructor(private auth: Auth,  private firestore: Firestore) {
-    // Auth-State überwachen und UID setzen
+  constructor(private auth: Auth, private firestore: Firestore) {
+    this.uid$ = new BehaviorSubject<string | null>(null); // ✅ Muss BehaviorSubject sein
+
     onAuthStateChanged(this.auth, (user) => {
-      const uid = user?.uid || null;
-      this.uidSubject.next(uid);
+      this.uid$.next(user?.uid || null); // ✅ Jetzt funktioniert `.next()`
     });
+
+    this.user$ = this.uid$.pipe(
+      switchMap((uid) =>
+        uid ? docData(doc(this.firestore, 'users', uid)) : of(null)
+      )
+    );
   }
+
+
+  // === alter code!!!!!
+  // private uidSubject = new BehaviorSubject<string | null>(null);
+  // uid$ = this.uidSubject.asObservable(); // Observable für UID-Änderungen
+
+  // constructor(private auth: Auth,  private firestore: Firestore) {
+  //   // Auth-State überwachen und UID setzen
+  //   onAuthStateChanged(this.auth, (user) => {
+  //     const uid = user?.uid || null;
+  //     this.uidSubject.next(uid);
+  //   });
+  // }
 
   
   /**
@@ -42,7 +61,7 @@ export class FirebaseAuthService {
         email,
         password
       );
-      this.uidSubject.next(userCredential.user.uid);
+      this.uid$.next(userCredential.user.uid);
       return userCredential.user;
     } catch (error) {
       console.error('Registrierungsfehler:', error);
@@ -60,7 +79,7 @@ export class FirebaseAuthService {
         email,
         password
       );
-      this.uidSubject.next(userCredential.user.uid);
+      this.uid$.next(userCredential.user.uid);
       return userCredential.user;
     } catch (error) {
       console.error('Anmeldefehler:', error);
@@ -74,7 +93,7 @@ export class FirebaseAuthService {
   async logout(): Promise<void> {
     try {
       await signOut(this.auth);
-      this.uidSubject.next(null);
+      this.uid$.next(null);
     } catch (error) {
       console.error('Fehler beim Abmelden:', error);
       throw error;
@@ -97,7 +116,7 @@ export class FirebaseAuthService {
    * Gibt die aktuelle UID synchron zurück.
    */
   getUid(): string | null {
-    return this.uidSubject.getValue();
+    return this.uid$.getValue();
   }
 
   /**

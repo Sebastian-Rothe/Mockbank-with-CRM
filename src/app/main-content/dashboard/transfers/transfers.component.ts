@@ -36,9 +36,11 @@ export class TransfersComponent {
   // uid: string | null = null;
   user: User | null = null; // Benutzerdaten
   // userAccounts: Account[] = []; // Array von Account-Objekten
+  user$ = this.authService.user$; 
   constructor(
     private sharedService: SharedService,
     private dashboardData: DashboardDataServiceService,
+    private authService: FirebaseAuthService,
     public dialog: MatDialog
   ) {}
 
@@ -46,10 +48,10 @@ export class TransfersComponent {
     this.dashboardData.transfers$.subscribe((transfers) => {
       this.transfers = transfers;
     });
-    this.dashboardData.user$.subscribe((user) => {
+    this.user$.subscribe(user => {
       this.user = user;
     });
-
+    
   }
 
   getFormattedDate(transferDate: number): string {

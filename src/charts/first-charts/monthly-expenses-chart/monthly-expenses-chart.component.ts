@@ -5,6 +5,7 @@ import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import { Transfer } from '../../../models/transfer.class';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { User } from '../../../models/user.class';
+import { combineLatest } from 'rxjs';
 
 @Component({
   selector: 'app-monthly-expenses-chart',
@@ -24,22 +25,24 @@ export class MonthlyExpensesChartComponent {
   ) {}
 
   ngOnInit(): void {
-    this.authService.uid$.subscribe((uid) => {
-      if (uid) {
-        this.uid = uid;
-        this.loadMonthlyStats(this.uid);
+    combineLatest([this.authService.uid$, this.authService.user$]).subscribe(
+      ([uid, user]) => {
+        if (uid && user) {
+          this.uid = uid;
+          this.user = user;
+          this.loadMonthlyStats();
+        }
       }
-    });
+    );
   }
-  async loadMonthlyStats(userId: string): Promise<void> {
+  async loadMonthlyStats(): Promise<void> {
     try {
-      const user = await this.firebaseService.getUser(userId);
-      if (!user) {
-        console.error('User not found.');
+      if (!this.user || !this.user.uid) { // ✅ Zusätzliche Prüfung auf `this.user.uid`
+        console.error('User not found or UID missing.');
         return;
       }
   
-      this.user = user;
+      // this.user = user;
   
       // Fetch all transfers for the user
       const allTransfers: Transfer[] = await this.firebaseService.getTransfersForUser(this.user);

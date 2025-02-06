@@ -357,26 +357,6 @@ export class FirebaseService {
     }
   }
 
-  // async getAccount(accountId: string): Promise<{ name: string; balance: number }> {
-  //   const accountDocRef = doc(this.firestore, 'accounts', accountId);
-  //   const accountSnap = await getDoc(accountDocRef);
-
-  //   if (accountSnap.exists()) {
-  //     return accountSnap.data() as { name: string; balance: number };
-  //   } else {
-  //     throw new Error('Account not found');
-  //   }
-  // }
-  // Beispiel einer getAccount Methode
-  // async getAccount(accountId: string): Promise<any> {
-  //   const accountRef = this.firestore.collection('accounts').doc(accountId);
-  //   const accountSnapshot = await accountRef.get();
-  //   if (accountSnapshot.exists) {
-  //     return accountSnapshot.data(); // Gibt die Account-Daten als JSON zurück
-  //   } else {
-  //     throw new Error('Account not found');
-  //   }
-  // }
   async getAccount(accountId: string): Promise<any> {
     try {
       // Zugriff auf das Account-Dokument in der "accounts"-Sammlung
@@ -491,77 +471,7 @@ export class FirebaseService {
       throw error; // Fehler weitergeben, um sie an der aufrufenden Stelle zu behandeln
     }
   }
-  // async calculateAndDistributeInterest(): Promise<void> {
-  //   try {
-  //     // 1. Alle Benutzer abrufen, aber das Bankkonto ignorieren
-  //     let users = await this.getAllUsers();
-  //     users = users.filter(user => user.uid !== 'yBr3oAoV5HOBEHBxmTEcFwmR06H2'); // Falls die Bank ein eigenes Benutzerkonto hat
-
-  //     if (users.length === 0) return;
-
-  //     // 2. Zinssatz aus der "bank"-Collection abrufen
-  //     const bankDocRef = doc(this.firestore, 'bank', 'mainBank');
-  //     const bankSnap = await getDoc(bankDocRef);
-  //     if (!bankSnap.exists()) {
-  //       console.error('Bank data not found!');
-  //       return;
-  //     }
-  //     const bankData = bankSnap.data();
-  //     const interestRate = bankData['interestRate']; // Zinssatz in Prozent
-
-  //     for (const user of users) {
-  //       if (!user.accounts || user.accounts.length === 0) continue;
-
-  //       // 3. Gesamtvermögen des Benutzers berechnen
-  //       let totalBalance = 0;
-  //       for (const accountId of user.accounts) {
-  //         const accountData = await this.getAccount(accountId);
-  //         totalBalance += accountData.balance || 0;
-  //       }
-
-  //       // 4. Zinsen berechnen
-  //       const interestAmount = (totalBalance * interestRate) / 100;
-  //       if (interestAmount <= 0) continue;
-
-  //       // 5. Zinsen auf das erste Konto des Users überweisen
-  //       const primaryAccountId = user.accounts[0];
-  //       await this.transferFunds('ACC-1738235430074-182', primaryAccountId, interestAmount, 'Zinsgutschrift', 'Interest');
-
-  //       console.log(`Interest of ${interestAmount} EUR credited to ${user.uid} (${primaryAccountId})`);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error calculating interest:', error);
-  //   }
-  // }
-
-  // async calculateAndDistributeInterest(user: User): Promise<void> {
-  //   try {
-  //     // Alle bisherigen Transfers des Benutzers abrufen
-  //     const transfers = await this.getTransfersForUser(user);
-  //     const interestRate = 5; // Beispiel-Zinssatz, kann aus der Bank-Collection kommen
-  //     const totalBalance = await this.getTotalBalanceForUser(user); // Gesamtvermögen des Users berechnen
-  //     const interestAmount = (totalBalance * interestRate) / 100;
-
-  //     // Überprüfe, ob bereits Zinsen für den Zeitraum bezahlt wurden
-  //     const lastInterestTransfer = transfers
-  //       .filter(transfer => transfer.category === 'Interest') // Nur Zins-Transfers filtern
-  //       .sort((a, b) => b.createdAt - a.createdAt)[0]; // Den letzten Zins-Transfer finden
-
-  //     // Falls kein Transfer existiert oder der Transfer zu alt ist
-  //     const timeSinceLastInterest = lastInterestTransfer
-  //       ? Date.now() - lastInterestTransfer.createdAt
-  //       : Date.now() - user.createdAt;
-
-  //     // Berechne, ob genug Zeit vergangen ist, um Zinsen zu berechnen
-  //     if (timeSinceLastInterest >= 86400000) { // 86400000 ms = 1 Tag
-  //       // Zinsen berechnen und auf das Konto des Users überweisen
-  //       await this.transferFunds(user.accounts[0], user.accounts[0], interestAmount, 'Zinsgutschrift', 'Interest');
-  //       console.log(`Zinsen von ${interestAmount} EUR wurden dem Benutzer ${user.uid} gutgeschrieben.`);
-  //     }
-  //   } catch (error) {
-  //     console.error('Fehler bei der Berechnung der Zinsen:', error);
-  //   }
-  // }
+ 
 
   async calculateAndDistributeInterest(user: User): Promise<void> {
     try {

@@ -23,13 +23,13 @@
   <mat-dialog-content>
     <div class="transfer-detail">
       <p><strong>Category: </strong>{{ data.category }}</p>
-      <p><strong>Sender:</strong> {{ senderName }}</p>
+      <p><strong>Sender:</strong> {{ senderName$ | async }}</p>
       @if(data.senderAccountName){
       <p><strong>Sender Account Name:</strong> {{ data.senderAccountName }}</p>
       } @else {
       <p><strong>Sender Account ID:</strong> {{ data.senderAccountId }}</p>
       }
-      <p><strong>Receiver:</strong> {{ receiverName }}</p>
+      <p><strong>Receiver:</strong> {{ receiverName$ | async }}</p>
       @if(data.receiverAccountName){
       <p>
         <strong>Receiver Account Name:</strong> {{ data.receiverAccountName }}
