@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FirebaseService } from '../../../services/firebase.service';
-import { FirebaseAuthService } from '../../../services/firebase-auth.service';
-import { Transfer } from '../../../models/transfer.class';
+import { FirebaseService } from '../../services/firebase.service';
+import { FirebaseAuthService } from '../../services/firebase-auth.service';
+import { Transfer } from '../../models/transfer.class';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
-import { User } from '../../../models/user.class';
+import { User } from '../../models/user.class';
 
 
 @Component({

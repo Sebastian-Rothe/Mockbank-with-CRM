@@ -43,7 +43,17 @@ export class FirebaseService {
       return new User({ ...data, uid: doc.id }); // User-Klasse instanziieren und die ID hinzufügen
     });
   }
-
+  async getAllTransfers(): Promise<Transfer[]> {
+    try {
+      const transfersCollection = collection(this.firestore, 'transfers');
+      const querySnapshot = await getDocs(transfersCollection);
+      return querySnapshot.docs.map((doc) => new Transfer(doc.data() as Transfer));
+    } catch (error) {
+      console.error('Fehler beim Abrufen aller Transfers:', error);
+      throw error;
+    }
+  }
+  
   //  /**
   //  * Fügt einen neuen Benutzer zur Firestore-Datenbank hinzu.
   //  * @param user Der Benutzer, der hinzugefügt werden soll.
