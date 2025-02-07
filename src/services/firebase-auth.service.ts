@@ -11,6 +11,8 @@ import {
   User,
   sendEmailVerification,
   sendPasswordResetEmail,
+  UserCredential, 
+  signInAnonymously
 } from '@angular/fire/auth';
 import { Observable, BehaviorSubject, of, switchMap } from 'rxjs';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -86,7 +88,9 @@ export class FirebaseAuthService {
       throw error;
     }
   }
-
+  guestLogin(): Promise<UserCredential> {
+    return signInAnonymously(this.auth);
+  }
   /**
    * Meldet den aktuellen Benutzer ab.
    */

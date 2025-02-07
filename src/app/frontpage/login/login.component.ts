@@ -55,6 +55,17 @@ export class LoginComponent {
       this.errorMessage = error.message; // Zeigt Fehlermeldungen an
     }
   }
+  loginAsGuest() {
+    const user = this.authService.guestLogin()
+    if (user) {
+      // Weiterleitung mit UID als Query-Parameter
+      this.router.navigate(['main'], { queryParams: { uid: user } });
+      console.log(user);
+      this.cancel();
+    }
+      // .then(user => console.log('Gast-Login erfolgreich:', user))
+      // .catch(error => console.error('Fehler beim Gast-Login:', error));
+  }
 
   cancel(): void {
     this.dialogRef.close(); // Schließt den Dialog ohne Aktion
