@@ -47,13 +47,15 @@ export class FirebaseService {
     try {
       const transfersCollection = collection(this.firestore, 'transfers');
       const querySnapshot = await getDocs(transfersCollection);
-      return querySnapshot.docs.map((doc) => new Transfer(doc.data() as Transfer));
+      return querySnapshot.docs.map(
+        (doc) => new Transfer(doc.data() as Transfer)
+      );
     } catch (error) {
       console.error('Fehler beim Abrufen aller Transfers:', error);
       throw error;
     }
   }
-  
+
   //  /**
   //  * Fügt einen neuen Benutzer zur Firestore-Datenbank hinzu.
   //  * @param user Der Benutzer, der hinzugefügt werden soll.
@@ -217,46 +219,48 @@ export class FirebaseService {
     try {
       const senderDocRef = doc(this.accountCollection, senderAccountId);
       const receiverDocRef = doc(this.accountCollection, receiverAccountId);
-  
+
       const senderSnap = await getDoc(senderDocRef);
       const receiverSnap = await getDoc(receiverDocRef);
-  
+
       if (!senderSnap.exists() || !receiverSnap.exists()) {
         throw new Error('Sender or receiver account not found.');
       }
-  
+
       const senderData = Account.fromJson(senderSnap.data());
       const receiverData = Account.fromJson(receiverSnap.data());
-  
+
       if (senderData.balance < amount) {
         throw new Error('Insufficient funds.');
       }
-  
+
       const bankDocRef = doc(this.firestore, 'bank', 'mainBank');
       const bankSnap = await getDoc(bankDocRef);
       if (!bankSnap.exists()) {
         throw new Error('Bank data not found.');
       }
-  
+
       const bankData = bankSnap.data();
       const transactionFee = bankData['transactionFee'];
       const bankAccountId = 'ACC-1738235430074-182';
-  
+
       // Prüfen, ob die Bank involviert ist
-      const isBankTransfer = senderAccountId === bankAccountId || receiverAccountId === bankAccountId;
+      const isBankTransfer =
+        senderAccountId === bankAccountId ||
+        receiverAccountId === bankAccountId;
       const isInternalTransfer = senderData.userId === receiverData.userId;
-  
+
       // Gebührenberechnung
       let feeAmount = 0;
       if (!isBankTransfer) {
         feeAmount = isInternalTransfer ? transactionFee * 0.1 : transactionFee; // 10% für interne Transfers, volle Gebühr für externe
       }
-  
+
       // Prüfen, ob Sender genug Geld für Transfer + Gebühr hat
       if (senderData.balance < amount + feeAmount) {
         throw new Error('Insufficient funds for transfer and fee.');
       }
-  
+
       // Haupt-Transfer erstellen
       const transfer = new Transfer({
         senderAccountId,
@@ -269,10 +273,13 @@ export class FirebaseService {
         description: description, // ... feeAmount > 0 ? `${description} (Fee: ${feeAmount})` :  lass ich erst mal weg
         category,
       });
-  
-      const transferDocRef = doc(collection(this.firestore, 'transfers'), transfer.transferId);
+
+      const transferDocRef = doc(
+        collection(this.firestore, 'transfers'),
+        transfer.transferId
+      );
       await setDoc(transferDocRef, transfer.toPlainObject());
-  
+
       // Gebührentransfer zur Bank erstellen, falls nötig
       if (feeAmount > 0) {
         const bankTransfer = new Transfer({
@@ -286,26 +293,33 @@ export class FirebaseService {
           description: `Transaction Fee for Transfer ${transfer.transferId}`,
           category: 'Fee',
         });
-  
-        const bankTransferDocRef = doc(collection(this.firestore, 'transfers'), bankTransfer.transferId);
+
+        const bankTransferDocRef = doc(
+          collection(this.firestore, 'transfers'),
+          bankTransfer.transferId
+        );
         await setDoc(bankTransferDocRef, bankTransfer.toPlainObject());
-  
+
         // Bank-Konto aktualisieren
-        await updateDoc(bankDocRef, { totalBalance: (bankData?.['totalBalance'] || 0) + feeAmount });
+        await updateDoc(bankDocRef, {
+          totalBalance: (bankData?.['totalBalance'] || 0) + feeAmount,
+        });
       }
-  
+
       // Kontostände aktualisieren
-      await updateDoc(senderDocRef, { balance: senderData.balance - amount - feeAmount });
-      await updateDoc(receiverDocRef, { balance: receiverData.balance + amount });
-  
+      await updateDoc(senderDocRef, {
+        balance: senderData.balance - amount - feeAmount,
+      });
+      await updateDoc(receiverDocRef, {
+        balance: receiverData.balance + amount,
+      });
+
       console.log('Transfer completed successfully!');
     } catch (error) {
       console.error('Error processing transfer:', error);
       throw error;
     }
   }
-  
-  
 
   async deleteTransfer(transferId: string): Promise<void> {
     try {
@@ -481,7 +495,6 @@ export class FirebaseService {
       throw error; // Fehler weitergeben, um sie an der aufrufenden Stelle zu behandeln
     }
   }
- 
 
   async calculateAndDistributeInterest(user: User): Promise<void> {
     try {
@@ -509,9 +522,9 @@ export class FirebaseService {
 
       // Special case: First interest payment after 3 minutes
       let interestStart = lastInterestTransferDate; // Start of the interest calculation
-      if (minutesSinceCreated >= 3 && !lastInterestTransfer) {
-        console.log('First interest payment after 3 minutes.');
-        interestStart = user.createdAt; // If first time, start from user creation
+      if (!lastInterestTransfer) {
+        console.log('First interest payment immediately after user creation.');
+        interestStart = user.createdAt; // Start directly from the creation timestamp
       }
       // Regular interest payment every 2 hours
       else if (hoursSinceLastInterest < 2) {
@@ -541,12 +554,19 @@ export class FirebaseService {
       const totalInterestAmount =
         interestAmountPerHour * hoursSinceLastInterest;
 
-      if (totalInterestAmount <= 0) {
+      // 7. Apply minimum interest of 0.01 EUR
+      const minimumInterest = 0.01;
+      const finalInterestAmount = Math.max(
+        totalInterestAmount,
+        minimumInterest
+      );
+
+      if (finalInterestAmount <= 0) {
         console.log('No interest to pay.');
         return;
       }
 
-      // 7. Create an interest transfer for the calculated amount
+      // 8. Create an interest transfer for the calculated amount
       const primaryAccountId = user.accounts[0]; // The user's first account
       const interestEnd = Date.now(); // End of the interest calculation
 
@@ -554,7 +574,7 @@ export class FirebaseService {
       await this.transferFunds(
         'ACC-1738235430074-182', // The bank account from which interest will be paid (placeholder)
         primaryAccountId,
-        totalInterestAmount,
+        finalInterestAmount, // Mindestzins wird berücksichtigt
         `Interest credit from ${new Date(
           timestamp
         ).toLocaleString()} to ${new Date(interestEnd).toLocaleString()}`, // Transfer description
@@ -562,7 +582,7 @@ export class FirebaseService {
       );
 
       console.log(
-        `Interest amount of ${totalInterestAmount} EUR credited to account ${primaryAccountId} of user ${
+        `Interest amount of ${finalInterestAmount} EUR credited to account ${primaryAccountId} of user ${
           user.uid
         } for the period from ${new Date(
           interestStart
@@ -572,5 +592,4 @@ export class FirebaseService {
       console.error('Error calculating and distributing interest:', error);
     }
   }
-
 }
