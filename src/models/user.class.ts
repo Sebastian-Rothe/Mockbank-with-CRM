@@ -30,7 +30,7 @@ export class User {
   id?: string = '';
   firstName: string = '';
   lastName: string = '';
-  email?: string = '';
+  email?: string = 'guest@temporary.com';
   countryCode?: string = '';
   phoneNumber?: string = '';
   birthDate: number = 0;
@@ -38,7 +38,7 @@ export class User {
   zipCode: string = '';
   city: string = '';
   accounts: string[] = [];
-  role: 'user' | 'admin' | 'support' | 'management' = 'user';
+  role: 'user' | 'admin' | 'guest' | 'management' = 'user';
   status?: 'active' | 'inactive' | 'closed' = 'active';
   profilePictureUrl?: string = '';
   assignedAdvisorId?: string = '';

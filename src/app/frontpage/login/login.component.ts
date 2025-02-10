@@ -13,7 +13,18 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { User } from '../../../models/user.class';
 import { FirebaseService } from '../../../services/firebase.service';
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
+
 import { Router } from '@angular/router';
+
+interface GuestUser {
+  uid: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  role: 'guest';
+  createdAt: number;
+}
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -38,6 +49,7 @@ export class LoginComponent {
   constructor(
     private router: Router,
     private authService: FirebaseAuthService,
+    private firebaseService: FirebaseService,
     public dialogRef: MatDialogRef<LoginComponent>
   ) {}
 
@@ -55,17 +67,42 @@ export class LoginComponent {
       this.errorMessage = error.message; // Zeigt Fehlermeldungen an
     }
   }
-  loginAsGuest() {
-    const user = this.authService.guestLogin()
-    if (user) {
-      // Weiterleitung mit UID als Query-Parameter
-      this.router.navigate(['main'], { queryParams: { uid: user } });
-      console.log(user);
-      this.cancel();
+  // Funktion für den Gast-Login
+  async loginAsGuest(): Promise<void> {
+    try {
+      const userCredential = await this.authService.guestLogin();
+      if (userCredential) {
+        const uid = userCredential.user.uid;
+    
+        // Gast-User als User-Instanz erstellen
+        const guestUser = new User({
+          uid,
+          firstName: 'Guest',
+          lastName: 'User',
+          email: 'guest@temporary.com',
+          role: 'guest',
+          createdAt: Date.now(),
+          birthDate: 0, // oder ein anderes Standard-Datum
+          streetAddress: '',
+          zipCode: '',
+          city: '',
+          accounts: [],
+        });
+    
+        // Speichern des Gast-Users in Firestore
+        await this.firebaseService.addUserWithAccount(guestUser);
+    
+        // Weiterleitung
+        this.router.navigate(['main'], { queryParams: { uid: guestUser.uid } });
+        this.cancel();
+      }
+    } catch (error) {
+      console.error('Fehler beim Gast-Login:', error);
     }
-      // .then(user => console.log('Gast-Login erfolgreich:', user))
-      // .catch(error => console.error('Fehler beim Gast-Login:', error));
   }
+  
+  
+  
 
   cancel(): void {
     this.dialogRef.close(); // Schließt den Dialog ohne Aktion

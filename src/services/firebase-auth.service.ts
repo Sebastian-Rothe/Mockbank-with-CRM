@@ -12,11 +12,12 @@ import {
   sendEmailVerification,
   sendPasswordResetEmail,
   UserCredential, 
-  signInAnonymously
+  signInAnonymously,
+
 } from '@angular/fire/auth';
 import { Observable, BehaviorSubject, of, switchMap } from 'rxjs';
 import { onAuthStateChanged } from 'firebase/auth';
-import { Firestore, doc, updateDoc, docData } from '@angular/fire/firestore';
+import { Firestore, doc, updateDoc, docData, getDoc, setDoc, deleteDoc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -88,14 +89,54 @@ export class FirebaseAuthService {
       throw error;
     }
   }
-  guestLogin(): Promise<UserCredential> {
-    return signInAnonymously(this.auth);
+  async guestLogin(): Promise<UserCredential | null> {
+    try {
+      // Anonymes Login durchführen
+      const userCredential = await signInAnonymously(this.auth);
+      const uid = userCredential.user.uid;
+
+      // Zusätzliche Logik, um den Gast-User zu erstellen
+      const userDocRef = doc(this.firestore, 'users', uid);
+      const userSnapshot = await getDoc(userDocRef); // Überprüfen, ob der Gast schon existiert
+
+      if (!userSnapshot.exists()) {
+        // Falls der Gast-User nicht existiert, erstellen wir ihn mit Standarddaten
+        const guestUser = {
+          uid,
+          firstName: 'Guest',
+          lastName: 'User',
+          email: 'guest@temporary.com',
+          role: 'guest',
+          createdAt: Date.now(),
+        };
+
+        // Benutzer-Dokument in Firestore speichern
+        await setDoc(userDocRef, guestUser);
+      }
+
+      return userCredential;
+    } catch (error) {
+      console.error('Fehler beim Gast-Login:', error);
+      throw error;
+    }
   }
+
+  
   /**
    * Meldet den aktuellen Benutzer ab.
    */
   async logout(): Promise<void> {
     try {
+      const currentUser = this.auth.currentUser;
+      
+      if (currentUser && currentUser.isAnonymous) {
+        // Falls der Benutzer ein Gast ist, löschen wir das Firestore-Dokument
+        const userDocRef = doc(this.firestore, 'users', currentUser.uid);
+        await deleteDoc(userDocRef); // Löscht das Gast-Dokument aus Firestore
+        console.log('Gast-Daten wurden gelöscht.');
+      }
+
+      // Abmelden
       await signOut(this.auth);
       this.uid$.next(null);
     } catch (error) {
