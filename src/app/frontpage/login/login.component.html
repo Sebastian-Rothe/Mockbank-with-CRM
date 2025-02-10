@@ -1,6 +1,6 @@
 <div mat-dialog-content>
   <h2 mat-dialog-title>Login</h2>
-  <form class="form-container" (ngSubmit)="login()">
+  <form class="form-container">
     <mat-form-field class="full-width" appearance="outline">
       <mat-label>Email</mat-label>
       <input
@@ -30,14 +30,15 @@
       {{ errorMessage }}
     </div>
     }
-    <button (click)="loginAsGuest()">Als Gast einloggen</button>
+    <button mat-raised-button (click)="loginAsGuest()">Als Gast einloggen</button>
 
     <div class="button-container">
       <button
         mat-flat-button
         color="primary"
         class="submit-button"
-        type="submit"
+ 
+        (click)="login()"
       >
         Login
       </button>
