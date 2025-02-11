@@ -11,14 +11,22 @@ import {
   User,
   sendEmailVerification,
   sendPasswordResetEmail,
-  UserCredential, 
+  UserCredential,
   signInAnonymously,
-
 } from '@angular/fire/auth';
 import { Observable, BehaviorSubject, of, switchMap } from 'rxjs';
 import { onAuthStateChanged } from 'firebase/auth';
-import { Firestore, doc, updateDoc, docData, getDoc, setDoc, deleteDoc } from '@angular/fire/firestore';
+import {
+  Firestore,
+  doc,
+  updateDoc,
+  docData,
+  getDoc,
+  setDoc,
+  deleteDoc,
+} from '@angular/fire/firestore';
 import { FirebaseService } from './firebase.service';
+import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root',
 })
@@ -26,7 +34,12 @@ export class FirebaseAuthService {
   user$: Observable<any | null>; // User-Observable
   uid$: BehaviorSubject<string | null>; // ✅ Korrekt: BehaviorSubject erlaubt `.next()`
 
-  constructor(private auth: Auth, private firestore: Firestore, private firebaseService: FirebaseService) {
+  constructor(
+    private auth: Auth,
+    private firestore: Firestore,
+    private firebaseService: FirebaseService,
+    private router: Router
+  ) {
     this.uid$ = new BehaviorSubject<string | null>(null); // ✅ Muss BehaviorSubject sein
 
     onAuthStateChanged(this.auth, (user) => {
@@ -40,7 +53,6 @@ export class FirebaseAuthService {
     );
   }
 
-
   // === alter code!!!!!
   // private uidSubject = new BehaviorSubject<string | null>(null);
   // uid$ = this.uidSubject.asObservable(); // Observable für UID-Änderungen
@@ -53,7 +65,6 @@ export class FirebaseAuthService {
   //   });
   // }
 
-  
   /**
    * Registriert einen neuen Benutzer.
    */
@@ -121,22 +132,21 @@ export class FirebaseAuthService {
     }
   }
 
-  
   /**
    * Meldet den aktuellen Benutzer ab.
    */
   async logout(): Promise<void> {
     try {
       const currentUser = this.auth.currentUser;
-  
+
       if (currentUser && currentUser.isAnonymous) {
         // Firestore-Referenz des Gast-Users
         const userDocRef = doc(this.firestore, 'users', currentUser.uid);
         const userSnap = await getDoc(userDocRef);
-  
+
         if (userSnap.exists()) {
           const userData = userSnap.data();
-  
+
           // 1️⃣ Lösche alle Accounts des Gast-Users
           if (userData['accounts']) {
             for (const accountId of userData['accounts']) {
@@ -144,23 +154,24 @@ export class FirebaseAuthService {
             }
             console.log('Alle Gast-Accounts wurden gelöscht.');
           }
-  
+
           // 2️⃣ Lösche das User-Dokument
           await deleteDoc(userDocRef);
           console.log('Gast-Daten wurden gelöscht.');
         }
       }
-  
+
       // 3️⃣ Abmelden
       await signOut(this.auth);
       this.uid$.next(null);
-    
+      this.router.navigate(['/']).then(() => {
+        window.location.reload();
+      });
     } catch (error) {
       console.error('Fehler beim Abmelden:', error);
       throw error;
     }
   }
-  
 
   /**
    * Gibt den aktuellen Benutzer als Observable zurück.
@@ -184,36 +195,35 @@ export class FirebaseAuthService {
   /**
    * Aktualisiert die E-Mail des Benutzers.
    */
-/**
- * Aktualisiert die E-Mail des Benutzers.
- */
+  /**
+   * Aktualisiert die E-Mail des Benutzers.
+   */
 
-async updateEmail(newEmail: string, password: string): Promise<void> {
-  const user = this.auth.currentUser;
-  if (!user) {
-    throw new Error('Kein Benutzer angemeldet.');
+  async updateEmail(newEmail: string, password: string): Promise<void> {
+    const user = this.auth.currentUser;
+    if (!user) {
+      throw new Error('Kein Benutzer angemeldet.');
+    }
+
+    try {
+      // Zuerst den Benutzer re-authentifizieren
+      await this.reauthenticate(password);
+      console.log('Benutzer erfolgreich erneut authentifiziert.');
+
+      // E-Mail auch im Firestore aktualisieren
+      const userDocRef = doc(this.firestore, 'users', user.uid);
+      await updateDoc(userDocRef, { email: newEmail });
+      console.log('E-Mail im Firestore erfolgreich aktualisiert.');
+
+      // Dann die E-Mail ändern
+      await updateEmail(user, newEmail);
+      await this.logout();
+      console.log('E-Mail erfolgreich aktualisiert.');
+    } catch (error) {
+      console.error('Fehler beim Aktualisieren der E-Mail:', error);
+      throw error;
+    }
   }
-
-  try {
-    // Zuerst den Benutzer re-authentifizieren
-    await this.reauthenticate(password);
-    console.log('Benutzer erfolgreich erneut authentifiziert.');
-
-    // E-Mail auch im Firestore aktualisieren
-    const userDocRef = doc(this.firestore, 'users', user.uid);
-    await updateDoc(userDocRef, { email: newEmail });
-    console.log('E-Mail im Firestore erfolgreich aktualisiert.');
-
-    // Dann die E-Mail ändern
-    await updateEmail(user, newEmail);
-    await this.logout();
-    console.log('E-Mail erfolgreich aktualisiert.');
-  } catch (error) {
-    console.error('Fehler beim Aktualisieren der E-Mail:', error);
-    throw error;
-  }
-}
-
 
   /**
    * Aktualisiert das Passwort des Benutzers.
@@ -241,9 +251,9 @@ async updateEmail(newEmail: string, password: string): Promise<void> {
     if (!user || !user.email) {
       throw new Error('Kein Benutzer oder keine E-Mail-Adresse gefunden.');
     }
-  
+
     const credential = EmailAuthProvider.credential(user.email, password);
-  
+
     try {
       await reauthenticateWithCredential(user, credential);
       console.log('Benutzer erfolgreich erneut authentifiziert.');
@@ -252,36 +262,34 @@ async updateEmail(newEmail: string, password: string): Promise<void> {
       throw error;
     }
   }
-  
-    /**
+
+  /**
    * Sendet eine Verifizierungs-E-Mail an den angemeldeten Benutzer.
    */
-    async sendEmailVerification(): Promise<void> {
-      const user = this.auth.currentUser;
-      if (!user) {
-        throw new Error('Kein Benutzer angemeldet.');
-      }
-  
-      try {
-        await sendEmailVerification(user);
-        console.log('Verifizierungs-E-Mail wurde gesendet.');
-        console.log('Verifizierungs-E-Mail gesendet an:', user.email);
-
-      } catch (error) {
-        console.error('Fehler beim Senden der Verifizierungs-E-Mail:', error);
-        throw error;
-      }
-    }
-    
-    async checkEmailVerification(): Promise<boolean> {
-      const user = this.auth.currentUser;
-      if (!user) {
-        throw new Error('Kein Benutzer angemeldet.');
-      }
-    
-      // Benutzerinformationen aktualisieren
-      await user.reload();
-      return user.emailVerified;
+  async sendEmailVerification(): Promise<void> {
+    const user = this.auth.currentUser;
+    if (!user) {
+      throw new Error('Kein Benutzer angemeldet.');
     }
 
+    try {
+      await sendEmailVerification(user);
+      console.log('Verifizierungs-E-Mail wurde gesendet.');
+      console.log('Verifizierungs-E-Mail gesendet an:', user.email);
+    } catch (error) {
+      console.error('Fehler beim Senden der Verifizierungs-E-Mail:', error);
+      throw error;
+    }
+  }
+
+  async checkEmailVerification(): Promise<boolean> {
+    const user = this.auth.currentUser;
+    if (!user) {
+      throw new Error('Kein Benutzer angemeldet.');
+    }
+
+    // Benutzerinformationen aktualisieren
+    await user.reload();
+    return user.emailVerified;
+  }
 }

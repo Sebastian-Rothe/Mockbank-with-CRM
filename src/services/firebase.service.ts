@@ -498,98 +498,90 @@ export class FirebaseService {
 
   async calculateAndDistributeInterest(user: User): Promise<void> {
     try {
-      // 1. Retrieve all the user's previous transfers
+      // 1. Alle bisherigen Transfers des Users abrufen
       const transfers = await this.getTransfersForUser(user);
-
-      // 2. Check how much time has passed since the user was created
-      const timeSinceCreated = Date.now() - user.createdAt;
-      const minutesSinceCreated = Math.floor(timeSinceCreated / 60000); // Convert to minutes
-
-      // 3. Check if interest has already been paid
-      let lastInterestTransferDate = user.createdAt; // Default to creation date if no interest has been paid
+  
+      // 2. Letzten Zins-Transfer finden
+      let lastInterestTransferDate = user.createdAt;
       const lastInterestTransfer = transfers
-        .filter((transfer) => transfer.category === 'Interest') // Filter only interest transfers
-        .sort((a, b) => b.createdAt - a.createdAt)[0]; // Get the latest interest transfer
-
+        .filter((transfer) => transfer.category === 'Interest')
+        .sort((a, b) => b.createdAt - a.createdAt)[0];
+  
       if (lastInterestTransfer) {
         lastInterestTransferDate = lastInterestTransfer.createdAt;
       }
-
+  
+      // 3. Prüfen, ob bereits eine Zahlung geplant oder erfolgt ist
       const timeSinceLastInterest = Date.now() - lastInterestTransferDate;
-      const hoursSinceLastInterest = Math.floor(
-        timeSinceLastInterest / 3600000
-      ); // Convert to hours
-
-      // Special case: First interest payment after 3 minutes
-      let interestStart = lastInterestTransferDate; // Start of the interest calculation
-      if (!lastInterestTransfer) {
-        console.log('First interest payment immediately after user creation.');
-        interestStart = user.createdAt; // Start directly from the creation timestamp
-      }
-      // Regular interest payment every 2 hours
-      else if (hoursSinceLastInterest < 2) {
-        console.log('Interest has already been paid within the last 2 hours.');
+      const hoursSinceLastInterest = Math.floor(timeSinceLastInterest / 3600000);
+      
+      // **🔒 Wichtiger Fix: Sicherstellen, dass nicht bereits eine Zahlung in den letzten 5 Sekunden erstellt wurde**
+      const lastInterestRecently = transfers.some(
+        (t) => t.category === 'Interest' && Date.now() - t.createdAt < 5000
+      );
+  
+      if (lastInterestRecently) {
+        console.warn('Verhindert doppelte Zinszahlung: Bereits kürzlich ausgeführt.');
         return;
       }
-
-      // 4. Calculate the total balance of the user
+  
+      // **📌 Fix: Erster Zins soll SOFORT ausgezahlt werden**
+      let interestStart = lastInterestTransferDate;
+      if (!lastInterestTransfer) {
+        console.log('Erste Zinszahlung erfolgt sofort nach der User-Erstellung.');
+        interestStart = user.createdAt;
+      } else if (hoursSinceLastInterest < 2) {
+        console.log('Zinsen wurden bereits in den letzten 2 Stunden gezahlt.');
+        return;
+      }
+  
+      // 4. Gesamtguthaben des Users berechnen
       let totalBalance = 0;
       for (const accountId of user.accounts) {
         const accountData = await this.getAccount(accountId);
         totalBalance += accountData.balance || 0;
       }
-
-      // 5. Retrieve the interest rate from the bank data collection
+  
+      // 5. Zinsrate abrufen
       const bankDocRef = doc(this.firestore, 'bank', 'mainBank');
       const bankSnap = await getDoc(bankDocRef);
       if (!bankSnap.exists()) {
-        console.error('Bank data not found!');
+        console.error('Bankdaten nicht gefunden!');
         return;
       }
       const bankData = bankSnap.data();
-      const interestRate = bankData['interestRate']; // Interest rate in percentage
-
-      // 6. Calculate interest
-      const interestAmountPerHour = (totalBalance * interestRate) / 100 / 24; // Interest per hour (now correctly divided by 24)
-      const totalInterestAmount =
-        interestAmountPerHour * hoursSinceLastInterest;
-
-      // 7. Apply minimum interest of 0.01 EUR
+      const interestRate = bankData['interestRate']; 
+  
+      // 6. Zinsen berechnen
+      const interestAmountPerHour = (totalBalance * interestRate) / 100 / 24; 
+      const totalInterestAmount = interestAmountPerHour * hoursSinceLastInterest;
+  
+      // **✅ Mindestzins anwenden**
       const minimumInterest = 0.01;
-      const finalInterestAmount = Math.max(
-        totalInterestAmount,
-        minimumInterest
-      );
-
+      const finalInterestAmount = Math.max(totalInterestAmount, minimumInterest);
+  
       if (finalInterestAmount <= 0) {
-        console.log('No interest to pay.');
+        console.log('Keine Zinsen zu zahlen.');
         return;
       }
-
-      // 8. Create an interest transfer for the calculated amount
-      const primaryAccountId = user.accounts[0]; // The user's first account
-      const interestEnd = Date.now(); // End of the interest calculation
-
-      const timestamp = Number(interestStart);
+  
+      // 7. Zinsen überweisen
+      const primaryAccountId = user.accounts[0];
+      const interestEnd = Date.now();
+  
       await this.transferFunds(
-        'ACC-1738235430074-182', // The bank account from which interest will be paid (placeholder)
+        'ACC-1738235430074-182',
         primaryAccountId,
-        finalInterestAmount, // Mindestzins wird berücksichtigt
-        `Interest credit from ${new Date(
-          timestamp
-        ).toLocaleString()} to ${new Date(interestEnd).toLocaleString()}`, // Transfer description
-        'Interest' // Category
+        finalInterestAmount,
+        `Interest credit from ${new Date(interestStart).toLocaleString()} to ${new Date(interestEnd).toLocaleString()}`,
+        'Interest'
       );
-
-      console.log(
-        `Interest amount of ${finalInterestAmount} EUR credited to account ${primaryAccountId} of user ${
-          user.uid
-        } for the period from ${new Date(
-          interestStart
-        ).toLocaleString()} to ${new Date(interestEnd).toLocaleString()}.`
-      );
+  
+      console.log(`Zinsen von ${finalInterestAmount} EUR für User ${user.uid} gutgeschrieben.`);
+  
     } catch (error) {
-      console.error('Error calculating and distributing interest:', error);
+      console.error('Fehler bei der Zinsberechnung:', error);
     }
   }
+  
 }
