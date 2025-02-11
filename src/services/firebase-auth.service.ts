@@ -18,7 +18,7 @@ import {
 import { Observable, BehaviorSubject, of, switchMap } from 'rxjs';
 import { onAuthStateChanged } from 'firebase/auth';
 import { Firestore, doc, updateDoc, docData, getDoc, setDoc, deleteDoc } from '@angular/fire/firestore';
-
+import { FirebaseService } from './firebase.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -26,7 +26,7 @@ export class FirebaseAuthService {
   user$: Observable<any | null>; // User-Observable
   uid$: BehaviorSubject<string | null>; // ✅ Korrekt: BehaviorSubject erlaubt `.next()`
 
-  constructor(private auth: Auth, private firestore: Firestore) {
+  constructor(private auth: Auth, private firestore: Firestore, private firebaseService: FirebaseService) {
     this.uid$ = new BehaviorSubject<string | null>(null); // ✅ Muss BehaviorSubject sein
 
     onAuthStateChanged(this.auth, (user) => {
@@ -128,22 +128,39 @@ export class FirebaseAuthService {
   async logout(): Promise<void> {
     try {
       const currentUser = this.auth.currentUser;
-      
+  
       if (currentUser && currentUser.isAnonymous) {
-        // Falls der Benutzer ein Gast ist, löschen wir das Firestore-Dokument
+        // Firestore-Referenz des Gast-Users
         const userDocRef = doc(this.firestore, 'users', currentUser.uid);
-        await deleteDoc(userDocRef); // Löscht das Gast-Dokument aus Firestore
-        console.log('Gast-Daten wurden gelöscht.');
+        const userSnap = await getDoc(userDocRef);
+  
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+  
+          // 1️⃣ Lösche alle Accounts des Gast-Users
+          if (userData['accounts']) {
+            for (const accountId of userData['accounts']) {
+              await this.firebaseService.deleteAccount(accountId);
+            }
+            console.log('Alle Gast-Accounts wurden gelöscht.');
+          }
+  
+          // 2️⃣ Lösche das User-Dokument
+          await deleteDoc(userDocRef);
+          console.log('Gast-Daten wurden gelöscht.');
+        }
       }
-
-      // Abmelden
+  
+      // 3️⃣ Abmelden
       await signOut(this.auth);
       this.uid$.next(null);
+    
     } catch (error) {
       console.error('Fehler beim Abmelden:', error);
       throw error;
     }
   }
+  
 
   /**
    * Gibt den aktuellen Benutzer als Observable zurück.
