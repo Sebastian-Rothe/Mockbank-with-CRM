@@ -10,7 +10,8 @@ import { Router } from '@angular/router';
 import { FirebaseService } from '../../services/firebase.service';
 import { User } from '../../models/user.class';
 import { combineLatest } from 'rxjs';
-
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MatDrawerMode } from '@angular/material/sidenav';
 @Component({
   selector: 'app-main-content',
   standalone: true,
@@ -30,12 +31,30 @@ import { combineLatest } from 'rxjs';
 export class MainContentComponent implements OnInit{
     uid: string | null = null;
     user: User | null = null; // Benutzerdaten
+
+    drawerMode: MatDrawerMode = 'side'; // Standardmodus für große Screens
+    isDrawerOpened = true; // Standardmäßig offen für Desktop
   constructor(
     private authService: FirebaseAuthService,
     private router: Router,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private breakpointObserver: BreakpointObserver
   ) {}
   ngOnInit(): void {
+    // Bildschirmgröße überwachen
+    this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
+      if (result.matches) {
+        // Kleine Bildschirme (z. B. Smartphones)
+        this.drawerMode = 'over';
+        this.isDrawerOpened = false;
+      } else {
+        // Große Bildschirme (z. B. Desktop)
+        this.drawerMode = 'side';
+        this.isDrawerOpened = true;
+      }
+    });
+
+    // Benutzerinformationen laden
     combineLatest([this.authService.uid$, this.authService.user$]).subscribe(
       ([uid, user]) => {
         if (uid && user) {
@@ -46,6 +65,7 @@ export class MainContentComponent implements OnInit{
       }
     );
   }
+
   async calculateAndDistributeInterest(): Promise<void> {
     try {
       this.firebaseService.calculateAndDistributeInterest(this.user!)
@@ -57,7 +77,7 @@ export class MainContentComponent implements OnInit{
     try {
       await this.authService.logout();
       console.log('Erfolgreich ausgeloggt');
-      this.router.navigate(['/']); // Optional: Navigiere zur Login-Seite
+      // this.router.navigate(['/']); // Optional: Navigiere zur Login-Seite
     } catch (error) {
       console.error('Fehler beim Logout:', error);
     }

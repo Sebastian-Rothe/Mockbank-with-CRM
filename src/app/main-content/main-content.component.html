@@ -1,62 +1,65 @@
 <mat-drawer-container class="example-container" autosize>
-    <mat-drawer #drawer class="sidenav" [opened]="true" mode="side">
-      <div class="logo-container">
-        <mat-icon>account_balance</mat-icon><span>MockBank</span>
-      </div>
-      <ul>
-        <li routerLink="/main/dashboard" routerLinkActive="router-link-active">
-          <mat-icon>dashboard</mat-icon> Dashboard
-        </li>
-        @if(user?.role === 'user' || 'guest'){
-          <li routerLink="user/{{uid}}"><mat-icon>person</mat-icon>Profile</li>
-        }
-        <!-- @if(user?.role === 'admin'){ -->
-        <li routerLink="/main/user"><mat-icon>person</mat-icon> User</li>
-        <!-- } -->
-        @if(user?.role === 'admin'){
-        <li routerLink="/main/new-admin"><mat-icon>person_add</mat-icon> Create new Admin</li>
-        }
-        <li class="footer-items"> 
-          <a href="">Help Center</a>
-          <a href="">Contact</a>
-          <a href="">Privacy Policy</a>
-          <a routerLink="imprint">Imprint</a>
-        </li>
-        <li class="logout" (click)="logout()"><mat-icon>logout</mat-icon> Logout</li>
-      </ul>
-    </mat-drawer>
-  
-    <div class="example-sidenav-content">
-      <mat-toolbar>
-        <button
-          mat-icon-button
-          class="example-icon"
-          aria-label="Example icon-button with menu icon"
-          (click)="drawer.toggle()"
-        >
-          <mat-icon>menu</mat-icon>
-        </button>
-        <span>MockBank</span>
-        <span class="example-spacer"></span>
-        <button
-          mat-icon-button
-          class="example-icon favorite-icon"
-          aria-label="Example icon-button with heart icon"
-        >
-          <mat-icon>favorite</mat-icon>
-        </button>
-        <button
-          mat-icon-button
-          class="example-icon"
-          aria-label="Example icon-button with share icon"
-          (click)="share()"
-        >
-          <mat-icon>share</mat-icon>
-        </button>
-      </mat-toolbar>
-      <div class="router-container">
-        <router-outlet></router-outlet>
-      </div>
+  <mat-drawer
+    #drawer
+    class="sidenav"
+    [mode]="drawerMode"
+    [opened]="isDrawerOpened"
+  >
+    <div class="logo-container">
+      <mat-icon>account_balance</mat-icon><span>MockBank</span>
     </div>
-  </mat-drawer-container>
-  
+    <ul>
+      <li (click)="drawer.close()" routerLink="/main/dashboard" routerLinkActive="router-link-active">
+        <mat-icon>dashboard</mat-icon> Dashboard
+      </li>
+      @if(user?.role === 'user' || 'guest'){
+        <li (click)="drawer.close()" routerLink="user/{{uid}}">
+          <mat-icon>person</mat-icon>Profile
+        </li>
+      }
+      @if(user?.role === 'admin'){
+        <li (click)="drawer.close()" routerLink="/main/new-admin">
+          <mat-icon>person_add</mat-icon> Create new Admin
+        </li>
+      }
+      <li class="footer-items"> 
+        <a href="">Help Center</a>
+        <a href="">Contact</a>
+        <a href="">Privacy Policy</a>
+        <a routerLink="imprint">Imprint</a>
+      </li>
+      <li class="logout" (click)="logout()">
+        <mat-icon>logout</mat-icon> Logout
+      </li>
+    </ul>
+  </mat-drawer>
+
+  <div class="example-sidenav-content">
+    <mat-toolbar>
+      <button
+        mat-icon-button
+        class="example-icon"
+        aria-label="Toggle Sidebar"
+        (click)="drawer.toggle()"
+      >
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>MockBank</span>
+      <span class="example-spacer"></span>
+      <button mat-icon-button class="example-icon favorite-icon">
+        <mat-icon>favorite</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        class="example-icon"
+        aria-label="Share"
+        (click)="share()"
+      >
+        <mat-icon>share</mat-icon>
+      </button>
+    </mat-toolbar>
+    <div class="router-container">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</mat-drawer-container>
