@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -12,6 +12,7 @@ import { User } from '../../models/user.class';
 import { combineLatest } from 'rxjs';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDrawerMode } from '@angular/material/sidenav';
+
 @Component({
   selector: 'app-main-content',
   standalone: true,
@@ -28,30 +29,31 @@ import { MatDrawerMode } from '@angular/material/sidenav';
   templateUrl: './main-content.component.html',
   styleUrl: './main-content.component.scss',
 })
-export class MainContentComponent implements OnInit{
-    uid: string | null = null;
-    user: User | null = null; // Benutzerdaten
+export class MainContentComponent implements OnInit, AfterViewInit {
+  isDrawerOpened: boolean = true; // Lokale Variable für den Drawer-Status
+  drawerMode: MatDrawerMode = 'side'; // Standardmodus für große Screens
+  uid: string | null = null;
+  user: User | null = null;
 
-    drawerMode: MatDrawerMode = 'side'; // Standardmodus für große Screens
-    isDrawerOpened = true; // Standardmäßig offen für Desktop
   constructor(
     private authService: FirebaseAuthService,
     private router: Router,
     private firebaseService: FirebaseService,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private cdRef: ChangeDetectorRef
   ) {}
+
   ngOnInit(): void {
     // Bildschirmgröße überwachen
     this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
       if (result.matches) {
-        // Kleine Bildschirme (z. B. Smartphones)
         this.drawerMode = 'over';
-        this.isDrawerOpened = false;
+        this.isDrawerOpened = false; // Drawer schließen auf kleinen Bildschirmen
       } else {
-        // Große Bildschirme (z. B. Desktop)
         this.drawerMode = 'side';
-        this.isDrawerOpened = true;
+        this.isDrawerOpened = true; // Drawer öffnen auf großen Bildschirmen
       }
+      this.cdRef.detectChanges();
     });
 
     // Benutzerinformationen laden
@@ -66,18 +68,34 @@ export class MainContentComponent implements OnInit{
     );
   }
 
+  ngAfterViewInit(): void {
+      this.cdRef.detectChanges();
+  }
+
+  // Ereignisbehandler, wenn der Drawer geöffnet wird
+  onDrawerOpened(): void {
+    this.isDrawerOpened = true;
+  }
+
+  // Ereignisbehandler, wenn der Drawer geschlossen wird
+  onDrawerClosed(): void {
+    this.isDrawerOpened = false;
+  }
+
+  // Berechnung und Verteilung der Zinsen
   async calculateAndDistributeInterest(): Promise<void> {
     try {
-      this.firebaseService.calculateAndDistributeInterest(this.user!)
+      this.firebaseService.calculateAndDistributeInterest(this.user!);
     } catch (error) {
       console.error('Error with interest:', error);
     }
   }
+
+  // Logout-Logik
   async logout(): Promise<void> {
     try {
       await this.authService.logout();
       console.log('Erfolgreich ausgeloggt');
-      // this.router.navigate(['/']); // Optional: Navigiere zur Login-Seite
     } catch (error) {
       console.error('Fehler beim Logout:', error);
     }
@@ -85,16 +103,14 @@ export class MainContentComponent implements OnInit{
 
   share() {
     if (navigator.share) {
-      // Web Share API - funktioniert auf mobilen Geräten und einigen Desktop-Browsern
       navigator.share({
         title: 'My Awesome Content',
         text: 'Check out this amazing content!',
-        url: window.location.href, // URL der aktuellen Seite
+        url: window.location.href,
       })
       .then(() => console.log('Content shared successfully'))
       .catch((error) => console.error('Error sharing content:', error));
     } else {
-      // Fallback - Social Media Links für Sharing (z.B. Facebook, Twitter)
       this.shareOnSocialMedia();
     }
   }
@@ -104,12 +120,8 @@ export class MainContentComponent implements OnInit{
     const text = 'Check out this amazing content!';
     const title = 'My Awesome Content';
 
-    // Beispiel für das Teilen auf Facebook
     window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(text)}`, '_blank');
-    
-    // Beispiel für das Teilen auf Twitter
     window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}&via=yourtwitterhandle`, '_blank');
-  
     window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(text)}`, '_blank');
   }
 }

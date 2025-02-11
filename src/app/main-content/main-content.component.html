@@ -3,7 +3,7 @@
     #drawer
     class="sidenav"
     [mode]="drawerMode"
-    [opened]="isDrawerOpened"
+    (opened)="onDrawerOpened()" (closed)="onDrawerClosed()"
   >
     <div class="logo-container">
       <mat-icon>account_balance</mat-icon><span>MockBank</span>
@@ -44,7 +44,12 @@
       >
         <mat-icon>menu</mat-icon>
       </button>
-      <span>MockBank</span>
+      @if(!isDrawerOpened){
+        <div class="logo-container" style="padding: 0;">
+          <mat-icon>account_balance</mat-icon><span>MockBank</span>
+        </div>
+      }
+     
       <span class="example-spacer"></span>
       <button mat-icon-button class="example-icon favorite-icon">
         <mat-icon>favorite</mat-icon>
