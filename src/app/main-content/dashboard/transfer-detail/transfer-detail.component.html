@@ -24,17 +24,23 @@
     <div class="transfer-detail">
       <p><strong>Category: </strong>{{ data.category }}</p>
       <p><strong>Sender:</strong> {{ senderName$ | async }}</p>
-      @if(data.senderAccountName){
+
+      @if(data.senderAccountId !== 'ACC-1738235430074-182'){ @if
+      (data.senderAccountName) {
       <p><strong>Sender Account Name:</strong> {{ data.senderAccountName }}</p>
+
       } @else {
       <p><strong>Sender Account ID:</strong> {{ data.senderAccountId }}</p>
-      }
+      } }
+
       <p><strong>Receiver:</strong> {{ receiverName$ | async }}</p>
-      @if(data.receiverAccountName){
+      @if(data.receiverAccountName && data.receiverAccountId ===
+      'ACC-1738235430074-182' ){ }@else if (data.receiverAccountName) {
       <p>
         <strong>Receiver Account Name:</strong> {{ data.receiverAccountName }}
       </p>
-      }@else {
+
+      } @else {
       <p><strong>Receiver Account ID:</strong> {{ data.receiverAccountId }}</p>
       }
       <p><strong>Amount: </strong> {{ getFormattedCurrency(data.amount) }}</p>

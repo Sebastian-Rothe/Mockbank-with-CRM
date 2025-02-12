@@ -176,14 +176,14 @@ export class FirebaseAuthService {
   /**
    * Gibt den aktuellen Benutzer als Observable zurück.
    */
-  getCurrentUser(): Observable<User | null> {
-    return new Observable((observer) => {
-      const unsubscribe = onAuthStateChanged(this.auth, (user) => {
-        observer.next(user);
-      });
-      return { unsubscribe };
-    });
-  }
+  // getCurrentUser(): Observable<User | null> {
+  //   return new Observable((observer) => {
+  //     const unsubscribe = onAuthStateChanged(this.auth, (user) => {
+  //       observer.next(user);
+  //     });
+  //     return { unsubscribe };
+  //   });
+  // }
 
   /**
    * Gibt die aktuelle UID synchron zurück.

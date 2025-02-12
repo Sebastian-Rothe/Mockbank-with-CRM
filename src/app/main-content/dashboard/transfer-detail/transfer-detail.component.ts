@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatButtonModule } from '@angular/material/button';
-import { Observable, map } from 'rxjs';
+import { Observable, map, from } from 'rxjs';
 import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
 import { CommonModule } from '@angular/common';
 @Component({
@@ -50,22 +50,11 @@ export class TransferDetailComponent {
     this.uid$ = this.authService.uid$; // ✅ UID aus dem AuthService holen
 
     // ✅ Direkt die Namen als Observables berechnen:
-    this.senderName$ = this.authService.user$.pipe(
-      map((user) => {
-        if (user && user.uid === this.transfer.senderUserId) {
-          return `${user.firstName} ${user.lastName}`;
-        }
-        return 'Unbekannt';
-      })
+    this.senderName$ = from(this.firebaseService.getUser(this.data.senderUserId)).pipe(
+      map((user) => user ? `${user.firstName} ${user.lastName}` : 'Unbekannt')
     );
-
-    this.receiverName$ = this.authService.user$.pipe(
-      map((user) => {
-        if (user && user.uid === this.transfer.receiverUserId) {
-          return `${user.firstName} ${user.lastName}`;
-        }
-        return 'Unbekannt';
-      })
+    this.receiverName$ = from(this.firebaseService.getUser(this.data.receiverUserId)).pipe(
+      map((user) => user ? `${user.firstName} ${user.lastName}` : 'Unbekannt')
     );
   }
   getFormattedDate(transferDate: number): string {
