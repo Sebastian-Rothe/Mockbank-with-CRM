@@ -51,75 +51,65 @@ export class FirebaseService {
         (doc) => new Transfer(doc.data() as Transfer)
       );
     } catch (error) {
-      console.error('Fehler beim Abrufen aller Transfers:', error);
+      console.error('Error when calling up all transfers:', error);
       throw error;
     }
   }
 
-  //  /**
-  //  * Fügt einen neuen Benutzer zur Firestore-Datenbank hinzu.
-  //  * @param user Der Benutzer, der hinzugefügt werden soll.
-  //  * @returns Promise mit dem Ergebnis der Operation.
-  //  */
-  //  async addUser(user: User): Promise<void> {
-  //   const userData = user.toPlainObject();
-
-  //   // Entferne undefined-Werte
-  //   Object.keys(userData).forEach((key) => {
-  //     if (userData[key] === undefined) {
-  //       delete userData[key];
-  //     }
-  //   });
-
-  //   // Dokument mit der UID als ID erstellen
-  //   const userDocRef = doc(this.userCollection, user.uid);
-  //   await setDoc(userDocRef, userData);
-  // }
-
-  /**
-   * Fügt einen Benutzer mit einem zugehörigen Account hinzu.
-   * @param user Der Benutzer, der hinzugefügt werden soll.
-   * @param initialBalance Startguthaben für den Account.
-   * @returns Promise mit dem Ergebnis der Operation.
-   */
+// new code addUserWithAccount
   async addUserWithAccount(user: User): Promise<void> {
     try {
-      // Schritt 1: Benutzer-Daten vorbereiten
-      const userData = user.toPlainObject();
-      Object.keys(userData).forEach((key) => {
-        if (userData[key] === undefined) {
-          delete userData[key];
-        }
-      });
-
-      // Schritt 2: Benutzer-Dokument erstellen
-      const userDocRef = doc(this.userCollection, user.uid);
-      await setDoc(userDocRef, { ...userData, accounts: [] }); // Initialisiere accounts als leeres Array
-
-      // Schritt 3: Account erstellen
-      const accountId = `ACC-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-      const accountData = {
-        accountId,
-        userId: user.uid,
-        fullname: `${user.firstName} ${user.lastName}`, // Vollständiger Name des Benutzers
-        balance: 1000,
-        currency: 'EUR',
-        createdAt: Date.now(),
-      };
-      const accountDocRef = doc(this.accountCollection, accountId);
-      await setDoc(accountDocRef, accountData);
-
-      // Schritt 4: Account-ID zum Benutzer-Dokument hinzufügen
-      await updateDoc(userDocRef, {
-        accounts: [accountId], // Füge die Account-ID ins Array hinzu
-      });
-
+      const userData = this.cleanUserData(user);
+      if (!user.uid) {
+        throw new Error('User ID is undefined');
+      }
+      const userDocRef = await this.createUserDoc(user.uid, userData);
+      const accountId = await this.createAccountDoc(user);
+      await this.updateUserAccounts(userDocRef, accountId);
       console.log('User and account created successfully!');
     } catch (error) {
       console.error('Error creating user and account:', error);
-      throw error; // Fehler weitergeben
+      throw error;
     }
   }
+  
+  cleanUserData(user: User): any {
+    const data = user.toPlainObject();
+    Object.keys(data).forEach(key => {
+      if (data[key] === undefined) delete data[key];
+    });
+    return data;
+  }
+  
+  async createUserDoc(uid: string, data: any): Promise<DocumentReference> {
+    const userDocRef = doc(this.userCollection, uid);
+    await setDoc(userDocRef, { ...data, accounts: [] });
+    return userDocRef;
+  }
+  
+  async createAccountDoc(user: User): Promise<string> {
+    const accountId = `ACC-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+    const accountData = {
+      accountId,
+      userId: user.uid,
+      fullname: `${user.firstName} ${user.lastName}`,
+      balance: 1000,
+      currency: 'EUR',
+      createdAt: Date.now(),
+    };
+    const accountDocRef = doc(this.accountCollection, accountId);
+    await setDoc(accountDocRef, accountData);
+    return accountId;
+  }
+  
+  async updateUserAccounts(
+    userDocRef: DocumentReference,
+    accountId: string
+  ): Promise<void> {
+    await updateDoc(userDocRef, { accounts: [accountId] });
+  }
+ // End of new code addUserWithAccount -------------------------
+//  ----------------------------
 
   async getUser(userId: string): Promise<User | null> {
     try {
