@@ -36,7 +36,7 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './dialog-edit-user-detail.component.scss',
 })
 export class DialogEditUserDetailComponent {
-  uid: string = ''; // oder von einem Dienst setzen
+  // uid: string = ''; // oder von einem Dienst setzen
 
   user = new User();
   birthDate: Date = new Date();

@@ -31,7 +31,7 @@ import { MatIcon } from '@angular/material/icon';
     MatDatepickerModule,
     MatButtonModule,
     FormsModule,
-    MatIcon
+    MatIcon,
   ],
   templateUrl: './dialog-send-money.component.html',
   styleUrl: './dialog-send-money.component.scss',
@@ -45,7 +45,6 @@ export class DialogSendMoneyComponent {
   totalBalance: number = 0;
   selectedUser: string | null = null;
   senderAccountId: string;
-  uid$ = this.authService.uid$;
   categories: string[] = [
     'Groceries',
     'Rent',
@@ -80,21 +79,17 @@ export class DialogSendMoneyComponent {
   }
 
   ngOnInit(): void {
-    this.authService.uid$
-     
-      .subscribe((uid) => {
-        console.log('Aktuelle UID:', uid);
-        if (uid) {
-          this.uid = uid;
-          this.loadUser(uid);
-        }
-      });
+    this.uid = this.authService.getUid();
+
+    if (this.uid) {
+      this.loadUser(this.uid);
+    }
   }
-    // if (this.users.length > 0) {
-    //   this.selectedUser = this.users.find(user => user.uid === this.uid) || null;
-    //   console.log('Selected user on init:', this.selectedUser);
-    // }
-  
+
+  // if (this.users.length > 0) {
+  //   this.selectedUser = this.users.find(user => user.uid === this.uid) || null;
+  //   console.log('Selected user on init:', this.selectedUser);
+  // }
 
   async loadUser(uid: string): Promise<void> {
     try {
