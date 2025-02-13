@@ -35,9 +35,8 @@ export class TransferDetailComponent {
   bankAccountId: string = 'ACC-1738235430074-182';
 
   uid$: Observable<string | null>; // ✅ UID als Observable
-  senderName$: Observable<string>; // ✅ Sender als Observable
-  receiverName$: Observable<string>; // ✅ Empfänger als Observable
-
+  senderName: string = 'loading...';  // Direkt als String speichern
+  receiverName: string = 'loading...'; 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Transfer,
     public dialogRef: MatDialogRef<TransferDetailComponent>,
@@ -49,13 +48,21 @@ export class TransferDetailComponent {
     this.transfer = data;
     this.uid$ = this.authService.uid$; // ✅ UID aus dem AuthService holen
 
-    // ✅ Direkt die Namen als Observables berechnen:
-    this.senderName$ = from(this.firebaseService.getUser(this.data.senderUserId)).pipe(
-      map((user) => user ? `${user.firstName} ${user.lastName}` : 'Unbekannt')
-    );
-    this.receiverName$ = from(this.firebaseService.getUser(this.data.receiverUserId)).pipe(
-      map((user) => user ? `${user.firstName} ${user.lastName}` : 'Unbekannt')
-    );
+  }
+  async ngOnInit() {
+    if (this.data.senderUserId) {
+      const sender = await this.firebaseService.getUser(this.data.senderUserId);
+      this.senderName = sender ? `${sender.firstName} ${sender.lastName}` : 'Unbekannt';
+    } else {
+      this.senderName = 'Unbekannt';
+    }
+
+    if (this.data.receiverUserId) {
+      const receiver = await this.firebaseService.getUser(this.data.receiverUserId);
+      this.receiverName = receiver ? `${receiver.firstName} ${receiver.lastName}` : 'Unbekannt';
+    } else {
+      this.receiverName = 'Unbekannt';
+    }
   }
   getFormattedDate(transferDate: number): string {
     return this.sharedService.formatTimestampToDetailedDate(transferDate);

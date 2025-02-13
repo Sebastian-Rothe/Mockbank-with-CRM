@@ -23,7 +23,7 @@
   <mat-dialog-content>
     <div class="transfer-detail">
       <p><strong>Category: </strong>{{ data.category }}</p>
-      <p><strong>Sender:</strong> {{ senderName$ | async }}</p>
+      <p><strong>Sender:</strong> {{ senderName }}</p>
 
       @if(data.senderAccountId !== 'ACC-1738235430074-182'){ @if
       (data.senderAccountName) {
@@ -33,7 +33,7 @@
       <p><strong>Sender Account ID:</strong> {{ data.senderAccountId }}</p>
       } }
 
-      <p><strong>Receiver:</strong> {{ receiverName$ | async }}</p>
+      <p><strong>Receiver:</strong> {{ receiverName }}</p>
       @if(data.receiverAccountName && data.receiverAccountId ===
       'ACC-1738235430074-182' ){ }@else if (data.receiverAccountName) {
       <p>
