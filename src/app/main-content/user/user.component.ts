@@ -25,13 +25,13 @@ import { FirebaseService } from '../../../services/firebase.service';
 })
 export class UserComponent {
   user: User = new User();
-  user$: Observable<User[]>;
+  users$: Observable<User[]>;
 
   constructor(
     public dialog: MatDialog,
     private firebaseService: FirebaseService
   ) {
-    this.user$ = this.firebaseService.getUsers();
+    this.users$ = this.firebaseService.getUsers();
   }
 
   // openDialog() {

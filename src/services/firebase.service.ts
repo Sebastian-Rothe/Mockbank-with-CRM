@@ -16,6 +16,7 @@ import {
   deleteDoc,
   getDocs,
   getDoc,
+  increment
 } from '@angular/fire/firestore';
 // Models
 import { User } from '../models/user.class';
@@ -111,33 +112,44 @@ export class FirebaseService {
  // End of new code addUserWithAccount -------------------------
 //  ----------------------------
 
-  async getUser(userId: string): Promise<User | null> {
-    try {
-      // Zugriff auf das spezifische Dokument in der "users"-Sammlung
-      const userDocRef = doc(this.firestore, 'users', userId);
-      const userDocSnap = await getDoc(userDocRef);
+/**
+ * Retrieves a user by their ID.
+ *
+ * @param userId - The ID of the user to retrieve.
+ * @returns A promise that resolves to a User instance if found, or null otherwise.
+ */
+async getUser(userId: string): Promise<User | null> {
+  try {
+    // Reference the specific document in the "users" collection
+    const userDocRef = doc(this.firestore, 'users', userId);
+    const userDocSnap = await getDoc(userDocRef);
 
-      console.log(
-        'getUser - userDocSnap:',
-        userDocSnap.exists(),
-        userDocSnap.data()
-      );
-      // Prüfen, ob das Dokument existiert
-      if (userDocSnap.exists()) {
-        // Wenn das Dokument existiert, gebe es als User-Objekt zurück und setze die ID
-        const userData = userDocSnap.data();
-        const user = new User(userData);
-        user.uid = userDocSnap.id; // Hier wird die ID hinzugefügt
-        return user;
-      } else {
-        console.log('No such user!');
-        return null;
-      }
-    } catch (error) {
-      console.error('Error getting user:', error);
+    if (!userDocSnap.exists()) {
+      console.log('No such user!');
       return null;
     }
+
+    // console.log('getUser - userDocSnap exists:', userDocSnap.exists(), userDocSnap.data());
+    return this.createUserFromSnapshot(userDocSnap);
+  } catch (error) {
+    console.error('Error getting user:', error);
+    return null;
   }
+}
+
+/**
+ * Creates a User instance from a Firestore document snapshot.
+ *
+ * @param userDocSnap - The Firestore document snapshot containing user data.
+ * @returns A User instance with the UID set.
+ */
+private createUserFromSnapshot(userDocSnap: any): User {
+  const userData = userDocSnap.data();
+  const user = new User(userData);
+  user.uid = userDocSnap.id;
+  return user;
+}
+
 
   /**
    * Ruft alle Transfers ab, die mit einem bestimmten Benutzer verknüpft sind (für alle Accounts)
@@ -163,153 +175,270 @@ export class FirebaseService {
     }
   }
 
-  /**
-   * Ruft die Transfers für einen bestimmten Account ab
-   * @param accountId Die ID des Accounts
-   * @returns Eine Liste von Transfers, die mit diesem Account in Verbindung stehen
-   */
-  private async getTransfersForAccount(accountId: string): Promise<Transfer[]> {
-    const senderQuery = query(
-      collection(this.firestore, 'transfers'),
-      where('senderAccountId', '==', accountId)
+/**
+ * Retrieves transfers associated with a specific account.
+ *
+ * This method fetches transfers where the account is either the sender or the receiver.
+ *
+ * @param accountId - The ID of the account.
+ * @returns A promise that resolves to an array of Transfer instances.
+ */
+async getTransfersForAccount(accountId: string): Promise<Transfer[]> {
+  // Create queries for transfers where the account is the sender or receiver.
+  const senderQuery = this.createTransfersQuery('senderAccountId', accountId);
+  const receiverQuery = this.createTransfersQuery('receiverAccountId', accountId);
+
+  // Fetch transfers concurrently for both queries.
+  const [senderTransfers, receiverTransfers] = await Promise.all([
+    this.fetchTransfers(senderQuery),
+    this.fetchTransfers(receiverQuery),
+  ]);
+
+  // Combine the results and return them.
+  return [...senderTransfers, ...receiverTransfers];
+}
+
+/**
+ * Creates a Firestore query for transfers based on a specific field.
+ *
+ * @param field - The field to filter by (e.g. 'senderAccountId' or 'receiverAccountId').
+ * @param value - The value to match for the specified field.
+ * @returns A Firestore query instance.
+ */
+createTransfersQuery(field: string, value: string) {
+  return query(collection(this.firestore, 'transfers'), where(field, '==', value));
+}
+
+/**
+ * Executes the provided Firestore query and maps the results to Transfer instances.
+ *
+ * @param transfersQuery - The Firestore query for transfers.
+ * @returns A promise that resolves to an array of Transfer instances.
+ */
+async fetchTransfers(transfersQuery: any): Promise<Transfer[]> {
+  const snapshot = await getDocs(transfersQuery);
+  return snapshot.docs.map((doc) => this.createTransferFromDoc(doc));
+}
+
+/**
+ * Creates a Transfer instance from a Firestore document snapshot.
+ *
+ * @param doc - A Firestore document snapshot containing transfer data.
+ * @returns A new Transfer instance.
+ */
+createTransferFromDoc(doc: any): Transfer {
+  const transferData = doc.data();
+  return new Transfer(transferData);
+}
+
+
+/**
+ * Transfers funds from one account to another, applying transaction fees where necessary.
+ *
+ * @param senderAccountId - ID of the sender's account.
+ * @param receiverAccountId - ID of the receiver's account.
+ * @param amount - Amount to transfer.
+ * @param description - Optional description of the transfer.
+ * @param category - Optional category for the transfer.
+ * @throws Error if any issue occurs during the transfer process.
+ */
+async transferFunds(
+  senderAccountId: string,
+  receiverAccountId: string,
+  amount: number,
+  description?: string,
+  category?: string
+): Promise<void> {
+  try {
+    const [senderData, receiverData] = await this.getAccounts(
+      senderAccountId,
+      receiverAccountId
     );
+    const bankData = await this.getBankData();
+    const transactionFee = bankData['transactionFee'];
+    const bankAccountId = 'ACC-1738235430074-182';
 
-    const receiverQuery = query(
-      collection(this.firestore, 'transfers'),
-      where('receiverAccountId', '==', accountId)
+    const { feeAmount, isBankTransfer } = this.calculateFee(
+      senderData,
+      receiverData,
+      senderAccountId,
+      receiverAccountId,
+      bankAccountId,
+      transactionFee
     );
+    // console.log(isBankTransfer); sollten wir den wert an anderer stelle noch brauchen lassen wir ihn vorerst hier!
+    
 
-    const senderDocs = await getDocs(senderQuery);
-    const receiverDocs = await getDocs(receiverQuery);
-
-    const transfers: Transfer[] = [];
-
-    senderDocs.forEach((doc) => {
-      const transferData = doc.data();
-      const transfer = new Transfer(transferData);
-      transfers.push(transfer);
-    });
-
-    receiverDocs.forEach((doc) => {
-      const transferData = doc.data();
-      const transfer = new Transfer(transferData);
-      transfers.push(transfer);
-    });
-
-    return transfers;
-  }
-
-  async transferFunds(
-    senderAccountId: string,
-    receiverAccountId: string,
-    amount: number,
-    description?: string,
-    category?: string
-  ): Promise<void> {
-    try {
-      const senderDocRef = doc(this.accountCollection, senderAccountId);
-      const receiverDocRef = doc(this.accountCollection, receiverAccountId);
-
-      const senderSnap = await getDoc(senderDocRef);
-      const receiverSnap = await getDoc(receiverDocRef);
-
-      if (!senderSnap.exists() || !receiverSnap.exists()) {
-        throw new Error('Sender or receiver account not found.');
-      }
-
-      const senderData = Account.fromJson(senderSnap.data());
-      const receiverData = Account.fromJson(receiverSnap.data());
-
-      if (senderData.balance < amount) {
-        throw new Error('Insufficient funds.');
-      }
-
-      const bankDocRef = doc(this.firestore, 'bank', 'mainBank');
-      const bankSnap = await getDoc(bankDocRef);
-      if (!bankSnap.exists()) {
-        throw new Error('Bank data not found.');
-      }
-
-      const bankData = bankSnap.data();
-      const transactionFee = bankData['transactionFee'];
-      const bankAccountId = 'ACC-1738235430074-182';
-
-      // Prüfen, ob die Bank involviert ist
-      const isBankTransfer =
-        senderAccountId === bankAccountId ||
-        receiverAccountId === bankAccountId;
-      const isInternalTransfer = senderData.userId === receiverData.userId;
-
-      // Gebührenberechnung
-      let feeAmount = 0;
-      if (!isBankTransfer) {
-        feeAmount = isInternalTransfer ? transactionFee * 0.1 : transactionFee; // 10% für interne Transfers, volle Gebühr für externe
-      }
-
-      // Prüfen, ob Sender genug Geld für Transfer + Gebühr hat
-      if (senderData.balance < amount + feeAmount) {
-        throw new Error('Insufficient funds for transfer and fee.');
-      }
-
-      // Haupt-Transfer erstellen
-      const transfer = new Transfer({
-        senderAccountId,
-        senderAccountName: senderData.accountName,
-        senderUserId: senderData.userId,
-        receiverAccountId,
-        receiverAccountName: receiverData.accountName,
-        receiverUserId: receiverData.userId,
-        amount,
-        description: description, // ... feeAmount > 0 ? `${description} (Fee: ${feeAmount})` :  lass ich erst mal weg
-        category,
-      });
-
-      const transferDocRef = doc(
-        collection(this.firestore, 'transfers'),
-        transfer.transferId
-      );
-      await setDoc(transferDocRef, transfer.toPlainObject());
-
-      // Gebührentransfer zur Bank erstellen, falls nötig
-      if (feeAmount > 0) {
-        const bankTransfer = new Transfer({
-          senderAccountId,
-          senderAccountName: senderData.accountName,
-          senderUserId: senderData.userId,
-          receiverAccountId: bankAccountId,
-          receiverAccountName: 'Main Bank',
-          receiverUserId: 'yBr3oAoV5HOBEHBxmTEcFwmR06H2',
-          amount: feeAmount,
-          description: `Transaction Fee for Transfer ${transfer.transferId}`,
-          category: 'Fee',
-        });
-
-        const bankTransferDocRef = doc(
-          collection(this.firestore, 'transfers'),
-          bankTransfer.transferId
-        );
-        await setDoc(bankTransferDocRef, bankTransfer.toPlainObject());
-
-        // Bank-Konto aktualisieren
-        await updateDoc(bankDocRef, {
-          totalBalance: (bankData?.['totalBalance'] || 0) + feeAmount,
-        });
-      }
-
-      // Kontostände aktualisieren
-      await updateDoc(senderDocRef, {
-        balance: senderData.balance - amount - feeAmount,
-      });
-      await updateDoc(receiverDocRef, {
-        balance: receiverData.balance + amount,
-      });
-
-      console.log('Transfer completed successfully!');
-    } catch (error) {
-      console.error('Error processing transfer:', error);
-      throw error;
+    if (senderData.balance < amount + feeAmount) {
+      throw new Error('Insufficient funds for transfer and fee.');
     }
+
+    await this.processTransfer(
+      senderData,
+      receiverData,
+      amount,
+      description,
+      category,
+      feeAmount,
+      bankAccountId,
+      bankData
+    );
+
+    console.log('Transfer completed successfully!');
+  } catch (error) {
+    console.error('Error processing transfer:', error);
+    throw error;
   }
+}
+
+/**
+ * Retrieves sender and receiver account data from Firestore.
+ */
+async getAccounts(
+  senderAccountId: string,
+  receiverAccountId: string
+): Promise<[Account, Account]> {
+  const senderSnap = await getDoc(doc(this.accountCollection, senderAccountId));
+  const receiverSnap = await getDoc(
+    doc(this.accountCollection, receiverAccountId)
+  );
+
+  if (!senderSnap.exists() || !receiverSnap.exists()) {
+    throw new Error('Sender or receiver account not found.');
+  }
+
+  return [
+    Account.fromJson(senderSnap.data()),
+    Account.fromJson(receiverSnap.data()),
+  ];
+}
+
+/**
+ * Retrieves bank data from Firestore.
+ */
+async getBankData(): Promise<any> {
+  const bankDocRef = doc(this.firestore, 'bank', 'mainBank');
+  const bankSnap = await getDoc(bankDocRef);
+
+  if (!bankSnap.exists()) {
+    throw new Error('Bank data not found.');
+  }
+
+  return bankSnap.data();
+}
+
+/**
+ * Calculates the transaction fee based on transfer type.
+ */
+private calculateFee(
+  senderData: Account,
+  receiverData: Account,
+  senderAccountId: string,
+  receiverAccountId: string,
+  bankAccountId: string,
+  transactionFee: number
+) {
+  const isBankTransfer =
+    senderAccountId === bankAccountId || receiverAccountId === bankAccountId;
+  const isInternalTransfer = senderData.userId === receiverData.userId;
+
+  const feeAmount = isBankTransfer
+    ? 0
+    : isInternalTransfer
+    ? transactionFee * 0.1
+    : transactionFee;
+
+  return { feeAmount, isBankTransfer };
+}
+
+/**
+ * Handles the transfer process, including updating accounts and processing fees.
+ */
+async processTransfer(
+  senderData: Account,
+  receiverData: Account,
+  amount: number,
+  description: string | undefined,
+  category: string | undefined,
+  feeAmount: number,
+  bankAccountId: string,
+  bankData: any
+) {
+  // Transfer erstellen
+  const transfer = new Transfer({
+    senderAccountId: senderData.accountId,
+    senderAccountName: senderData.accountName,
+    senderUserId: senderData.userId,
+    receiverAccountId: receiverData.accountId,
+    receiverAccountName: receiverData.accountName,
+    receiverUserId: receiverData.userId,
+    amount,
+    description,
+    category,
+  });
+
+  await setDoc(
+    doc(collection(this.firestore, 'transfers'), transfer.transferId),
+    transfer.toPlainObject()
+  );
+
+  // Falls eine Gebühr anfällt, separaten Transfer zur Bank durchführen
+  if (feeAmount > 0) {
+    await this.processFeeTransfer(senderData, feeAmount, bankAccountId);
+    // await this.updateBankBalance(bankData, feeAmount);
+  }
+
+  // Kontostände aktualisieren
+  await this.updateAccountBalance(senderData.accountId, -amount - feeAmount);
+  await this.updateAccountBalance(receiverData.accountId, amount);
+}
+
+/**
+ * Processes a separate transaction for the transaction fee.
+ */
+async processFeeTransfer(
+  senderData: Account,
+  feeAmount: number,
+  bankAccountId: string
+) {
+  const bankTransfer = new Transfer({
+    senderAccountId: senderData.accountId,
+    senderAccountName: senderData.accountName,
+    senderUserId: senderData.userId,
+    receiverAccountId: bankAccountId,
+    receiverAccountName: 'Main Bank',
+    receiverUserId: 'yBr3oAoV5HOBEHBxmTEcFwmR06H2',
+    amount: feeAmount,
+    description: `Transaction Fee`,
+    category: 'Fee',
+  });
+
+  await setDoc(
+    doc(collection(this.firestore, 'transfers'), bankTransfer.transferId),
+    bankTransfer.toPlainObject()
+  );
+}
+
+/**
+ * Updates the total balance of the bank.
+ */
+// async updateBankBalance(bankData: any, feeAmount: number) {
+//   const bankDocRef = doc(this.firestore, 'bank', 'mainBank');
+//   await updateDoc(bankDocRef, {
+//     totalBalance: (bankData?.['totalBalance'] || 0) + feeAmount,
+//   });
+// }
+
+/**
+ * Updates the balance of a specific account.
+ */
+private async updateAccountBalance(accountId: string, amountChange: number) {
+  const accountDocRef = doc(this.accountCollection, accountId);
+  await updateDoc(accountDocRef, {
+    balance: increment(amountChange),
+  });
+}
+
 
   async deleteTransfer(transferId: string): Promise<void> {
     try {

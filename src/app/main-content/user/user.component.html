@@ -9,7 +9,7 @@
         <td>zipCode</td>
         <td>city</td>
       </tr>
-      @for(user of (user$ | async ); track $index){
+      @for(user of (users$ | async ); track $index){
         
       <tr routerLink="{{ user.uid }}">
         <td>{{ user.firstName }}</td>
