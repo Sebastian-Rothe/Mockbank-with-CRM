@@ -1,17 +1,20 @@
 import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { RouterLink, RouterOutlet, Router } from '@angular/router';
+import { combineLatest } from 'rxjs';
+// Material
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDrawer, MatDrawerContainer } from '@angular/material/sidenav';
-import { FirebaseAuthService } from '../../services/firebase-auth.service';
-import { Router } from '@angular/router';
-import { FirebaseService } from '../../services/firebase.service';
-import { User } from '../../models/user.class';
-import { combineLatest } from 'rxjs';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDrawerMode } from '@angular/material/sidenav';
+// Models
+import { User } from '../../models/user.class';
+// Services
+import { FirebaseAuthService } from '../../services/firebase-auth.service';
+import { FirebaseService } from '../../services/firebase.service';
+import { BankService } from '../../services/bank.service';
 
 @Component({
   selector: 'app-main-content',
@@ -40,7 +43,8 @@ export class MainContentComponent implements OnInit, AfterViewInit {
     private router: Router,
     private firebaseService: FirebaseService,
     private breakpointObserver: BreakpointObserver,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private bankService: BankService
   ) {}
 
   ngOnInit(): void {
@@ -85,7 +89,7 @@ export class MainContentComponent implements OnInit, AfterViewInit {
   // Berechnung und Verteilung der Zinsen
   async calculateAndDistributeInterest(): Promise<void> {
     try {
-      this.firebaseService.calculateAndDistributeInterest(this.user!);
+      this.bankService.calculateAndDistributeInterest(this.user!);
     } catch (error) {
       console.error('Error with interest:', error);
     }
