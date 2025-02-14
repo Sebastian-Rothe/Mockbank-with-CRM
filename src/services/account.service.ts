@@ -1,38 +1,33 @@
 import { Injectable, inject } from '@angular/core';
 import {
   Firestore,
-  DocumentReference,
-  DocumentData,
   collection,
-  query,
-  where,
-  collectionData,
-  addDoc,
   arrayRemove,
   doc,
   setDoc,
   updateDoc,
   deleteDoc,
-  getDocs,
   getDoc,
-  increment
 } from '@angular/fire/firestore';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
   firestore: Firestore = inject(Firestore);
 
-  private userCollection = collection(this.firestore, 'users');
   private accountCollection = collection(this.firestore, 'accounts');
 
   constructor() { }
 
-
-
+  /**
+   * Retrieves an account document from the 'accounts' collection by its ID.
+   * @param {string} accountId - The account ID.
+   * @returns {Promise<any>} A promise that resolves with the account data.
+   * @throws {Error} If the account is not found or an error occurs.
+   */
   async getAccount(accountId: string): Promise<any> {
     try {
-      // Zugriff auf das Account-Dokument in der "accounts"-Sammlung
       const accountDocRef = doc(this.firestore, 'accounts', accountId);
       const accountSnap = await getDoc(accountDocRef);
 
@@ -51,7 +46,7 @@ export class AccountService {
    * Generates a unique account ID.
    * @returns {string} A unique account identifier.
    */
-  private generateAccountId(): string {
+  generateAccountId(): string {
     return `ACC-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
   }
 
@@ -62,7 +57,7 @@ export class AccountService {
    * @param {string} accountId - The generated account ID.
    * @returns {Record<string, any>} The account data.
    */
-  private createAccountData(
+  createAccountData(
     userId: string,
     details: { accountName: string; balance: number; currency: string },
     accountId: string
@@ -83,7 +78,7 @@ export class AccountService {
    * @param {Record<string, any>} accountData - The account data.
    * @returns {Promise<void>} A promise that resolves when the account is added.
    */
-  private async addAccountToFirestore(
+  async addAccountToFirestore(
     accountId: string,
     accountData: Record<string, any>
   ): Promise<void> {
@@ -96,8 +91,9 @@ export class AccountService {
    * @param {string} userId - The user ID.
    * @param {string} accountId - The new account ID.
    * @returns {Promise<void>} A promise that resolves when the user document is updated.
+   * @throws {Error} If the user is not found.
    */
-  private async updateUserAccounts(
+  async updateUserAccounts(
     userId: string,
     accountId: string
   ): Promise<void> {
@@ -133,7 +129,12 @@ export class AccountService {
     }
   }
 
-
+  /**
+   * Updates an account's data in Firestore.
+   * @param {string} accountId - The account ID.
+   * @param {any} accountData - The data to update for the account.
+   * @returns {Promise<void>} A promise that resolves when the update is complete.
+   */
   async updateAccount(accountId: string, accountData: any): Promise<void> {
     try {
       const accountDocRef = doc(this.firestore, 'accounts', accountId);
@@ -145,6 +146,11 @@ export class AccountService {
     }
   }
 
+  /**
+   * Deletes an account document from Firestore.
+   * @param {string} accountId - The account ID.
+   * @returns {Promise<void>} A promise that resolves when the deletion is complete.
+   */
   async deleteAccount(accountId: string): Promise<void> {
     try {
       const accountDocRef = doc(this.firestore, 'accounts', accountId);
@@ -155,23 +161,30 @@ export class AccountService {
       throw error;
     }
   }
-async removeAccountFromUser(
-  userId: string,
-  accountId: string
-): Promise<void> {
-  if (!userId) {
-    throw new Error('Invalid userId provided.');
-  }
-  try {
-    const userDocRef = doc(this.firestore, 'users', userId);
-    await updateDoc(userDocRef, {
-      accounts: arrayRemove(accountId),
-    });
-    console.log(`Account ${accountId} removed from user ${userId}`);
-  } catch (error) {
-    console.error('Error removing account from user:', error);
-    throw error;
-  }
-}
 
+  /**
+   * Removes an account ID from a user's accounts array in Firestore.
+   * @param {string} userId - The user ID.
+   * @param {string} accountId - The account ID to remove.
+   * @returns {Promise<void>} A promise that resolves when the removal is complete.
+   * @throws {Error} If an invalid userId is provided.
+   */
+  async removeAccountFromUser(
+    userId: string,
+    accountId: string
+  ): Promise<void> {
+    if (!userId) {
+      throw new Error('Invalid userId provided.');
+    }
+    try {
+      const userDocRef = doc(this.firestore, 'users', userId);
+      await updateDoc(userDocRef, {
+        accounts: arrayRemove(accountId),
+      });
+      console.log(`Account ${accountId} removed from user ${userId}`);
+    } catch (error) {
+      console.error('Error removing account from user:', error);
+      throw error;
+    }
+  }
 }
