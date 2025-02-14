@@ -27,6 +27,7 @@ import {
 } from '@angular/fire/firestore';
 import { FirebaseService } from './firebase.service';
 import { Router } from '@angular/router';
+import { AccountService } from './account.service';
 
 @Injectable({
   providedIn: 'root',
@@ -41,6 +42,7 @@ export class FirebaseAuthService {
     private auth: Auth,
     private firestore: Firestore,
     private firebaseService: FirebaseService,
+    private accountService: AccountService,
     private router: Router
   ) {
     // Initialize BehaviorSubject with null
@@ -180,7 +182,7 @@ export class FirebaseAuthService {
       const userData = userSnap.data();
       if (userData['accounts']) {
         for (const accountId of userData['accounts']) {
-          await this.firebaseService.deleteAccount(accountId);
+          await this.accountService.deleteAccount(accountId);
         }
         console.log('All guest accounts have been deleted.');
       }

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { FirebaseService } from './firebase.service';
 import { FirebaseAuthService } from './firebase-auth.service';
+import { AccountService } from './account.service';
 import { User } from '../models/user.class';
 import { Account } from '../models/account.class';
 import { Transfer } from '../models/transfer.class';
@@ -15,7 +16,7 @@ export class DashboardDataServiceService {
   private transfersSubject = new BehaviorSubject<Transfer[]>([]);
   transfers$ = this.transfersSubject.asObservable();
 
-  constructor(private firebaseService: FirebaseService, private authService: FirebaseAuthService) {
+  constructor(private firebaseService: FirebaseService, private authService: FirebaseAuthService, private accountService: AccountService) {
     // ⬇️ Direkt auf den User-Stream hören!
     this.authService.user$.subscribe(user => {
       if (user) {
@@ -40,7 +41,7 @@ export class DashboardDataServiceService {
   async loadAccounts(accountIds: string[]): Promise<void> {
     try {
       const accounts = await Promise.all(
-        accountIds.map((accountId) => this.firebaseService.getAccount(accountId))
+        accountIds.map((accountId) => this.accountService.getAccount(accountId))
       );
       // Wenn du eine Transformation benötigst (z.B. Account.fromJson)
       const accountObjs = accounts.map(Account.fromJson);

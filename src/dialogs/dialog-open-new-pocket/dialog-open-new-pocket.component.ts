@@ -10,6 +10,7 @@ import { Account } from '../../models/account.class';
 import { FirebaseService } from '../../services/firebase.service';
 import { FirebaseAuthService } from '../../services/firebase-auth.service';
 import { MatIcon } from '@angular/material/icon';
+import { AccountService } from '../../services/account.service';
 
 @Component({
   selector: 'app-dialog-open-new-pocket',
@@ -33,6 +34,8 @@ export class DialogOpenNewPocketComponent implements OnInit {
 
   constructor(
     private firebaseService: FirebaseService,
+
+    private accountService: AccountService,
     private authService: FirebaseAuthService,
     public dialogRef: MatDialogRef<DialogOpenNewPocketComponent>
   ) {}
@@ -71,7 +74,7 @@ export class DialogOpenNewPocketComponent implements OnInit {
 
     try {
       // Konto in Firebase hinzufügen
-      await this.firebaseService.addAccount(this.uid, this.account.toJson());
+      await this.accountService.addAccount(this.uid, this.account.toJson());
       this.dialogRef.close(true); // Dialog schließen mit Erfolg
     } catch (error) {
       console.error('Error creating account:', error);

@@ -5,6 +5,7 @@ import { FirebaseAuthService } from '../../../../services/firebase-auth.service'
 import { FirebaseService } from '../../../../services/firebase.service';
 import { SharedService } from '../../../../services/shared.service';
 import { DashboardDataServiceService } from '../../../../services/dashboard-data-service.service';
+import { AccountService } from '../../../../services/account.service';
 // Materail
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardContent, MatCardModule } from '@angular/material/card';
@@ -47,7 +48,8 @@ export class AccountsComponent {
     private dialog: MatDialog,
     private firebaseService: FirebaseService,
     private authService: FirebaseAuthService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private accountService: AccountService
   ) {}
 
   ngOnInit(): void {
@@ -121,9 +123,9 @@ export class AccountsComponent {
   
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
-        this.firebaseService
+        this.accountService
           .deleteAccount(accountId)
-          .then(() => this.firebaseService.removeAccountFromUser(userId, accountId))
+          .then(() => this.accountService.removeAccountFromUser(userId, accountId))
           .then(() => {
             console.log('Account deleted successfully');
             // this.dashboardData.loadUser(this.uid); // 🚀 Accounts neu laden

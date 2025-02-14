@@ -15,6 +15,7 @@ import { FirebaseAuthService } from '../../services/firebase-auth.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
+import { AccountService } from '../../services/account.service';
 
 @Component({
   selector: 'app-dialog-move-money',
@@ -47,6 +48,7 @@ export class DialogMoveMoneyComponent {
 
   constructor(
     private firebaseService: FirebaseService,
+    private accountService: AccountService,
     private authService: FirebaseAuthService,
     public dialogRef: MatDialogRef<DialogMoveMoneyComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { senderAccountId: string }
@@ -79,7 +81,7 @@ export class DialogMoveMoneyComponent {
     try {
       const accounts = await Promise.all(
         accountIds.map(async (accountId) => {
-          const accountData = await this.firebaseService.getAccount(accountId);
+          const accountData = await this.accountService.getAccount(accountId);
           return Account.fromJson(accountData); // Umwandlung in Account-Objekt mit fromJson
         })
       );

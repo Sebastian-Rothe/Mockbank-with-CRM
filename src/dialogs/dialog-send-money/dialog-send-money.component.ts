@@ -9,6 +9,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatIcon } from '@angular/material/icon';
 // modules
 import { Transfer } from '../../models/transfer.class';
 import { User } from '../../models/user.class';
@@ -16,7 +17,7 @@ import { Account } from '../../models/account.class';
 // Firebase Services
 import { FirebaseService } from '../../services/firebase.service';
 import { FirebaseAuthService } from '../../services/firebase-auth.service';
-import { MatIcon } from '@angular/material/icon';
+import { AccountService } from '../../services/account.service';
 
 @Component({
   selector: 'app-dialog-sent-money',
@@ -67,6 +68,7 @@ export class DialogSendMoneyComponent {
   constructor(
     private firebaseService: FirebaseService,
     private authService: FirebaseAuthService,
+    private accountService: AccountService,
     public dialogRef: MatDialogRef<DialogSendMoneyComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { senderAccountId: string }
   ) {
@@ -114,7 +116,7 @@ export class DialogSendMoneyComponent {
     try {
       const accounts = await Promise.all(
         accountIds.map(async (accountId) => {
-          const accountData = await this.firebaseService.getAccount(accountId);
+          const accountData = await this.accountService.getAccount(accountId);
           return Account.fromJson(accountData); // Umwandlung in Account-Objekt
         })
       );
@@ -135,7 +137,7 @@ export class DialogSendMoneyComponent {
           .filter((user) => user.accounts && user.accounts.length > 0)
           .map(async (user) => {
             const firstAccountId = user.accounts[0];
-            const accountData = await this.firebaseService.getAccount(
+            const accountData = await this.accountService.getAccount(
               firstAccountId
             );
             return Account.fromJson(accountData);

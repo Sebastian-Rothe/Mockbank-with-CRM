@@ -23,6 +23,7 @@ import { Bank } from '../models/bank.interface';
 import { Account } from '../models/account.class';
 import { User } from '../models/user.class';
 import { Transfer } from '../models/transfer.class';
+import { AccountService } from './account.service';
  
 
 @Injectable({
@@ -36,7 +37,7 @@ export class BankService {
   private bankCollection = collection(this.firestore, 'bank');
   private accountCollection = collection(this.firestore, 'accounts');
 
-  constructor(private firebaseService: FirebaseService) {}
+  constructor(private firebaseService: FirebaseService, private accountService: AccountService) {}
 
   /**
    * Fetches the bank data from Firestore.
@@ -164,7 +165,7 @@ export class BankService {
   async getTotalBalance(accountIds: string[]): Promise<number> {
     let totalBalance = 0;
     for (const accountId of accountIds) {
-      const accountData = await this.firebaseService.getAccount(accountId);
+      const accountData = await this.accountService.getAccount(accountId);
       totalBalance += accountData.balance || 0;
     }
     return totalBalance;

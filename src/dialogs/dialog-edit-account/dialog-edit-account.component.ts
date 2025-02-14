@@ -10,6 +10,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
 import { MatInput } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
+import { AccountService } from '../../services/account.service';
 @Component({
   selector: 'app-dialog-edit-account',
   standalone: true,
@@ -23,6 +24,7 @@ export class DialogEditAccountComponent {
 
   constructor(
     private firebaseService: FirebaseService,
+    private accountService: AccountService,
     public dialogRef: MatDialogRef<DialogEditAccountComponent>,
       @Inject(MAT_DIALOG_DATA) public data: { accountID: string }
   ) {
@@ -32,7 +34,7 @@ export class DialogEditAccountComponent {
 
   ngOnInit(): void {
     // Laden der Account-Daten
-    this.firebaseService.getAccount(this.AccountId).then((accountData) => {
+    this.accountService.getAccount(this.AccountId).then((accountData) => {
       if (accountData) {
         this.account = { ...accountData, accountId: this.AccountId }; // Daten in das Account-Objekt laden
       }
@@ -42,7 +44,7 @@ export class DialogEditAccountComponent {
   }
   saveChanges(): void {
     // Speichern der Änderungen
-    this.firebaseService.updateAccount(this.AccountId, this.account).then(() => {
+    this.accountService.updateAccount(this.AccountId, this.account).then(() => {
       console.log('Account successfully updated');
       this.dialogRef.close();
     }).catch((error) => {
