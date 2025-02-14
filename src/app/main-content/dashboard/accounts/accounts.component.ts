@@ -54,11 +54,12 @@ export class AccountsComponent {
 
   ngOnInit(): void {
     this.authService.uid$.subscribe((uid) => {
-      console.log(uid, 'at dash');
-
-      this.uid$.subscribe(uid => {
-        console.log('Aktuelle UID:', uid);
-      });
+      if (uid) {
+        this.uid = uid;
+        console.log('Current UID:', this.uid);
+      } else {
+        console.error('No UID available');
+      }
     });
     this.dashboardData.accounts$.subscribe((accounts) => {
       this.accounts = accounts;
