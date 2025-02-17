@@ -1,39 +1,54 @@
 .add-user-btn {
-  position: fixed;
   right: 56px;
   bottom: 56px;
+  position: fixed;
+}
+.search-container {
+  width: 100%;
+
+  background-color: #fff;
+
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+
+  > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 12px;
+  }
+  padding-top: 22px;
+  margin-bottom: 8px;
+}
+mat-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+  background-color: #fff;
+  padding: 16px;
 }
 
-mat-card {
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 
-                0 1px 3px rgba(0, 0, 0, 0.06);
-    background-color: #fff; 
-    padding: 16px; 
+table {
+  border-collapse: collapse;
+  tr {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    font-size: 1.1rem;
+    font-weight: 400;
   }
-  
-  table {
-    border-collapse: collapse;
-    tr {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-      font-size: 1.1rem;
-      font-weight: 400;
-    }
-  
-    tr:first-child {
-      color: rgba(0, 0, 0, 0.4);
-      font-size: 1.4rem;
-      font-weight: 500;
-    }
-  
-    tr:last-child {
-      border-bottom: 0;
-    }
-  
-    td {
-      text-align: start;
-      height: 44px;
+
+  tr:first-child {
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 1.4rem;
+    font-weight: 500;
+  }
+
+  tr:last-child {
+    border-bottom: 0;
+  }
+
+  td {
+    text-align: start;
+    height: 44px;
     //   padding: 8px 12px; // Abstand zwischen Zellinhalt und Rand
-    }
   }
-  
+}

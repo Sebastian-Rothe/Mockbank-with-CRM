@@ -31,7 +31,7 @@ export class UserComponent {
   users$: Observable<User[]>; // Originale Users aus Firebase
   filteredUsers: User[] = []; // Gefilterte Users für die Anzeige
   allUsers: User[] = []; // Lokale Kopie aller User
-
+  userCount: number = 0;
   constructor(
     public dialog: MatDialog,
     private firebaseService: FirebaseService
@@ -40,6 +40,7 @@ export class UserComponent {
     this.users$.subscribe(users => {
       this.allUsers = users;
       this.filteredUsers = users;
+      this.userCount = users.length;
     });
   }
 
