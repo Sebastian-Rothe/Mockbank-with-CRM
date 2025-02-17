@@ -1,18 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import {
   Firestore,
-  DocumentReference,
-  DocumentData,
   collection,
-  query,
-  where,
-  collectionData,
-  addDoc,
-  arrayRemove,
   doc,
-  setDoc,
   updateDoc,
-  deleteDoc,
   getDocs,
   getDoc,
   docData,
@@ -24,7 +15,6 @@ import { Account } from '../models/account.class';
 import { User } from '../models/user.class';
 import { Transfer } from '../models/transfer.class';
 import { AccountService } from './account.service';
- 
 
 @Injectable({
   providedIn: 'root',
@@ -37,7 +27,10 @@ export class BankService {
   private bankCollection = collection(this.firestore, 'bank');
   private accountCollection = collection(this.firestore, 'accounts');
 
-  constructor(private firebaseService: FirebaseService, private accountService: AccountService) {}
+  constructor(
+    private firebaseService: FirebaseService,
+    private accountService: AccountService
+  ) {}
 
   /**
    * Fetches the bank data from Firestore.
@@ -124,7 +117,6 @@ export class BankService {
     }
   }
 
-
   /**
    * Retrieves all transfers for a user.
    * @param {User} user - The user whose transfers are retrieved.
@@ -140,12 +132,17 @@ export class BankService {
    * @param {number} userCreatedAt - Timestamp of user creation.
    * @returns {number} - The last interest transfer timestamp.
    */
-  getLastInterestTransferDate(transfers: Transfer[], userCreatedAt: number): number {
+  getLastInterestTransferDate(
+    transfers: Transfer[],
+    userCreatedAt: number
+  ): number {
     const lastInterestTransfer = transfers
       .filter((transfer) => transfer.category === 'Interest')
       .sort((a, b) => b.createdAt - a.createdAt)[0];
 
-    return lastInterestTransfer ? lastInterestTransfer.createdAt : userCreatedAt;
+    return lastInterestTransfer
+      ? lastInterestTransfer.createdAt
+      : userCreatedAt;
   }
 
   /**
@@ -154,7 +151,9 @@ export class BankService {
    * @returns {boolean} - True if interest was recently credited, false otherwise.
    */
   hasRecentInterestTransfer(transfers: Transfer[]): boolean {
-    return transfers.some((t) => t.category === 'Interest' && Date.now() - t.createdAt < 5000);
+    return transfers.some(
+      (t) => t.category === 'Interest' && Date.now() - t.createdAt < 5000
+    );
   }
 
   /**
@@ -179,7 +178,7 @@ export class BankService {
     const bankDocRef = doc(this.firestore, 'bank', 'mainBank');
     const bankSnap = await getDoc(bankDocRef);
     if (!bankSnap.exists()) throw new Error('Bank data not found!');
-    
+
     return bankSnap.data()['interestRate'];
   }
 
@@ -190,7 +189,11 @@ export class BankService {
    * @param {number} hours - Hours since the last interest was applied.
    * @returns {number} - The final interest amount.
    */
-  calculateInterest(balance: number, interestRate: number, hours: number): number {
+  calculateInterest(
+    balance: number,
+    interestRate: number,
+    hours: number
+  ): number {
     const interestPerHour = (balance * interestRate) / 100 / 24;
     return Math.max(interestPerHour * hours, 0.01); // Ensuring a minimum interest
   }
@@ -201,47 +204,96 @@ export class BankService {
    * @param {number} amount - The interest amount.
    * @param {number} start - Interest calculation start time.
    */
-  async distributeInterest(accountId: string, amount: number, start: number): Promise<void> {
+  async distributeInterest(
+    accountId: string,
+    amount: number,
+    start: number
+  ): Promise<void> {
     const end = Date.now();
     await this.firebaseService.transferFunds(
       'ACC-1738235430074-182',
       accountId,
       amount,
-      `Interest credit from ${new Date(start).toLocaleString()} to ${new Date(end).toLocaleString()}`,
+      `Interest credit from ${new Date(start).toLocaleString()} to ${new Date(
+        end
+      ).toLocaleString()}`,
       'Interest'
     );
     console.log(`Interest of ${amount} EUR credited to ${accountId}.`);
   }
 
+
   /**
    * Main function to calculate and distribute interest for a user.
    * @param {User} user - The user receiving interest.
+   * @returns {Promise<void>} A promise resolving when interest distribution is complete.
    */
   async calculateAndDistributeInterest(user: User): Promise<void> {
     try {
-      const transfers = await this.getUserTransfers(user);
-      if (this.hasRecentInterestTransfer(transfers)) {
-        console.warn('Preventing duplicate interest payment.');
-        return;
-      }
+      if (await this.isInterestPaymentBlocked(user)) return;
 
-      const lastInterestDate = this.getLastInterestTransferDate(transfers, user.createdAt);
-      const hoursSinceLastInterest = Math.floor((Date.now() - lastInterestDate) / 3600000);
+      const lastInterestDate = await this.getLastInterestDate(user);
+      if (this.shouldSkipInterest(lastInterestDate, user.createdAt)) return;
 
-      if (hoursSinceLastInterest < 2 && lastInterestDate !== user.createdAt) {
-        console.log('Interest was already paid in the last 2 hours.');
-        return;
-      }
+      const interestAmount = await this.computeInterest(user, lastInterestDate);
+      if (interestAmount <= 0) return;
 
-      const totalBalance = await this.getTotalBalance(user.accounts);
-      const interestRate = await this.getInterestRate();
-      const interestAmount = this.calculateInterest(totalBalance, interestRate, hoursSinceLastInterest);
-
-      if (interestAmount > 0) {
-        await this.distributeInterest(user.accounts[0], interestAmount, lastInterestDate);
-      }
+      await this.distributeInterest(user.accounts[0], interestAmount, lastInterestDate);
     } catch (error) {
-      console.error('Error calculating interest:', error);
+      console.error('Error calculating interest:', (error as Error).message);
     }
   }
+
+  /**
+   * Checks whether an interest payment should be blocked for the user.
+   * This is determined by verifying if an interest transfer was recently made.
+   * @param {User} user - The user whose transfers are checked.
+   * @returns {Promise<boolean>} A promise that resolves to true if an interest payment is blocked, false otherwise.
+   */
+  private async isInterestPaymentBlocked(user: User): Promise<boolean> {
+    const transfers = await this.getUserTransfers(user);
+    return this.hasRecentInterestTransfer(transfers);
+  }
+
+  /**
+   * Retrieves the timestamp of the last interest transfer for the user.
+   * If no interest transfer exists, returns the user's creation timestamp.
+   * @param {User} user - The user whose last interest date is retrieved.
+   * @returns {Promise<number>} A promise that resolves to the timestamp of the last interest transfer.
+   */
+  private async getLastInterestDate(user: User): Promise<number> {
+    const transfers = await this.getUserTransfers(user);
+    return this.getLastInterestTransferDate(transfers, user.createdAt);
+  }
+
+  /**
+   * Determines whether the interest calculation should be skipped.
+   * If the last interest date is not equal to the user's creation date and less than 2 hours have passed since the last interest payment, interest is skipped.
+   * @param {number} lastInterestDate - The timestamp of the last interest payment.
+   * @param {number} userCreatedAt - The timestamp when the user was created.
+   * @returns {boolean} True if interest calculation should be skipped, false otherwise.
+   */
+  private shouldSkipInterest(lastInterestDate: number, userCreatedAt: number): boolean {
+    return lastInterestDate !== userCreatedAt && (Date.now() - lastInterestDate) / 3600000 < 2;
+  }
+
+  /**
+   * Computes the interest amount to be credited to the user's primary account.
+   * It retrieves the user's total balance and the bank's current interest rate, and then calculates the interest based on the elapsed time since the last interest payment.
+   * @param {User} user - The user receiving interest.
+   * @param {number} lastInterestDate - The timestamp of the last interest payment.
+   * @returns {Promise<number>} A promise that resolves to the computed interest amount.
+   */
+  private async computeInterest(user: User, lastInterestDate: number): Promise<number> {
+    const [totalBalance, interestRate] = await Promise.all([
+      this.getTotalBalance(user.accounts),
+      this.getInterestRate()
+    ]);
+    return this.calculateInterest(
+      totalBalance,
+      interestRate,
+      (Date.now() - lastInterestDate) / 3600000
+    );
+  }
+  
 }

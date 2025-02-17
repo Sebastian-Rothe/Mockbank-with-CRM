@@ -11,14 +11,14 @@ import {
 } from '@angular/fire/firestore';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AccountService {
   firestore: Firestore = inject(Firestore);
 
   private accountCollection = collection(this.firestore, 'accounts');
 
-  constructor() { }
+  constructor() {}
 
   /**
    * Retrieves an account document from the 'accounts' collection by its ID.
@@ -93,10 +93,7 @@ export class AccountService {
    * @returns {Promise<void>} A promise that resolves when the user document is updated.
    * @throws {Error} If the user is not found.
    */
-  async updateUserAccounts(
-    userId: string,
-    accountId: string
-  ): Promise<void> {
+  async updateUserAccounts(userId: string, accountId: string): Promise<void> {
     const userDocRef = doc(this.firestore, 'users', userId);
     const userSnap = await getDoc(userDocRef);
     if (!userSnap.exists()) {
@@ -120,7 +117,11 @@ export class AccountService {
   ): Promise<void> {
     try {
       const accountId = this.generateAccountId();
-      const accountData = this.createAccountData(userId, accountDetails, accountId);
+      const accountData = this.createAccountData(
+        userId,
+        accountDetails,
+        accountId
+      );
       await this.addAccountToFirestore(accountId, accountData);
       await this.updateUserAccounts(userId, accountId);
     } catch (error) {
