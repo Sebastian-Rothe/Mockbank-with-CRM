@@ -11,7 +11,9 @@ import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FirebaseService } from '../../../services/firebase.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
+import { MatInputModule } from '@angular/material/input';
 @Component({
   selector: 'app-user',
   standalone: true,
@@ -19,22 +21,45 @@ import { FirebaseService } from '../../../services/firebase.service';
     MatCardModule,
     CommonModule,
     RouterLink,
+    MatFormFieldModule,
+    MatInputModule
   ],
   templateUrl: './user.component.html',
   styleUrl: './user.component.scss',
 })
 export class UserComponent {
-  user: User = new User();
-  users$: Observable<User[]>;
+  users$: Observable<User[]>; // Originale Users aus Firebase
+  filteredUsers: User[] = []; // Gefilterte Users für die Anzeige
+  allUsers: User[] = []; // Lokale Kopie aller User
 
   constructor(
     public dialog: MatDialog,
     private firebaseService: FirebaseService
   ) {
     this.users$ = this.firebaseService.getUsers();
+    this.users$.subscribe(users => {
+      this.allUsers = users;
+      this.filteredUsers = users;
+    });
   }
 
-  // openDialog() {
-  //   this.dialog.open(DialogAddUserComponent);
-  // }
+  onSearch(event: Event) {
+    const input = event.target as HTMLInputElement; // Type assertion to HTMLInputElement
+    const query = input.value;
+  
+    if (query) {
+      const lowerQuery = query.toLowerCase();
+      this.filteredUsers = this.allUsers.filter(user =>
+        user.firstName.toLowerCase().includes(lowerQuery) ||
+        user.lastName.toLowerCase().includes(lowerQuery) ||
+        user.email?.toLowerCase().includes(lowerQuery) ||
+        user.streetAddress?.toLowerCase().includes(lowerQuery) ||
+        user.city?.toLowerCase().includes(lowerQuery)
+      );
+    } else {
+      this.filteredUsers = [...this.allUsers];
+    }
+  }
+  
+  
 }

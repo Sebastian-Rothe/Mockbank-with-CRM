@@ -1,38 +1,28 @@
+<mat-form-field appearance="outline">
+  <mat-label>Search Users</mat-label>
+  <input matInput (input)="onSearch($event)" placeholder="Name, Email, City...">
+</mat-form-field>
+
+
 <div class="card-container">
   <mat-card>
     <table>
       <tr>
         <td>firstName</td>
         <td>lastName</td>
-        <!-- <td>birthDate</td> -->
-        <td>streetAddress.</td>
+        <td>streetAddress</td>
         <td>zipCode</td>
         <td>city</td>
       </tr>
-      @for(user of (users$ | async ); track $index){
-        
-      <tr routerLink="{{ user.uid }}">
-        <td>{{ user.firstName }}</td>
-        <td>{{ user.lastName }}</td>
-        <!-- <td>{{ user.birthDate }}</td> -->
-        <td>{{ user.streetAddress }}</td>
-        <td>{{ user.zipCode }}</td>
-        <td>{{ user.city }}</td>
-      </tr>
+      @for(user of filteredUsers; track $index) {
+        <tr routerLink="{{ user.uid }}">
+          <td>{{ user.firstName }}</td>
+          <td>{{ user.lastName }}</td>
+          <td>{{ user.streetAddress }}</td>
+          <td>{{ user.zipCode }}</td>
+          <td>{{ user.city }}</td>
+        </tr>
       }
     </table>
-    <!-- <mat-card-content>Simple card</mat-card-content> -->
   </mat-card>
 </div>
-
-<!-- <button
-  (click)="openDialog()"
-  class="add-user-btn"
-  mat-fab
-  color="primary"
-  matTooltip="add user"
-  matTooltipPosition="above"
-  aria-label="Example icon button with a home icon"
->
-  <mat-icon>add</mat-icon>
-</button> -->

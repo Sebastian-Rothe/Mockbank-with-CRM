@@ -18,6 +18,9 @@
         </li>
       }
       @if(user?.role === 'admin'){
+        <li (click)="drawer.close()" routerLink="/main/user">
+          <mat-icon>person_search</mat-icon> Search for User
+        </li>
         <li (click)="drawer.close()" routerLink="/main/new-admin">
           <mat-icon>person_add</mat-icon> Create new Admin
         </li>
