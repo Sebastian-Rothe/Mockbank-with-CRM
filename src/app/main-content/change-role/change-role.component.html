@@ -1,0 +1,17 @@
+@if(user){
+    <div>
+        <mat-form-field appearance="outline">
+            <mat-label>User Role</mat-label>
+            <mat-select [(value)]="user.role" (selectionChange)="updateUserRole()">
+                @for(role of roles; track role){
+    
+                    <mat-option [value]="role">
+                      {{ role }}
+                    </mat-option>
+                }
+            </mat-select>
+          </mat-form-field>
+          
+
+    </div>
+}

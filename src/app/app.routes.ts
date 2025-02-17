@@ -9,6 +9,7 @@ import { CreateNewAdminComponent } from './main-content/create-new-admin/create-
 import { ImprintComponent } from './frontpage/imprint/imprint.component';
 import { FrontpageContentComponent } from './frontpage/frontpage-content/frontpage-content.component';
 import { UserProfileComponent } from './main-content/user-profile/user-profile.component';
+import { ChangeRoleComponent } from './main-content/change-role/change-role.component';
 
 export const routes: Routes = [
   {
@@ -31,6 +32,7 @@ export const routes: Routes = [
       { path: 'user', component: UserComponent },
       { path: 'user/:uid', component: UserDetailComponent },
       { path: 'new-admin', component: CreateNewAdminComponent },
+      { path: 'change-role', component: ChangeRoleComponent },
     ],
   },
 ];

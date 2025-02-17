@@ -37,6 +37,7 @@ export class MainContentComponent implements OnInit, AfterViewInit {
   drawerMode: MatDrawerMode = 'side'; // Standardmodus für große Screens
   uid: string | null = null;
   user: User | null = null;
+  isGuest: boolean = false;
 
   constructor(
     private authService: FirebaseAuthService,
@@ -59,7 +60,7 @@ export class MainContentComponent implements OnInit, AfterViewInit {
       }
       this.cdRef.detectChanges();
     });
-
+    
     // Benutzerinformationen laden
     combineLatest([this.authService.uid$, this.authService.user$]).subscribe(
       ([uid, user]) => {
@@ -67,6 +68,7 @@ export class MainContentComponent implements OnInit, AfterViewInit {
           this.uid = uid;
           this.user = user;
           this.calculateAndDistributeInterest();
+          this.isGuest = this.authService.isGuestUser();
         }
       }
     );
