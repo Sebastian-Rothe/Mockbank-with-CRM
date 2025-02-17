@@ -54,7 +54,7 @@ export class DashboardComponent implements OnInit {
   user: User | null = null; 
   user$ = this.authService.user$; // Direkt das Observable speichern
   uid$ = this.authService.uid$; // Falls nur die UID benötigt wird
-
+  isGuest: boolean = false;
 
   constructor(
     private authService: FirebaseAuthService,
@@ -74,9 +74,10 @@ export class DashboardComponent implements OnInit {
     this.uid$.subscribe(uid => {
       console.log('Aktuelle UID:', uid);
     });
+    this.isGuest = this.authService.isGuestUser();
   }
   
-  async loadUser(uid: string): Promise<void> {
+  async loadUser(): Promise<void> {
     try {
       // this.user = await this.firebaseService.getUser(uid);
     }

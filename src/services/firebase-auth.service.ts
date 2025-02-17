@@ -146,6 +146,15 @@ export class FirebaseAuthService {
   }
 
   /**
+   * Checks if the current user is a guest (anonymous user).
+   *
+   * @returns A boolean indicating whether the user is a guest.
+   */
+  isGuestUser(): boolean {
+    return this.auth.currentUser?.isAnonymous ?? false;
+  }
+
+  /**
    * Logs out the current user.
    *
    * If the current user is a guest, cleans up guest data before logging out.

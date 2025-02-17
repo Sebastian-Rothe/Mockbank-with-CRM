@@ -250,7 +250,7 @@ export class BankService {
    * @param {User} user - The user whose transfers are checked.
    * @returns {Promise<boolean>} A promise that resolves to true if an interest payment is blocked, false otherwise.
    */
-  private async isInterestPaymentBlocked(user: User): Promise<boolean> {
+  async isInterestPaymentBlocked(user: User): Promise<boolean> {
     const transfers = await this.getUserTransfers(user);
     return this.hasRecentInterestTransfer(transfers);
   }
@@ -261,7 +261,7 @@ export class BankService {
    * @param {User} user - The user whose last interest date is retrieved.
    * @returns {Promise<number>} A promise that resolves to the timestamp of the last interest transfer.
    */
-  private async getLastInterestDate(user: User): Promise<number> {
+  async getLastInterestDate(user: User): Promise<number> {
     const transfers = await this.getUserTransfers(user);
     return this.getLastInterestTransferDate(transfers, user.createdAt);
   }
@@ -273,7 +273,7 @@ export class BankService {
    * @param {number} userCreatedAt - The timestamp when the user was created.
    * @returns {boolean} True if interest calculation should be skipped, false otherwise.
    */
-  private shouldSkipInterest(lastInterestDate: number, userCreatedAt: number): boolean {
+  shouldSkipInterest(lastInterestDate: number, userCreatedAt: number): boolean {
     return lastInterestDate !== userCreatedAt && (Date.now() - lastInterestDate) / 3600000 < 2;
   }
 
@@ -284,7 +284,7 @@ export class BankService {
    * @param {number} lastInterestDate - The timestamp of the last interest payment.
    * @returns {Promise<number>} A promise that resolves to the computed interest amount.
    */
-  private async computeInterest(user: User, lastInterestDate: number): Promise<number> {
+  async computeInterest(user: User, lastInterestDate: number): Promise<number> {
     const [totalBalance, interestRate] = await Promise.all([
       this.getTotalBalance(user.accounts),
       this.getInterestRate()
