@@ -6,10 +6,11 @@ import { FrontpageComponent } from './frontpage/frontpage.component';
 import { OpenNewAccountComponent } from './frontpage/open-new-account/open-new-account.component';
 import { MainContentComponent } from './main-content/main-content.component';
 import { CreateNewAdminComponent } from './main-content/create-new-admin/create-new-admin.component';
-import { ImprintComponent } from './frontpage/imprint/imprint.component';
+import { ImprintComponent } from './imprint/imprint.component';
 import { FrontpageContentComponent } from './frontpage/frontpage-content/frontpage-content.component';
 import { UserProfileComponent } from './main-content/user-profile/user-profile.component';
 import { ChangeRoleComponent } from './main-content/change-role/change-role.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 
 export const routes: Routes = [
   {
@@ -27,6 +28,7 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // Default-Route
       { path: 'imprint', component: ImprintComponent },
+      { path: 'privacy-policy', component: PrivacyPolicyComponent },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'user-profile', component: UserProfileComponent },
       { path: 'user', component: UserComponent },
