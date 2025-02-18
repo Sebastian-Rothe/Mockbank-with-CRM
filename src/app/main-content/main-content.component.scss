@@ -107,10 +107,18 @@ ul {
   .example-container {
     min-height: 100vh;
   }
+  .router-container {
+    padding: 12px;
+
+  }
 }
 
 @media (max-width: 480px) {
   .sidenav {
     width: 220px;
+  }
+  .router-container {
+    padding: 8px;
+
   }
 }
