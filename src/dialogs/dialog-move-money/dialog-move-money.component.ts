@@ -54,12 +54,12 @@ export class DialogMoveMoneyComponent {
     @Inject(MAT_DIALOG_DATA) public data: { senderAccountId: string }
   ) {
     this.senderAccountId = data.senderAccountId; // Speichern der übergebenen ID
-    console.log('Sender Account ID in Dialog:', this.senderAccountId);
+ 
   }
 
   ngOnInit(): void {
     this.uid = this.authService.getUid();
-    console.log('Current UID:', this.uid);
+
     if (this.uid) {
       this.loadUser(this.uid);
     }
@@ -68,7 +68,7 @@ export class DialogMoveMoneyComponent {
   async loadUser(uid: string): Promise<void> {
     try {
       this.user = await this.firebaseService.getUser(uid);
-      console.log('Loaded user:', this.user);
+   
 
       if (this.user && this.user.accounts.length > 0) {
         await this.loadAccounts(this.user.accounts);

@@ -52,7 +52,7 @@ export class UserDetailComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe((params) => (this.userId = params['uid']));
-    console.log(this.userId);
+ 
     this.getUserDetails(this.userId);
   }
 
@@ -65,7 +65,7 @@ export class UserDetailComponent implements OnInit {
         // Füge die id hinzu, damit sie im User-Objekt enthalten ist
         const userData = docSnap.data();
         this.user = new User({ ...userData, uid: docSnap.id }); // id hinzufügen
-        console.log('User fetched:', this.user);
+   
       } else {
         console.log('User not found');
       }

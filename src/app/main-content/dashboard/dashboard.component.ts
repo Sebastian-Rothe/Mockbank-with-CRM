@@ -53,7 +53,7 @@ import { TransfersChartComponent } from '../../../charts/transfers-chart/transfe
 export class DashboardComponent implements OnInit {
   user: User | null = null; 
   user$ = this.authService.user$; // Direkt das Observable speichern
-  uid$ = this.authService.uid$; // Falls nur die UID benötigt wird
+  // uid$ = this.authService.uid$; // Falls nur die UID benötigt wird
   isGuest: boolean = false;
 
   constructor(
@@ -67,13 +67,11 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     // Falls du in TypeScript direkt auf den User zugreifen willst
     this.user$.subscribe(user => {
-      console.log('Aktueller User:', user);
+   
       this.user = user;
     });
 
-    this.uid$.subscribe(uid => {
-      console.log('Aktuelle UID:', uid);
-    });
+  
     this.isGuest = this.authService.isGuestUser();
   }
   

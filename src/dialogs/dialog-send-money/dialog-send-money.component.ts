@@ -74,10 +74,10 @@ export class DialogSendMoneyComponent {
   ) {
     this.firebaseService.getUsers().subscribe((users) => {
       this.users = users;
-      console.log('Users:', this.users);
+   
     });
     this.senderAccountId = data.senderAccountId; // Speichern der übergebenen ID
-    console.log('Sender Account ID in Dialog:', this.senderAccountId);
+  
   }
 
   ngOnInit(): void {
@@ -96,7 +96,7 @@ export class DialogSendMoneyComponent {
   async loadUser(uid: string): Promise<void> {
     try {
       // this.user = await this.firebaseService.getUser(uid);
-      console.log('Loaded user:', this.user);
+     
 
       if (this.user && this.user.accounts.length > 0) {
         await this.loadAccounts(this.user.accounts);
@@ -122,7 +122,7 @@ export class DialogSendMoneyComponent {
       );
 
       this.userAccounts = accounts; // Speichere die geladenen Konten
-      console.log('Loaded accounts:', this.userAccounts);
+    
     } catch (error) {
       console.error('Error loading accounts:', error);
     }
@@ -145,8 +145,6 @@ export class DialogSendMoneyComponent {
       );
       this.userAccounts = firstAccounts;
 
-      console.log('First accounts loaded:', this.userAccounts);
-      console.log('', users);
     } catch (error) {
       console.error('Error loading first accounts from all users:', error);
     }

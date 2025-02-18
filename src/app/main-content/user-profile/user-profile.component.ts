@@ -25,21 +25,21 @@ export class UserProfileComponent {
   { }
   ngOnInit(): void {
     this.authService.uid$.subscribe((uid) => {
-      console.log('Aktuelle UID:', uid);
+    
       if (uid) {
         this.uid = uid; 
-        this.loadUser(uid); 
+        // this.loadUser(uid); 
       }
     });
   }
-  async loadUser(uid: string): Promise<void> {
-    try {
-      // this.user = await this.firebaseService.getUser(uid);
-      console.log('Loaded user:', this.user);
-    } catch (error) {
-      console.error('Error loading user:', error);
-    }
-  }
+  // async loadUser(uid: string): Promise<void> {
+  //   try {
+  //     // this.user = await this.firebaseService.getUser(uid);
+  //     console.log('Loaded user:', this.user);
+  //   } catch (error) {
+  //     console.error('Error loading user:', error);
+  //   }
+  // }
   getFormattedBirthDate(): string {
     return this.sharedService.formatTimestampToDate(this.user?.birthDate || 0);
   }

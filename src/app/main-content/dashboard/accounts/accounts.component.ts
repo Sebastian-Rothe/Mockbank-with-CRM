@@ -56,7 +56,7 @@ export class AccountsComponent {
     this.authService.uid$.subscribe((uid) => {
       if (uid) {
         this.uid = uid;
-        console.log('Current UID:', this.uid);
+
       } else {
         console.error('No UID available');
       }

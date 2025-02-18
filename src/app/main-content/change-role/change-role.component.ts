@@ -30,7 +30,7 @@ export class ChangeRoleComponent {
 
   ngOnInit(): void {
     this.uid = this.authService.getUid();
-    console.log('Current UID:', this.uid);
+  
     if (this.uid) {
       this.loadUser(this.uid);
     }
@@ -39,7 +39,7 @@ export class ChangeRoleComponent {
   async loadUser(uid: string): Promise<void> {
     try {
       this.user = await this.firebaseService.getUser(uid);
-      console.log('Loaded user:', this.user);
+ 
     } catch (error) {
       console.error('Error loading user:', error);
     }
@@ -49,7 +49,7 @@ export class ChangeRoleComponent {
       try {
         const userDocRef = doc(this.firestore, 'users', this.user.uid);
         await updateDoc(userDocRef, { role: this.user.role });
-        console.log(`User role updated to: ${this.user.role}`);
+        console.log(`User role updated to: ${this.user.role}`); // change the style of the msg
       } catch (error) {
         console.error('Error updating role:', error);
       }

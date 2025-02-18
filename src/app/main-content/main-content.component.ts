@@ -101,7 +101,6 @@ export class MainContentComponent implements OnInit, AfterViewInit {
   async logout(): Promise<void> {
     try {
       await this.authService.logout();
-      console.log('Erfolgreich ausgeloggt');
     } catch (error) {
       console.error('Fehler beim Logout:', error);
     }

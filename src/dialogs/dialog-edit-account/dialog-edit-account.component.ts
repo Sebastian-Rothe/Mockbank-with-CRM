@@ -29,7 +29,7 @@ export class DialogEditAccountComponent {
       @Inject(MAT_DIALOG_DATA) public data: { accountID: string }
   ) {
     this.AccountId = data.accountID; // Speichern der übergebenen ID
-    console.log('Sender Account ID in Dialog:', this.AccountId);
+ 
   }
 
   ngOnInit(): void {

@@ -19,13 +19,13 @@ export class TransfersChartComponent implements OnInit {
 
   async ngOnInit() {
     await this.getTransfersPerDay();
-    console.log('📊 Final dataPoints für Transfer-Chart:', this.transferCountData, this.transferAmountData);
+    // console.log('📊 Final dataPoints für Transfer-Chart:', this.transferCountData, this.transferAmountData);
     this.loadChart();
   }
 
   async getTransfersPerDay() {
     const transfers: Transfer[] = await this.firebaseService.getAllTransfers();
-    console.log('📤 Alle Transfers aus Firestore:', transfers);
+    // console.log('📤 Alle Transfers aus Firestore:', transfers);
 
     const groupedData: Record<string, { count: number; totalAmount: number }> = {};
 
@@ -43,7 +43,7 @@ export class TransfersChartComponent implements OnInit {
       }
     });
 
-    console.log('📅 Gruppierte Transfers nach Datum:', groupedData);
+    // console.log('📅 Gruppierte Transfers nach Datum:', groupedData);
 
     // Daten in Arrays für das Chart umwandeln
     this.transferCountData = [];
