@@ -54,7 +54,6 @@ export class UserComponent {
         user.firstName.toLowerCase().includes(lowerQuery) ||
         user.lastName.toLowerCase().includes(lowerQuery) ||
         user.email?.toLowerCase().includes(lowerQuery) ||
-        user.streetAddress?.toLowerCase().includes(lowerQuery) ||
         user.city?.toLowerCase().includes(lowerQuery)
       );
     } else {

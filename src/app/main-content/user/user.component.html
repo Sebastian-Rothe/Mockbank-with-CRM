@@ -1,23 +1,31 @@
 <mat-card class="search-container">
   <mat-form-field appearance="outline">
     <mat-label>Search Users</mat-label>
-    <input matInput (input)="onSearch($event)" placeholder="Name, Email, City...">
+    <input
+      matInput
+      (input)="onSearch($event)"
+      placeholder="Search by name, email, or city"
+    />
   </mat-form-field>
-  <div>Total amount of Users: {{ userCount}}</div>
+  <div class="user-count">
+    Total Users: <strong> {{ userCount }}</strong>
+  </div>
 </mat-card>
 
-
 <div class="card-container">
-  <mat-card>
+  <mat-card class="user-table-container">
     <table>
-      <tr>
-        <td>firstName</td>
-        <td>lastName</td>
-        <td>streetAddress</td>
-        <td>zipCode</td>
-        <td>city</td>
-      </tr>
-      @for(user of filteredUsers; track $index) {
+      <thead>
+        <tr>
+          <td>firstName</td>
+          <td>lastName</td>
+          <td>streetAddress</td>
+          <td>zipCode</td>
+          <td>city</td>
+        </tr>
+      </thead>
+      <tbody>
+        @for(user of filteredUsers; track $index) {
         <tr routerLink="{{ user.uid }}">
           <td>{{ user.firstName }}</td>
           <td>{{ user.lastName }}</td>
@@ -25,7 +33,8 @@
           <td>{{ user.zipCode }}</td>
           <td>{{ user.city }}</td>
         </tr>
-      }
+        }
+      </tbody>
     </table>
   </mat-card>
 </div>
