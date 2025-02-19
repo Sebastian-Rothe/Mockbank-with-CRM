@@ -23,6 +23,7 @@ import { DialogEditUserDetailComponent } from '../../../dialogs/dialog-edit-user
 import { DialogEditUserDetailsComponent } from '../../../dialogs/dialog-edit-user-details/dialog-edit-user-details.component';
 import { DialogEditUserEmailComponent } from '../../../dialogs/dialog-edit-user-email/dialog-edit-user-email.component';
 import { DialogEditUserPasswordComponent } from '../../../dialogs/dialog-edit-user-password/dialog-edit-user-password.component';
+import { AccountsComponent } from '../dashboard/accounts/accounts.component';
 
 
 // import { CommonModule } from '@angular/common';
@@ -35,6 +36,7 @@ import { DialogEditUserPasswordComponent } from '../../../dialogs/dialog-edit-us
     MatIcon,
     MatButtonModule,
     MatMenuModule,
+    AccountsComponent
   ],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss',
