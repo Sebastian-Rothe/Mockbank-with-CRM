@@ -17,6 +17,9 @@
           <mat-icon>person</mat-icon>Profile
         </li>
       }
+      <li (click)="drawer.close()" routerLink="/main/statistics">
+        <mat-icon>analytics</mat-icon> Statistics
+      </li>
       @if(user?.role === 'admin'){
         <li (click)="drawer.close()" routerLink="/main/user">
           <mat-icon>person_search</mat-icon> Search for User

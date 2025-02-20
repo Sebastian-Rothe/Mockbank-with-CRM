@@ -11,6 +11,7 @@ import { FrontpageContentComponent } from './frontpage/frontpage-content/frontpa
 import { UserProfileComponent } from './main-content/user-profile/user-profile.component';
 import { ChangeRoleComponent } from './main-content/change-role/change-role.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { StatisticsComponent } from './main-content/statistics/statistics.component';
 
 export const routes: Routes = [
   {
@@ -35,6 +36,7 @@ export const routes: Routes = [
       { path: 'user/:uid', component: UserDetailComponent },
       { path: 'new-admin', component: CreateNewAdminComponent },
       { path: 'change-role', component: ChangeRoleComponent },
+      { path: 'statistics', component: StatisticsComponent },
     ],
   },
 ];
