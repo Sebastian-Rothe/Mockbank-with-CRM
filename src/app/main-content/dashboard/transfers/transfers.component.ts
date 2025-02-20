@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardContent, MatCardModule } from '@angular/material/card';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
@@ -13,7 +13,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { TransferDetailComponent } from '../transfer-detail/transfer-detail.component';
 import { Transfer } from '../../../../models/transfer.class';
 import { DashboardDataServiceService } from '../../../../services/dashboard-data-service.service';
-
 
 @Component({
   selector: 'app-transfers',
@@ -37,22 +36,44 @@ export class TransfersComponent {
   user: User | null = null; // Benutzerdaten
   // userAccounts: Account[] = []; // Array von Account-Objekten
   user$ = this.authService.user$; 
+    @Input() userId: string | null = null; 
   constructor(
     private sharedService: SharedService,
     private dashboardData: DashboardDataServiceService,
     private authService: FirebaseAuthService,
+    private firebaseService: FirebaseService,
     public dialog: MatDialog
   ) {}
 
-  ngOnInit(): void {
-    this.dashboardData.transfers$.subscribe((transfers) => {
-      this.transfers = transfers;
-    });
-    this.user$.subscribe(user => {
-      this.user = user;
-    });
-    
+  async ngOnInit(): Promise<void> {
+    if (this.userId) {
+      // Lade den User asynchron
+      this.user = await this.firebaseService.getUser(this.userId);
+  
+      if (this.user) {
+        console.log('Loaded user:', this.user);
+        
+        // Lade die Transfers für diesen User
+        await this.dashboardData.loadTransfers(this.user);
+        this.dashboardData.transfers$.subscribe(transfers => {
+          this.transfers = transfers;
+          console.log('Transfers loaded for user:', transfers);
+        });
+      } else {
+        console.log('User not found');
+      }
+    } else {
+      // Falls kein userId vorhanden ist (User sieht eigene Transfers)
+      this.dashboardData.transfers$.subscribe((transfers) => {
+        this.transfers = transfers;
+      });
+      
+      this.user$.subscribe(user => {
+        this.user = user;
+      });
+    }
   }
+  
 
   getFormattedDate(transferDate: number): string {
     return this.sharedService.formatTimestampToDate(transferDate);

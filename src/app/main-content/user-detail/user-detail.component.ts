@@ -25,6 +25,7 @@ import { DialogEditUserDetailsComponent } from '../../../dialogs/dialog-edit-use
 import { DialogEditUserEmailComponent } from '../../../dialogs/dialog-edit-user-email/dialog-edit-user-email.component';
 import { DialogEditUserPasswordComponent } from '../../../dialogs/dialog-edit-user-password/dialog-edit-user-password.component';
 import { AccountsComponent } from '../dashboard/accounts/accounts.component';
+import { TransfersComponent } from '../dashboard/transfers/transfers.component';
 
 // import { CommonModule } from '@angular/common';
 @Component({
@@ -37,6 +38,7 @@ import { AccountsComponent } from '../dashboard/accounts/accounts.component';
     MatButtonModule,
     MatMenuModule,
     AccountsComponent,
+    TransfersComponent
   ],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss',
@@ -44,7 +46,7 @@ import { AccountsComponent } from '../dashboard/accounts/accounts.component';
 export class UserDetailComponent implements OnInit {
   userId: string = '';
   user: User | null = null;
-  isGuest: boolean = false;
+  isGuest: boolean = true;
   userIdCheck: string | null = '';
   constructor(
     public dialog: MatDialog,
@@ -70,9 +72,9 @@ export class UserDetailComponent implements OnInit {
     );
   }
 
-  getUser(userID: string) {
-    this.firebaseService.getUser(userID);
-  }
+  // getUser(userID: string) {
+  //   this.firebaseService.getUser(userID);
+  // }
   getUserDetails(userId: string): void {
     if (!userId) {
       console.error('No user ID provided!');

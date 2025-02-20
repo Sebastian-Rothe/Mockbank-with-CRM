@@ -42,6 +42,7 @@
   </mat-card>
   @if(isGuest && userId !== userIdCheck){
     <app-accounts [userId]="userId"></app-accounts>
+    <app-transfers [userId]="userId"></app-transfers>
 
   }
   <mat-card appearance="outlined" class="m-32">
