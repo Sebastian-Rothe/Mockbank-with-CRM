@@ -40,7 +40,7 @@ export class CreateNewAdminComponent {
   // formGroup: FormGroup;
   passwordVisible = false;
   user = new User();
-  roles: string[] = ['user', 'admin', 'support', 'management'];
+  roles: string[] = ['user', 'admin', 'management'];
   private _formBuilder = inject(FormBuilder);
   constructor(
     private firebaseAuthService: FirebaseAuthService,
@@ -101,16 +101,17 @@ export class CreateNewAdminComponent {
             .addUserWithAccount(this.user)
             .then(() => {
               console.log('Benutzer erfolgreich gespeichert:', this.user.uid);
-              // // this.router.navigate(['/']);
-              //       // Dialog öffnen
-              //       const dialogRef = this.dialog.open(SuccessDialogComponent);
+              // this.router.navigate(['/']);
+                    // Dialog öffnen
+                    // const dialogRef = this.dialog.open(SuccessDialogComponent);
 
-              //       // Dialog-Aktion abfangen
-              //       dialogRef.afterClosed().subscribe((result) => {
-              //         if (result === 'goToHome') {
-              //           this.router.navigate(['/']);
-              //         }
-              //       });
+                    // // Dialog-Aktion abfangen
+                    // dialogRef.afterClosed().subscribe((result) => {
+                    //   if (result === 'goToHome') {
+                    //     this.router.navigate(['/']);
+                    //   }
+                    // });
+              
             })
             .catch((error) => {
               console.error(
