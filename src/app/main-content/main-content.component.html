@@ -9,27 +9,28 @@
       <mat-icon>account_balance</mat-icon><span>MockBank</span>
     </div>
     <ul>
-      <li (click)="drawer.close()" routerLink="/main/dashboard" routerLinkActive="router-link-active">
+      <!-- (click)="drawer.close()" -->
+      <li  routerLink="/main/dashboard" routerLinkActive="router-link-active">
         <mat-icon>dashboard</mat-icon> Dashboard
       </li>
       @if(user?.role === 'user' || 'guest'){
-        <li (click)="drawer.close()" routerLink="user/{{uid}}">
+        <li  routerLink="user/{{uid}}">
           <mat-icon>person</mat-icon>Profile
         </li>
       }
-      <li (click)="drawer.close()" routerLink="/main/statistics">
+      <li routerLink="/main/statistics">
         <mat-icon>analytics</mat-icon> Statistics
       </li>
       @if(user?.role === 'admin'){
-        <li (click)="drawer.close()" routerLink="/main/user">
+        <li  routerLink="/main/user">
           <mat-icon>person_search</mat-icon> Search for User
         </li>
-        <li (click)="drawer.close()" routerLink="/main/new-admin">
+        <li  routerLink="/main/new-admin">
           <mat-icon>person_add</mat-icon> Create new Admin
         </li>
       }
       @if(isGuest){
-        <li (click)="drawer.close()" routerLink="/main/change-role">
+        <li routerLink="/main/change-role">
           <mat-icon>person_edit</mat-icon> Change Role
         </li>
       }

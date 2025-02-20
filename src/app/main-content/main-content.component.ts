@@ -33,8 +33,8 @@ import { BankService } from '../../services/bank.service';
   styleUrl: './main-content.component.scss',
 })
 export class MainContentComponent implements OnInit, AfterViewInit {
-  isDrawerOpened: boolean = true; // Lokale Variable für den Drawer-Status
-  drawerMode: MatDrawerMode = 'side'; // Standardmodus für große Screens
+  isDrawerOpened: boolean = true; 
+  drawerMode: MatDrawerMode = 'side'; 
   uid: string | null = null;
   user: User | null = null;
   isGuest: boolean = false;
@@ -49,19 +49,17 @@ export class MainContentComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    // Bildschirmgröße überwachen
     this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
       if (result.matches) {
         this.drawerMode = 'over';
-        this.isDrawerOpened = false; // Drawer schließen auf kleinen Bildschirmen
+        this.isDrawerOpened = false; 
       } else {
         this.drawerMode = 'side';
-        this.isDrawerOpened = true; // Drawer öffnen auf großen Bildschirmen
+        this.isDrawerOpened = true; 
       }
       this.cdRef.detectChanges();
     });
     
-    // Benutzerinformationen laden
     combineLatest([this.authService.uid$, this.authService.user$]).subscribe(
       ([uid, user]) => {
         if (uid && user) {
@@ -78,12 +76,11 @@ export class MainContentComponent implements OnInit, AfterViewInit {
       this.cdRef.detectChanges();
   }
 
-  // Ereignisbehandler, wenn der Drawer geöffnet wird
+ 
   onDrawerOpened(): void {
     this.isDrawerOpened = true;
   }
 
-  // Ereignisbehandler, wenn der Drawer geschlossen wird
   onDrawerClosed(): void {
     this.isDrawerOpened = false;
   }
@@ -102,7 +99,7 @@ export class MainContentComponent implements OnInit, AfterViewInit {
     try {
       await this.authService.logout();
     } catch (error) {
-      console.error('Fehler beim Logout:', error);
+      console.error('Error on logout:', error);
     }
   }
 

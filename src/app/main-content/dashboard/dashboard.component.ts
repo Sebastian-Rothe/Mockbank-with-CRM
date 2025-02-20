@@ -39,13 +39,11 @@ import { TransfersChartComponent } from '../../../charts/transfers-chart/transfe
     CommonModule,
     // MatMenu,
     TransfersComponent,
-    FirstChartsComponent, // first charts component
-    MonthlyExpensesChartComponent,
+    
     BankComponent,
     AccountsComponent,
     UserDashboardComponent,
-    UserGrowthChartComponent,
-    TransfersChartComponent
+   
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],

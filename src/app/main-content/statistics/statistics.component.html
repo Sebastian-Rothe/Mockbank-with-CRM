@@ -1,1 +1,12 @@
-<p>statistics works!</p>
+
+@if(user?.role === 'admin' || user?.role === 'management'){
+
+    <app-transfers-chart></app-transfers-chart>
+    <app-user-growth-chart></app-user-growth-chart>
+} @else {
+
+    <app-first-charts></app-first-charts>
+    <app-monthly-expenses-chart></app-monthly-expenses-chart>
+
+}    
+
