@@ -17,23 +17,26 @@
     <table>
       <thead>
         <tr>
-          <td>firstName</td>
-          <td>lastName</td>
-          <td>streetAddress</td>
-          <td>zipCode</td>
-          <td>city</td>
+          <td>Name</td>
+          <td>Email</td>
+          <td>Phone</td>
+          <td>Street</td>
+          <td>ZibCode</td>
+          <td>City</td>
         </tr>
       </thead>
       <tbody>
-        @for(user of filteredUsers; track $index) {
+        @for(user of filteredUsers; track $index) { @if(user.uid !==
+        'yBr3oAoV5HOBEHBxmTEcFwmR06H2'){
         <tr routerLink="{{ user.uid }}">
-          <td>{{ user.firstName }}</td>
-          <td>{{ user.lastName }}</td>
-          <td>{{ user.streetAddress }}</td>
+          <td>{{ user.firstName + " " + user.lastName }}</td>
+          <td>{{ user.email }}</td>
+          <td>{{user.phoneNumber}}</td>
+          <td>{{user.streetAddress}}</td>
           <td>{{ user.zipCode }}</td>
           <td>{{ user.city }}</td>
         </tr>
-        }
+        } }
       </tbody>
     </table>
   </mat-card>
