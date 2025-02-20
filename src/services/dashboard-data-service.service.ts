@@ -93,4 +93,15 @@ export class DashboardDataServiceService {
       console.error('Error loading transfers: ', error);
     }
   }
+
+  async loadAccountsForUser(userId: string): Promise<void> {
+    try {
+      const accounts = await this.firebaseService.getAccountsForUser(userId);
+      this.accountsSubject.next(accounts);
+    } catch (error) {
+      console.error(`Error loading accounts for user ${userId}: `, error);
+      this.accountsSubject.next([]);
+    }
+  }
+  
 }

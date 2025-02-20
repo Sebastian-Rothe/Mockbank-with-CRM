@@ -1,5 +1,5 @@
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
 // services
 import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
 import { FirebaseService } from '../../../../services/firebase.service';
@@ -42,7 +42,7 @@ export class AccountsComponent {
   uid$ = this.authService.uid$; // Falls nur die UID benötigt wird
   uid: string = '';
   accounts: Account[] = [];
-
+  @Input() userId: string | null = null; 
   constructor(
     private dashboardData: DashboardDataServiceService,
     private dialog: MatDialog,
@@ -53,18 +53,20 @@ export class AccountsComponent {
   ) {}
 
   ngOnInit(): void {
-    this.authService.uid$.subscribe((uid) => {
-      if (uid) {
-        this.uid = uid;
-
-      } else {
-        console.error('No UID available');
-      }
-    });
-    this.dashboardData.accounts$.subscribe((accounts) => {
-      this.accounts = accounts;
-    });
+    if (this.userId) {
+      this.dashboardData.loadAccountsForUser(this.userId).then(() => {
+        this.dashboardData.accounts$.subscribe(accounts => {
+          this.accounts = accounts;
+          console.log('Accounts loaded for user:', accounts);
+        });
+      });
+    } else {
+      this.dashboardData.accounts$.subscribe(accounts => {
+        this.accounts = accounts;
+      });
+    }
   }
+  
 
   openSendMoneyDialog(accountId: string): void {
     const dialogRef = this.dialog.open(DialogSendMoneyComponent, {

@@ -24,13 +24,13 @@ export class UserProfileComponent {
     private sharedService: SharedService)
   { }
   ngOnInit(): void {
-    this.authService.uid$.subscribe((uid) => {
+    // this.authService.uid$.subscribe((uid) => {
     
-      if (uid) {
-        this.uid = uid; 
-        // this.loadUser(uid); 
-      }
-    });
+    //   if (uid) {
+    //     this.uid = uid; 
+    //     // this.loadUser(uid); 
+    //   }
+    // });
   }
   // async loadUser(uid: string): Promise<void> {
   //   try {

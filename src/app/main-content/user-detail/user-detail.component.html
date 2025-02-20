@@ -1,3 +1,4 @@
+
 <div class="user-profile">
   <!-- User Overview Section -->
   <mat-card appearance="outlined" class="card-header m-32">
@@ -39,27 +40,9 @@
       </div>
     </div>
   </mat-card>
-  @if(user?.role !== 'user' || 'guest'){
-<!-- accounts!!!
- 
-<app-accounts></app-accounts> das ghet hier nicht. es fehlen die richtigen datern!
--->
-    <mat-card appearance="outlined" class="m-32">
-      <div class="section-header">
-        <h4>Login Data</h4>
-        <button
-          mat-icon-button
-          [matMenuTriggerFor]="userAccount"
-          aria-label="Open contact menu"
-        >
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #userAccount="matMenu">
-          <button mat-menu-item (click)="openEmailDialog()"><mat-icon class="mr-l6">mail</mat-icon>Change Email</button>
-          <button mat-menu-item (click)="openPasswordDialog()"><mat-icon class="mr-l6">password</mat-icon>Change Password</button>
-        </mat-menu>
-      </div>
-    </mat-card>
+  @if(isGuest && userId !== userIdCheck){
+    <app-accounts [userId]="userId"></app-accounts>
+
   }
   <mat-card appearance="outlined" class="m-32">
     <div class="section-header">

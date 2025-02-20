@@ -526,5 +526,23 @@ private async updateAccountBalance(accountId: string, amountChange: number) {
     }
   }
   
+  async getAccountsForUser(userId: string): Promise<Account[]> {
+    try {
+      const user = await this.getUser(userId);
+      if (!user || !user.accounts || user.accounts.length === 0) return [];
+      
+      const accountPromises = user.accounts.map(accountId => 
+        getDoc(doc(this.firestore, 'accounts', accountId))
+      );
+  
+      const accountDocs = await Promise.all(accountPromises);
+      return accountDocs
+        .filter(doc => doc.exists())
+        .map(doc => new Account({ ...doc.data(), accountId: doc.id }));
+    } catch (error) {
+      console.error('Error loading accounts:', error);
+      return [];
+    }
+  }
   
 }

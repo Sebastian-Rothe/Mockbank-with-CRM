@@ -1,4 +1,4 @@
-//  
+//
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
@@ -6,6 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { doc, onSnapshot } from 'firebase/firestore';
 // Services
 import { FirebaseService } from '../../../services/firebase.service';
+import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import { SharedService } from '../../../services/shared.service';
 // Models
 import { User } from '../../../models/user.class';
@@ -25,7 +26,6 @@ import { DialogEditUserEmailComponent } from '../../../dialogs/dialog-edit-user-
 import { DialogEditUserPasswordComponent } from '../../../dialogs/dialog-edit-user-password/dialog-edit-user-password.component';
 import { AccountsComponent } from '../dashboard/accounts/accounts.component';
 
-
 // import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-user-detail',
@@ -36,43 +36,69 @@ import { AccountsComponent } from '../dashboard/accounts/accounts.component';
     MatIcon,
     MatButtonModule,
     MatMenuModule,
-    AccountsComponent
+    AccountsComponent,
   ],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss',
 })
 export class UserDetailComponent implements OnInit {
-  userId = '';
+  userId: string = '';
   user: User | null = null;
-
+  isGuest: boolean = false;
+  userIdCheck: string | null = '';
   constructor(
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private firebaseService: FirebaseService,
+    private authService: FirebaseAuthService,
     private sharedService: SharedService
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe((params) => (this.userId = params['uid']));
- 
+    this.route.params.subscribe((params) => {
+      this.userId = params['uid'];
+      console.log('User ID from route:', this.userId);
+    });
     this.getUserDetails(this.userId);
+   
+    this.userIdCheck = this.authService.getUid();
+    console.log(
+      'the userId at user-detail:',
+      this.userId,
+      '???',
+      this.userIdCheck
+    );
   }
 
+  getUser(userID: string) {
+    this.firebaseService.getUser(userID);
+  }
   getUserDetails(userId: string): void {
+    if (!userId) {
+      console.error('No user ID provided!');
+      return;
+    }
+  
+    console.log('Fetching user details for ID:', userId);
+  
     const userRef = doc(this.firebaseService.firestore, 'users', userId);
-
-    // Realtime listener auf das Firestore-Dokument
+  
     onSnapshot(userRef, (docSnap) => {
       if (docSnap.exists()) {
-        // Füge die id hinzu, damit sie im User-Objekt enthalten ist
         const userData = docSnap.data();
-        this.user = new User({ ...userData, uid: docSnap.id }); // id hinzufügen
-   
+        console.log('User document found:', userData);
+  
+        this.user = new User({ ...userData, uid: docSnap.id });
+        console.log('User object after instantiation:', this.user);
       } else {
-        console.log('User not found');
+        console.error('User not found in Firestore!');
       }
     });
+  
+    this.isGuest = this.authService.isGuestUser();
+    console.log('Is guest user?', this.isGuest);
   }
+  
 
   editUserDetail() {
     if (this.user) {
@@ -82,7 +108,7 @@ export class UserDetailComponent implements OnInit {
   }
 
   editUserAddress() {
-    if (this.user){
+    if (this.user) {
       const dialog = this.dialog.open(DialogEditUserAddressComponent);
       dialog.componentInstance.user = new User(this.user.toPlainObject());
     }
@@ -95,12 +121,11 @@ export class UserDetailComponent implements OnInit {
     console.log('Edit User Contact');
   }
   editUserDetails() {
-     if (this.user){
+    if (this.user) {
       const dialog = this.dialog.open(DialogEditUserDetailsComponent);
       dialog.componentInstance.user = new User(this.user.toPlainObject());
     }
   }
- 
 
   openEmailDialog(): void {
     this.dialog.open(DialogEditUserEmailComponent, {
@@ -113,5 +138,4 @@ export class UserDetailComponent implements OnInit {
       width: '400px',
     });
   }
-  
 }
