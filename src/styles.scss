@@ -41,3 +41,24 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+
+// Snackbar Design für verschiedene Typen
+.success {
+  background: #4caf50 !important; // Grün
+  color: white;
+}
+
+.error {
+  background: #f44336 !important; // Rot
+  color: white;
+}
+
+.warning {
+  background: #ff9800 !important; // Orange
+  color: black;
+}
+
+.info {
+  background: #2196f3 !important; // Blau
+  color: white;
+}

@@ -28,6 +28,7 @@ import {
 import { FirebaseService } from './firebase.service';
 import { Router } from '@angular/router';
 import { AccountService } from './account.service';
+import { SnackbarService } from './snackbar.service';
 
 @Injectable({
   providedIn: 'root',
@@ -43,6 +44,7 @@ export class FirebaseAuthService {
     private firestore: Firestore,
     private firebaseService: FirebaseService,
     private accountService: AccountService,
+    private snackbarService: SnackbarService,
     private router: Router
   ) {
     // Initialize BehaviorSubject with null
@@ -76,10 +78,14 @@ export class FirebaseAuthService {
         password
       );
       this.uid$.next(userCredential.user.uid);
+      this.snackbarService.success('Registration successful!');
+
       return userCredential.user;
     } catch (error) {
+      this.snackbarService.error('Registration failed: ' + (error as Error).message);
       console.error('Registration error:', error);
       throw error;
+
     }
   }
 
@@ -98,12 +104,16 @@ export class FirebaseAuthService {
         password
       );
       this.uid$.next(userCredential.user.uid);
+      this.snackbarService.success('Login successful!');
       return userCredential.user;
     } catch (error) {
-      console.error('Login error:', error);
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      this.snackbarService.error('Login failed: ' + errorMessage);
+  
       throw error;
     }
   }
+  
 
   /**
    * Logs in as a guest user.
@@ -114,9 +124,13 @@ export class FirebaseAuthService {
     try {
       const userCredential = await signInAnonymously(this.auth);
       await this.ensureGuestUserExists(userCredential.user.uid);
+      this.snackbarService.success('Guest login successful!');
       return userCredential;
+
     } catch (error) {
       console.error('Error during guest login:', error);
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      this.snackbarService.error('Guest login failed: ' + errorMessage);
       throw error;
     }
   }
@@ -169,9 +183,12 @@ export class FirebaseAuthService {
       }
       await signOut(this.auth);
       this.uid$.next(null);
+      this.snackbarService.success('Logged out successfully!');
+
       await this.redirectAfterLogout();
     } catch (error) {
-      console.error('Error during logout:', error);
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      this.snackbarService.error('Logout failed: ' + errorMessage);
       throw error;
     }
   }
@@ -255,9 +272,10 @@ export class FirebaseAuthService {
       // Update the authentication email and log out
       await updateEmail(user, newEmail);
       await this.logout();
-      console.log('Email successfully updated.');
+      this.snackbarService.success('Email updated successfully. Please log in again.');
     } catch (error) {
-      console.error('Error updating email:', error);
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      this.snackbarService.error('Error updating email: ' + errorMessage);
       throw error;
     }
   }
@@ -276,9 +294,10 @@ export class FirebaseAuthService {
 
     try {
       await updatePassword(user, newPassword);
-      console.log('Password successfully updated.');
+      this.snackbarService.success('Password updated successfully.');
     } catch (error) {
-      console.error('Error updating password:', error);
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      this.snackbarService.error('Failed to update password: ' + errorMessage);
       throw error;
     }
   }
@@ -321,10 +340,11 @@ export class FirebaseAuthService {
 
     try {
       await sendEmailVerification(user);
-      console.log('Verification email has been sent.');
+      this.snackbarService.success('Verification email sent successfully.');
       console.log('Verification email sent to:', user.email);
     } catch (error) {
-      console.error('Error sending verification email:', error);
+      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
+      this.snackbarService.error('Failed to send verification email: ' + errorMessage);
       throw error;
     }
   }
@@ -339,8 +359,6 @@ export class FirebaseAuthService {
     if (!user) {
       throw new Error('No user is logged in.');
     }
-
-    // Reload user information
     await user.reload();
     return user.emailVerified;
   }
