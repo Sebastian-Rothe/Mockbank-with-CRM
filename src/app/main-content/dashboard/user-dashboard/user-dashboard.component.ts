@@ -53,8 +53,16 @@ onFileSelected(event: Event): void {
   const file = input.files[0];
   const allowedTypes = ['image/jpeg', 'image/png'];
 
+  // Check if the file type is allowed
   if (!allowedTypes.includes(file.type)) {
     alert('Bitte laden Sie eine gültige Bilddatei hoch (jpg, png).');
+    return;
+  }
+
+  // Check if the file size is less than 1MB (1MB = 1024 * 1024 bytes)
+  const maxSize = 1 * 1024 * 1024; // 1MB
+  if (file.size > maxSize) {
+    alert('Das Bild darf maximal 1MB groß sein.');
     return;
   }
 
@@ -68,6 +76,7 @@ onFileSelected(event: Event): void {
   };
   reader.readAsDataURL(file);
 }
+
 
 // This function is now automatically called after the image is selected
 async saveProfilePicture(): Promise<void> {
