@@ -7,10 +7,11 @@ import { FirebaseService } from '../../../../services/firebase.service';
 import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
 import { DashboardDataServiceService } from '../../../../services/dashboard-data-service.service';
 import { User } from '../../../../models/user.class';
+import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'app-user-dashboard',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatIcon],
   templateUrl: './user-dashboard.component.html',
   styleUrl: './user-dashboard.component.scss'
 })
@@ -58,15 +59,17 @@ onFileSelected(event: Event): void {
   }
 
   const reader = new FileReader();
-  reader.onload = () => {
+  reader.onload = async () => {
     this.profilePictureUrl = reader.result as string;
     if (this.user) {
       this.user.profilePictureUrl = this.profilePictureUrl;
+      await this.saveProfilePicture();
     }
   };
   reader.readAsDataURL(file);
 }
 
+// This function is now automatically called after the image is selected
 async saveProfilePicture(): Promise<void> {
   if (this.user?.uid && this.user?.profilePictureUrl) {
     try {
