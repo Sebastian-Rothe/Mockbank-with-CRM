@@ -185,18 +185,23 @@ export class FirebaseAuthService {
    * @returns A promise that resolves when the cleanup is complete.
    */
   async cleanupGuestUserData(uid: string): Promise<void> {
-    const userDocRef = doc(this.firestore, 'users', uid);
-    const userSnap = await getDoc(userDocRef);
-    if (userSnap.exists()) {
-      const userData = userSnap.data();
-      if (userData['accounts']) {
-        for (const accountId of userData['accounts']) {
-          await this.accountService.deleteAccount(accountId);
+    try {
+      const userDocRef = doc(this.firestore, 'users', uid);
+      const userSnap = await getDoc(userDocRef);
+      if (userSnap.exists()) {
+        const userData = userSnap.data();
+        if (Array.isArray(userData['accounts'])) {
+          for (const accountId of userData['accounts']) {
+            await this.accountService.deleteAccount(accountId);
+          }
+          console.log('All guest accounts have been deleted.');
         }
-        console.log('All guest accounts have been deleted.');
+        await deleteDoc(userDocRef);
+        console.log('Guest user data has been deleted.');
       }
-      await deleteDoc(userDocRef);
-      console.log('Guest user data has been deleted.');
+    } catch (error) {
+      console.error('Error cleaning up guest user data:', error);
+      throw error;
     }
   }
 
