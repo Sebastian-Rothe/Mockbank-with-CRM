@@ -21,6 +21,7 @@ export const routes: Routes = [
       { path: '', component: FrontpageContentComponent },
       { path: 'imprint', component: ImprintComponent },
       { path: 'open-account', component: OpenNewAccountComponent },
+      { path: 'privacy-policy', component: PrivacyPolicyComponent },
     ],
   },
   {
