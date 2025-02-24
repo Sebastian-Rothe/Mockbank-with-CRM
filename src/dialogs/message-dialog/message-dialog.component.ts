@@ -1,5 +1,7 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardActions } from '@angular/material/card';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 // import { FormsModule } from '@angular/forms';
 // import { MatButtonModule } from '@angular/material/button';
 // import { MatDialog, MatDialogContent } from '@angular/material/dialog';
@@ -14,7 +16,8 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
       MatDialogModule,
       // MatFormFieldModule,
       // MatInputModule,
-      // MatButtonModule,
+      MatButtonModule,
+      MatDialogActions,
       // FormsModule,
       // MatIcon
     ],
@@ -24,8 +27,8 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
       <p>{{ data.message }}</p>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-      <button mat-button (click)="close(false)">Abbrechen</button>
-      <button mat-raised-button color="primary" (click)="close(true)">OK</button>
+      <button mat-button (click)="close(false)">Cancel</button>
+      <button mat-raised-button class='confirm-button' (click)="close(true) ">OK</button>
     </mat-dialog-actions>
   `,
   styleUrls: ['./message-dialog.component.scss']
