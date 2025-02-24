@@ -8,6 +8,7 @@ import { FirebaseAuthService } from '../../../../services/firebase-auth.service'
 import { DashboardDataServiceService } from '../../../../services/dashboard-data-service.service';
 import { User } from '../../../../models/user.class';
 import { MatIcon } from '@angular/material/icon';
+import { DialogService } from '../../../../services/dialog.service';
 @Component({
   selector: 'app-user-dashboard',
   standalone: true,
@@ -25,7 +26,8 @@ export class UserDashboardComponent implements OnInit {
     private dashboardData: DashboardDataServiceService,
     private sharedService: SharedService,
     private authService: FirebaseAuthService,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -55,14 +57,14 @@ onFileSelected(event: Event): void {
 
   // Check if the file type is allowed
   if (!allowedTypes.includes(file.type)) {
-    alert('Bitte laden Sie eine gültige Bilddatei hoch (jpg, png).');
+    this.dialogService.openDialog('Invalid file type', 'Please upload a valid image file (JPG or PNG).');
     return;
   }
 
   // Check if the file size is less than 1MB (1MB = 1024 * 1024 bytes)
   const maxSize = 1 * 1024 * 1024; // 1MB
   if (file.size > maxSize) {
-    alert('Das Bild darf maximal 1MB groß sein.');
+    this.dialogService.openDialog('File too large', 'The image must be less than 1MB.');
     return;
   }
 
@@ -88,10 +90,11 @@ async saveProfilePicture(): Promise<void> {
       );
       this.isImageSelected = false;
     } catch (error) {
-      console.error('Fehler beim Speichern des Profilbilds:', error);
+      this.dialogService.openDialog('Error', 'Failed to save the profile picture. Please try again.');
+      console.error('Error saving profile picture:', error);
     }
   } else {
-    alert('Bitte zuerst ein Bild auswählen.');
+    this.dialogService.openDialog('No Image Selected', 'Please select an image first.');
   }
 }
 
