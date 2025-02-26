@@ -3,45 +3,54 @@
     #drawer
     class="sidenav"
     [mode]="drawerMode"
-    (opened)="onDrawerOpened()" (closed)="onDrawerClosed()"
+    (opened)="onDrawerOpened()"
+    (closed)="onDrawerClosed()"
+    aria-label="Sidebar Navigation"
   >
     <div class="logo-container">
-      <mat-icon>account_balance</mat-icon><span>MockBank</span>
+      <mat-icon aria-hidden="true">account_balance</mat-icon>
+      <span>MockBank</span>
     </div>
     <ul>
-      <!-- (click)="drawer.close()" we need this at least for small screens -->
-      <li  routerLink="/main/dashboard" routerLinkActive="router-link-active">
-        <mat-icon>dashboard</mat-icon> Dashboard
+      <li routerLink="/main/dashboard" routerLinkActive="router-link-active">
+        <mat-icon aria-hidden="true">dashboard</mat-icon> 
+        <span>Dashboard</span>
       </li>
       @if(user?.role === 'user' || 'guest'){
-        <li  routerLink="user/{{uid}}">
-          <mat-icon>person</mat-icon>Profile
+        <li routerLink="user/{{uid}}">
+          <mat-icon aria-hidden="true">person</mat-icon>
+          <span>Profile</span>
         </li>
       }
       <li routerLink="/main/statistics">
-        <mat-icon>analytics</mat-icon> Statistics
+        <mat-icon aria-hidden="true">analytics</mat-icon> 
+        <span>Statistics</span>
       </li>
       @if(user?.role === 'admin'){
-        <li  routerLink="/main/user">
-          <mat-icon>person_search</mat-icon> Search for User
+        <li routerLink="/main/user">
+          <mat-icon aria-hidden="true">person_search</mat-icon> 
+          <span>Search for User</span>
         </li>
-        <li  routerLink="/main/new-admin">
-          <mat-icon>person_add</mat-icon> Create new Admin
+        <li routerLink="/main/new-admin">
+          <mat-icon aria-hidden="true">person_add</mat-icon> 
+          <span>Create new Admin</span>
         </li>
       }
       @if(isGuest){
         <li routerLink="/main/change-role">
-          <mat-icon>person_edit</mat-icon> Change Role
+          <mat-icon aria-hidden="true">person_edit</mat-icon> 
+          <span>Change Role</span>
         </li>
       }
       <li class="footer-items"> 
-        <a href="">Help Center</a>
-        <a href="">Contact</a>
-        <a routerLink="privacy-policy">Datenschutzerklärung</a>
-        <a routerLink="imprint">Impressum</a>
+        <a href="" aria-label="Help Center">Help Center</a>
+        <a href="" aria-label="Contact">Contact</a>
+        <a routerLink="privacy-policy" aria-label="Privacy Policy">Datenschutzerklärung</a>
+        <a routerLink="imprint" aria-label="Imprint">Impressum</a>
       </li>
-      <li class="logout" (click)="logout()">
-        <mat-icon>logout</mat-icon> Logout
+      <li class="logout" (click)="logout()" tabindex="0" role="button" aria-label="Logout">
+        <mat-icon aria-hidden="true">logout</mat-icon>
+        <span>Logout</span>
       </li>
     </ul>
   </mat-drawer>
@@ -58,12 +67,13 @@
       </button>
       @if(!isDrawerOpened){
         <div class="logo-container" style="padding: 0;">
-          <mat-icon>account_balance</mat-icon><span>MockBank</span>
+          <mat-icon aria-hidden="true">account_balance</mat-icon>
+          <span>MockBank</span>
         </div>
       }
      
       <span class="example-spacer"></span>
-      <button mat-icon-button class="example-icon favorite-icon">
+      <button mat-icon-button class="example-icon favorite-icon" aria-label="Favorite">
         <mat-icon>favorite</mat-icon>
       </button>
       <button
