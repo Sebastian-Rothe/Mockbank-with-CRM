@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -25,6 +25,7 @@ import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import jsPDF from 'jspdf'; // PDF-Bibliothek installieren: `npm install jspdf`
 import { Router } from '@angular/router';
 import { SuccessDialogComponent } from '../../../dialogs/success-dialog/success-dialog.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-open-new-account',
@@ -47,6 +48,7 @@ import { SuccessDialogComponent } from '../../../dialogs/success-dialog/success-
     MatFormFieldModule,
     MatInputModule,
     MatDatepickerModule,
+    CommonModule
   ],
   templateUrl: './open-new-account.component.html',
   styleUrl: './open-new-account.component.scss',
