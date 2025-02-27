@@ -42,7 +42,9 @@
         errorMessage="Contact Information's are required."
       >
         <form class="form-1" [formGroup]="firstFormGroup">
-          <ng-template matStepLabel>Contact Information</ng-template>
+          @if(!isScreenSmall){<ng-template matStepLabel
+            >Contact Information</ng-template
+          >}
 
           <mat-form-field>
             <mat-label>Country Code</mat-label>
@@ -97,7 +99,9 @@
         errorMessage="Address Details are required."
       >
         <form class="form-2" [formGroup]="secondFormGroup">
-          <ng-template matStepLabel>Address Details</ng-template>
+          @if(!isScreenSmall){<ng-template matStepLabel
+            >Address Details</ng-template
+          >}
 
           <mat-form-field>
             <mat-label>First Name</mat-label>
@@ -178,7 +182,9 @@
         errorMessage="Additional Information's are required."
       >
         <form class="form-3" [formGroup]="thirdFormGroup">
-          <ng-template matStepLabel>Additional Information</ng-template>
+          @if(!isScreenSmall){<ng-template matStepLabel
+            >Additional Information</ng-template
+          >}
 
           <mat-form-field>
             <mat-label>Occupation</mat-label>
@@ -227,14 +233,28 @@
         errorMessage="Password is required."
       >
         <form class="form-4" [formGroup]="fourthFormGroup">
-          <ng-template matStepLabel>Set Password</ng-template>
+          @if(!isScreenSmall){<ng-template matStepLabel
+            >Set Password</ng-template
+          >}
 
           <mat-form-field>
             <mat-label>Password</mat-label>
-            <input name="password" formControlName="password" matInput [type]="passwordVisible ? 'text' : 'password'">
-            <button mat-icon-button matSuffix (click)="passwordVisible = !passwordVisible" [attr.aria-label]="'Hide password'"
-                    [attr.aria-pressed]="!passwordVisible">
-              <mat-icon>{{passwordVisible ? 'visibility' : 'visibility_off'}}</mat-icon>
+            <input
+              name="password"
+              formControlName="password"
+              matInput
+              [type]="passwordVisible ? 'text' : 'password'"
+            />
+            <button
+              mat-icon-button
+              matSuffix
+              (click)="passwordVisible = !passwordVisible"
+              [attr.aria-label]="'Hide password'"
+              [attr.aria-pressed]="!passwordVisible"
+            >
+              <mat-icon>{{
+                passwordVisible ? "visibility" : "visibility_off"
+              }}</mat-icon>
             </button>
             @if(fourthFormGroup.get('password')?.hasError('required')){
             <mat-error> Password is required. </mat-error>}
@@ -268,32 +288,34 @@
       </mat-step>
 
       <mat-step [editable]="false">
-        <ng-template matStepLabel>Done</ng-template>
+        @if(!isScreenSmall){<ng-template matStepLabel>Done</ng-template>}
         <div class="form-done">
           <div class="summary">
             <h3>Summary of Your Information</h3>
             <p><strong>Contact Information:</strong></p>
-            <p>Country Code: {{ firstFormGroup.get('countryCode')?.value }}</p>
-            <p>Phone Number: {{ firstFormGroup.get('phoneNumber')?.value }}</p>
-            <p>Email: {{ firstFormGroup.get('email')?.value }}</p>
+            <p>Country Code: {{ firstFormGroup.get("countryCode")?.value }}</p>
+            <p>Phone Number: {{ firstFormGroup.get("phoneNumber")?.value }}</p>
+            <p>Email: {{ firstFormGroup.get("email")?.value }}</p>
             <p><strong>Address Details:</strong></p>
-            <p>First Name: {{ secondFormGroup.get('firstName')?.value }}</p>
-            <p>Last Name: {{ secondFormGroup.get('lastName')?.value }}</p>
-            <p>City: {{ secondFormGroup.get('city')?.value }}</p>
+            <p>First Name: {{ secondFormGroup.get("firstName")?.value }}</p>
+            <p>Last Name: {{ secondFormGroup.get("lastName")?.value }}</p>
+            <p>City: {{ secondFormGroup.get("city")?.value }}</p>
             <p><strong>Additional Information:</strong></p>
-            <p>Occupation: {{ thirdFormGroup.get('occupation')?.value }}</p>
-            <p>Nationality: {{ thirdFormGroup.get('nationality')?.value }}</p>
+            <p>Occupation: {{ thirdFormGroup.get("occupation")?.value }}</p>
+            <p>Nationality: {{ thirdFormGroup.get("nationality")?.value }}</p>
           </div>
           <div class="action-buttons">
-            <button mat-button (click)="stepper.selectedIndex = 0">Edit Data</button>
-            <button mat-raised-button color="primary" (click)="downloadPdf()">Download as PDF</button>
-        
+            <button mat-button (click)="stepper.selectedIndex = 0">
+              Edit Data
+            </button>
+            <button mat-raised-button color="primary" (click)="downloadPdf()">
+              Download as PDF
+            </button>
           </div>
           <div class="align-next-btn">
             <button mat-button matStepperPrevious>Back</button>
             <button mat-button (click)="saveNewUser()">Send application</button>
           </div>
-       
         </div>
       </mat-step>
     </mat-stepper>

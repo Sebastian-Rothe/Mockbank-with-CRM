@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy} from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, HostListener} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -56,6 +56,7 @@ import { CommonModule } from '@angular/common';
 export class OpenNewAccountComponent {
   user = new User();
   birthDate: Date = new Date();
+  isScreenSmall = false;
   private _formBuilder = inject(FormBuilder);
   constructor(
     private router: Router,
@@ -64,6 +65,14 @@ export class OpenNewAccountComponent {
     private firebaseAuthService: FirebaseAuthService
   ) {}
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.isScreenSmall = event.target.innerWidth <= 680;
+  }
+
+  ngOnInit() {
+    this.isScreenSmall = window.innerWidth <= 680;
+  }
   firstFormGroup = this._formBuilder.group({
     countryCode: [
       '',
