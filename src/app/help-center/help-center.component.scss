@@ -1,0 +1,42 @@
+
+.help-container {
+    width: 100%;
+    background-color: black;
+    border-radius: 8px;
+    margin-top: 78px;
+    color: white;
+    padding: 20px;
+  }
+
+  .QandA {
+    padding: 20px;
+    z-index: 0;
+  }
+
+  @media (max-width: 1024px) {
+    .help-container {
+      padding: 15px;
+    }
+    .QandA {
+      padding: 15px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .help-container {
+      padding: 10px;
+    }
+    .QandA {
+      padding: 10px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .help-container {
+      padding: 5px;
+    }
+    .QandA {
+      padding: 5px;
+    }
+  }
+  

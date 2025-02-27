@@ -12,6 +12,7 @@ import { UserProfileComponent } from './main-content/user-profile/user-profile.c
 import { ChangeRoleComponent } from './main-content/change-role/change-role.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 import { StatisticsComponent } from './main-content/statistics/statistics.component';
+import { HelpCenterComponent } from './help-center/help-center.component';
 
 export const routes: Routes = [
   {
@@ -22,6 +23,7 @@ export const routes: Routes = [
       { path: 'imprint', component: ImprintComponent },
       { path: 'open-account', component: OpenNewAccountComponent },
       { path: 'privacy-policy', component: PrivacyPolicyComponent },
+      { path: 'help-center', component: HelpCenterComponent },
     ],
   },
   {
@@ -31,6 +33,7 @@ export const routes: Routes = [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // Default-Route
       { path: 'imprint', component: ImprintComponent },
       { path: 'privacy-policy', component: PrivacyPolicyComponent },
+      { path: 'help-center', component: HelpCenterComponent },
       { path: 'dashboard', component: DashboardComponent },
       { path: 'user-profile', component: UserProfileComponent },
       { path: 'user', component: UserComponent },
