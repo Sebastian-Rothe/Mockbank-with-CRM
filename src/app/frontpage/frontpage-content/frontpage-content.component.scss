@@ -1,43 +1,108 @@
-.content-align{
-    min-height: 80vh;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
+.hero-section {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 5vh 10%;
+}
+
+.hero-text {
+  flex: 1;
+  max-width: 600px;
+  color: white;
+}
+
+.hero-text h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.hero-text ol {
+  padding-left: 1.2rem;
+}
+
+.hero-text li {
+  text-align: left;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.hero-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-image img {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.btn-outline {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #ff758c; 
+  background-color: transparent;
+  border: 2px solid #ff758c;
+  border-radius: 24px;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.btn-outline:hover {
+  background-color: #ff758c;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-outline:active {
+  transform: scale(0.98);
+}
+
+.btn-outline:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.5);
+}
+
+@media (max-width: 1024px) {
+  .hero-section {
+    flex-direction: column;
+    text-align: center;
+    padding-top: 12vh;
   }
-  h1{
-    font-size: 3rem;
+
+  .hero-text h1 {
+    font-size: 2.2rem;
   }
-  li{
-    color: white;
-    font-size: 1.2rem;
+
+  .hero-text li {
+    font-size: 1rem;
+  }
+
+  .hero-image {
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-text h1 {
+    font-size: 2rem;
+  }
+
+  .hero-text li {
+    font-size: 0.9rem;
   }
 
   .btn-outline {
-    display: inline-block;
-    padding: 0.75rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    color: #ff758c; // Primärfarbe
-    background-color: transparent;
-    border: 2px solid #ff758c;
-    border-radius: 24px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  
-    &:hover {
-      background-color: #ff758c;
-      color: #fff;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-  
-    &:active {
-      transform: scale(0.98);
-    }
-  
-    &:focus {
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.5);
-    }
+    font-size: 0.9rem;
+    padding: 0.6rem 1.2rem;
   }
-  
+}
