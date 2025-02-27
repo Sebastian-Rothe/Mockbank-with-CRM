@@ -106,3 +106,8 @@
     padding: 0.6rem 1.2rem;
   }
 }
+@media (orientation: landscape) {
+  .hero-section {
+    margin-top: 52px;
+  }
+}
