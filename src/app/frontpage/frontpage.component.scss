@@ -10,68 +10,81 @@ mat-toolbar {
   position: fixed;
   top: 0;
   height: 8vh;
+  padding: 0 44px;
   background-color: rgb(19, 75, 112);
   color: white;
 }
-// Basis-Styles für alle Buttons bleiben erhalten
+
 .button-align {
-    display: flex;
-    gap: 44px;
-    margin-right: 6%;
-  
-    > button {
-      border-radius: 24px;
-      padding: 12px 24px;
-      font-size: 16px;
-      font-weight: bold;
-      transition: all 0.1s ease;
-    }
-  
-    > a {
-      text-decoration: none; // Entfernt die Standard-Unterstreichung
-      border-radius: 24px;
-      padding: 12px 24px;
-      font-size: 16px;
-      font-weight: bold;
-      transition: all 0.1s ease;
-    }
-    > .btn-gradient {
-        background: #ff758c;
-        color: white;
-        border: none;
-        box-shadow: 0 0 8px rgba(255, 117, 140, 0.3);
-      
-        &:hover {
-          background: #ff758c;
-          box-shadow: 0 0 15px rgba(255, 117, 140, 0.9); 
-        }
-      }
-      
-  
-  
-    > .btn-outline {
-      background: transparent;
-      color: #ff758c;
-      border: 2px solid #ff758c;
-  
-      &:hover {
-        background: #ff758c;
-        color: white;
-        border-color: #ff758c;
-      }
+  display: flex;
+  gap: 44px;
+
+  > button {
+    border-radius: 24px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.1s ease;
+  }
+
+  > a {
+    text-decoration: none;
+    border-radius: 24px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.1s ease;
+  }
+  > .btn-gradient {
+    background: #ff758c;
+    color: white;
+    border: none;
+    box-shadow: 0 0 8px rgba(255, 117, 140, 0.3);
+
+    &:hover {
+      background: #ff758c;
+      box-shadow: 0 0 15px rgba(255, 117, 140, 0.9);
     }
   }
-  
-.content-align{
+
+  > .btn-outline {
+    background: transparent;
+    color: #ff758c;
+    border: 2px solid #ff758c;
+
+    &:hover {
+      background: #ff758c;
+      color: white;
+      border-color: #ff758c;
+    }
+  }
+}
+
+.content-align {
   height: 80vh;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
 }
-h1{
+h1 {
   font-size: 3rem;
 }
-li{
+li {
   color: white;
   font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .btn-outline {
+    display: none;
+  }
+  mat-toolbar {
+    padding: 0 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  mat-toolbar {
+    padding: 0 16px;
+  }
 }
