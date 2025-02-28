@@ -1,17 +1,17 @@
 
 .help-container {
     width: 100%;
+    min-height: 80vh;
     flex: 1;
-    background-color: black;
+    // background-color: black;
     border-radius: 0 0 8px 8px;
-    // margin-top: 90px;
+   
     color: white;
     padding: 20px;
   }
-
+  
   .QandA {
     padding: 20px;
-    z-index: 0;
   }
 
   @media (max-width: 1024px) {
