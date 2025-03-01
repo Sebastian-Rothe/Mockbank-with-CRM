@@ -171,7 +171,7 @@ export class OpenNewAccountComponent {
             // .addUser(this.user)
             .addUserWithAccount(this.user)
             .then(() => {
-              console.log('Benutzer erfolgreich gespeichert:', this.user.uid);
+              // console.log('Benutzer erfolgreich gespeichert:', this.user.uid);
               // this.router.navigate(['/']);
               // Dialog öffnen
               const dialogRef = this.dialog.open(SuccessDialogComponent);
@@ -185,15 +185,17 @@ export class OpenNewAccountComponent {
             })
             .catch((error) => {
               console.error(
-                'Fehler beim Speichern des Benutzers in Firestore:',
+                'Error saving the user in Firestore:',
                 error
-              );
+            );
+            
             });
         }
       })
       .catch((error) => {
-        console.error('Fehler beim Registrieren des Benutzers:', error);
-      });
+        console.error('Error registering the user:', error);
+    });
+    
   }
 
   downloadPdf() {

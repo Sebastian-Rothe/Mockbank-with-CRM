@@ -97,7 +97,7 @@ export class LoginComponent {
         this.cancel();
       }
     } catch (error) {
-      console.error('Fehler beim Gast-Login:', error);
+      console.error('Error at guest-login:', error);
     }
   }
   

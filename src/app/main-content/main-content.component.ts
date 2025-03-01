@@ -110,7 +110,7 @@ export class MainContentComponent implements OnInit, AfterViewInit {
         text: 'Check out this amazing content!',
         url: window.location.href,
       })
-      .then(() => console.log('Content shared successfully'))
+      // .then(() => console.log('Content shared successfully'))
       .catch((error) => console.error('Error sharing content:', error));
     } else {
       this.shareOnSocialMedia();
