@@ -115,7 +115,7 @@ export class AccountsComponent {
     });
   }
 
-  openDeleteAccountDialog(accountId: string, userId: string): void {
+  openDeleteAccountDialog(accountId: string): void {
     const dialogRef = this.dialog.open(DialogConfirmDeleteAccComponent, {
       width: '400px',
       data: {
@@ -124,16 +124,20 @@ export class AccountsComponent {
       },
     });
   
-    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+    dialogRef.afterClosed().subscribe(async (confirmed: boolean) => {
       if (confirmed) {
-        this.accountService
-          .deleteAccount(accountId)
-          .then(() => this.accountService.removeAccountFromUser(userId, accountId))
-          .then(() => {
-            console.log('Account deleted successfully');
-            // this.dashboardData.loadUser(this.uid); // 🚀 Accounts neu laden
-          })
-          .catch((error) => console.error('Error deleting account:', error));
+        try {
+          const userId = this.userId || (await this.authService.getUid());
+          if (!userId) {
+            throw new Error('User ID is not available.');
+          }
+          await this.accountService.deleteAccount(accountId);
+          await this.accountService.removeAccountFromUser(userId, accountId);
+          console.log('Account deleted successfully');
+          this.dashboardData.loadAccountsForUser(userId); // Reload accounts
+        } catch (error) {
+          console.error('Error deleting account:', error);
+        }
       }
     });
   }
