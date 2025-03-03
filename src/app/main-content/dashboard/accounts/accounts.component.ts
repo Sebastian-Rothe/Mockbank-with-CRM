@@ -43,7 +43,8 @@ export class AccountsComponent {
   uid: string = '';
   accounts: Account[] = [];
   @Input() userId: string | null = null; 
-  isSmallScreen = false;
+  isSmallScreen: Boolean = false;
+  isExtraSmallScreen: Boolean = false;
   constructor(
     private dashboardData: DashboardDataServiceService,
     private dialog: MatDialog,
@@ -73,6 +74,7 @@ export class AccountsComponent {
 @HostListener('window:resize', ['$event'])
 onResize() {
   this.isSmallScreen = window.innerWidth <= 600;
+  this.isExtraSmallScreen = window.innerWidth <= 400;
 }
 
 

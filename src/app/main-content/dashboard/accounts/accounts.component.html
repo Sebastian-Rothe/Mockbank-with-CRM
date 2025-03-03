@@ -19,13 +19,22 @@
               </div>
               <!-- Description -->
               <div class="account-description">
-                <span>{{ account.accountName }}</span>
+                <span class="accounts-name">{{ account.accountName }}</span>
                 <p class="account-id">{{ account.accountId }}</p>
+                @if(isExtraSmallScreen){
+                  {{ getFormattedCurrency(account.balance) }}
+                }
               </div>
               <!-- Balance -->
-              <div class="account-balance">
-                {{ getFormattedCurrency(account.balance) }}
-              </div>
+               @if(!isExtraSmallScreen){
+                 <div class="account-balance">
+                   {{ getFormattedCurrency(account.balance) }}
+                 </div>
+
+               }
+
+
+
               <!-- Actions -->
               <div class="account-actions">
                 @if (isSmallScreen) {

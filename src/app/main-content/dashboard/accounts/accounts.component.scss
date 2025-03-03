@@ -1,4 +1,4 @@
-.align-btn{
+.align-btn {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -43,7 +43,6 @@
         transition: transform 0.2s, box-shadow 0.2s;
 
         &:hover {
-    
           transform: translateY(-4px);
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
@@ -64,7 +63,7 @@
             width: 40px; // Größer für bessere Sichtbarkeit
             height: 40px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-          
+
             mat-icon {
               font-size: 24px; // Größere Icons
               width: 24px;
@@ -75,18 +74,24 @@
           .account-description {
             flex: 2;
             font-weight: 500;
-            margin-left: 12px;
             max-height: 80px;
             overflow: hidden;
 
             &::-webkit-scrollbar {
               display: none;
             }
-
+            .accounts-name {
+              font-weight: 500;
+            }
             .account-id {
               font-size: 0.85rem;
               color: #666;
+              white-space: nowrap;  
+              overflow: hidden;     
+              text-overflow: ellipsis; 
+             
             }
+            
           }
 
           .account-balance {
@@ -124,5 +129,23 @@
         }
       }
     }
+  }
+}
+@media (max-width: 400px) {
+  .accounts {
+    mat-card-content {
+      padding: 12px;
+      .account-card{
+        padding: 8px;
+      }
+    }
+
+    mat-card {
+      margin: 0;
+    }
+  }
+
+  .account-id {
+    margin: 0;
   }
 }
