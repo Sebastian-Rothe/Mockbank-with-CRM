@@ -81,6 +81,7 @@ onResize() {
 
   openSendMoneyDialog(accountId: string): void {
     const dialogRef = this.dialog.open(DialogSendMoneyComponent, {
+  
       data: { senderAccountId: accountId },
     });
 
@@ -103,6 +104,7 @@ onResize() {
 
   openMoveMoneyDialog(accountId: string): void {
     const dialogRef = this.dialog.open(DialogMoveMoneyComponent, {
+      width: '400px',
       data: { senderAccountId: accountId }, // Übergabe der Account-ID
     });
 
