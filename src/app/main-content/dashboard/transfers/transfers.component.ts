@@ -47,13 +47,9 @@ export class TransfersComponent {
 
   async ngOnInit(): Promise<void> {
     if (this.userId) {
-      // Lade den User asynchron
       this.user = await this.firebaseService.getUser(this.userId);
-  
       if (this.user) {
         console.log('Loaded user:', this.user);
-        
-        // Lade die Transfers für diesen User
         await this.dashboardData.loadTransfers(this.user);
         this.dashboardData.transfers$.subscribe(transfers => {
           this.transfers = transfers;
@@ -63,13 +59,15 @@ export class TransfersComponent {
         console.log('User not found');
       }
     } else {
-      // Falls kein userId vorhanden ist (User sieht eigene Transfers)
       this.dashboardData.transfers$.subscribe((transfers) => {
         this.transfers = transfers;
       });
       
       this.user$.subscribe(user => {
         this.user = user;
+        if (user) {
+          this.dashboardData.loadTransfers(user);
+        }
       });
     }
   }

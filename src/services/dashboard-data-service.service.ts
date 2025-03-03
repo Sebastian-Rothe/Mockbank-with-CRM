@@ -53,42 +53,47 @@ export class DashboardDataServiceService {
 
   async loadTransfers(user: User): Promise<void> {
     try {
-      const transfers = await this.firebaseService.getTransfersForUser(user);
-      const userAccounts = this.accountsSubject.getValue();
-      const processedTransfers: any[] = [];
+      this.firebaseService.listenForTransfers(user).subscribe(
+        (transfers) => {
+          const userAccounts = this.accountsSubject.getValue();
+          const processedTransfers: any[] = [];
 
-      for (const transfer of transfers) {
-        const isSender = userAccounts.some(
-          (account) => account.accountId === transfer.senderAccountId
-        );
-        const isReceiver = userAccounts.some(
-          (account) => account.accountId === transfer.receiverAccountId
-        );
+          for (const transfer of transfers) {
+            const isSender = userAccounts.some(
+              (account) => account.accountId === transfer.senderAccountId
+            );
+            const isReceiver = userAccounts.some(
+              (account) => account.accountId === transfer.receiverAccountId
+            );
 
-        // Überprüfen, ob der Transfer bereits verarbeitet wurde
-        const exists = processedTransfers.some(
-          (t) => t.transferId === transfer.transferId
-        );
+            const exists = processedTransfers.some(
+              (t) => t.transferId === transfer.transferId
+            );
 
-        if (!exists) {
-          if (isSender) {
-            processedTransfers.push({
-              ...transfer,
-              amount: -transfer.amount, // Negativ, wenn gesendet
-              type: 'sent',
-            });
+            if (!exists) {
+              if (isSender) {
+                processedTransfers.push({
+                  ...transfer,
+                  amount: -transfer.amount,
+                  type: 'sent',
+                });
+              }
+              if (isReceiver) {
+                processedTransfers.push({
+                  ...transfer,
+                  amount: transfer.amount,
+                  type: 'received',
+                });
+              }
+            }
           }
-          if (isReceiver) {
-            processedTransfers.push({
-              ...transfer,
-              amount: transfer.amount, // Positiv, wenn empfangen
-              type: 'received',
-            });
-          }
+          processedTransfers.sort((a, b) => b.createdAt - a.createdAt);
+          this.transfersSubject.next(processedTransfers);
+        },
+        (error) => {
+          console.error('Error loading transfers: ', error);
         }
-      }
-      processedTransfers.sort((a, b) => b.createdAt - a.createdAt);
-      this.transfersSubject.next(processedTransfers);
+      );
     } catch (error) {
       console.error('Error loading transfers: ', error);
     }

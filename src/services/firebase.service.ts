@@ -16,7 +16,8 @@ import {
   deleteDoc,
   getDocs,
   getDoc,
-  increment
+  increment,
+  onSnapshot
 } from '@angular/fire/firestore';
 // Models
 import { User } from '../models/user.class';
@@ -543,6 +544,30 @@ private async updateAccountBalance(accountId: string, amountChange: number) {
       console.error('Error loading accounts:', error);
       return [];
     }
+  }
+
+  listenForTransfers(user: User): Observable<Transfer[]> {
+    return new Observable<Transfer[]>((observer) => {
+      const transferRefs = user.accounts.flatMap((accountId) => [
+        query(collection(this.firestore, 'transfers'), where('senderAccountId', '==', accountId)),
+        query(collection(this.firestore, 'transfers'), where('receiverAccountId', '==', accountId))
+      ]);
+
+      const allTransfers: Transfer[] = [];
+      const unsubscribes = transferRefs.map((transferRef) => 
+        onSnapshot(transferRef, (snapshot) => {
+          const transfers = snapshot.docs.map((doc) => new Transfer(doc.data() as Transfer));
+          allTransfers.push(...transfers);
+          observer.next(allTransfers);
+        }, (error) => {
+          observer.error(error);
+        })
+      );
+
+      return () => {
+        unsubscribes.forEach((unsubscribe) => unsubscribe());
+      };
+    });
   }
   
 }
