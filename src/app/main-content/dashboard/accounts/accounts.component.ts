@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // services
 import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
@@ -43,6 +43,7 @@ export class AccountsComponent {
   uid: string = '';
   accounts: Account[] = [];
   @Input() userId: string | null = null; 
+  isSmallScreen = false;
   constructor(
     private dashboardData: DashboardDataServiceService,
     private dialog: MatDialog,
@@ -65,8 +66,16 @@ export class AccountsComponent {
         this.accounts = accounts;
       });
     }
+    this.onResize();
   }
   
+
+@HostListener('window:resize', ['$event'])
+onResize() {
+  this.isSmallScreen = window.innerWidth <= 600;
+}
+
+
 
   openSendMoneyDialog(accountId: string): void {
     const dialogRef = this.dialog.open(DialogSendMoneyComponent, {
