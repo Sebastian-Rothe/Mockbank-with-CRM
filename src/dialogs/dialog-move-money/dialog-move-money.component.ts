@@ -77,6 +77,12 @@ export class DialogMoveMoneyComponent {
       console.error('Error loading user:', error);
     }
   }
+
+  /**
+   * Loads the accounts for the user.
+   * @param {string[]} accountIds - The account IDs.
+   * @returns {Promise<void>} A promise that resolves when the accounts are loaded.
+   */
   async loadAccounts(accountIds: string[]): Promise<void> {
     try {
      
@@ -98,6 +104,9 @@ export class DialogMoveMoneyComponent {
     }
   }
 
+  /**
+   * Moves money from the sender account to the receiver account.
+   */
   moveMoney(): void {
     if (this.senderAccountId && this.transfer.receiverAccountId) {
       this.firebaseService
@@ -110,7 +119,6 @@ export class DialogMoveMoneyComponent {
         )
         .then(() => {
           console.log('Money transferred successfully.');
-          this.updateAccounts();
           this.closeDialog();
         })
         .catch((error) => {
@@ -118,12 +126,6 @@ export class DialogMoveMoneyComponent {
         });
     } else {
       console.error('Sender or receiver account ID missing.');
-    }
-  }
-
-  async updateAccounts(): Promise<void> {
-    if (this.user) {
-      await this.loadAccounts(this.user.accounts);
     }
   }
   

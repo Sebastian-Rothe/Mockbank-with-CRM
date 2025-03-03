@@ -26,6 +26,11 @@ export class DashboardDataServiceService {
     });
   }
 
+  /**
+   * Loads the accounts for the given account IDs.
+   * @param {string[]} accountIds - The account IDs.
+   * @returns {Promise<void>} A promise that resolves when the accounts are loaded.
+   */
   async loadAccounts(accountIds: string[]): Promise<void> {
     try {
       this.firebaseService.listenForAccounts({ accounts: accountIds } as User).subscribe(
@@ -55,6 +60,11 @@ export class DashboardDataServiceService {
     }
   }
 
+  /**
+   * Loads the transfers for the given user.
+   * @param {User} user - The user.
+   * @returns {Promise<void>} A promise that resolves when the transfers are loaded.
+   */
   async loadTransfers(user: User): Promise<void> {
     try {
       this.firebaseService.listenForTransfers(user).subscribe(
@@ -103,6 +113,11 @@ export class DashboardDataServiceService {
     }
   }
 
+  /**
+   * Loads the accounts for the given user ID.
+   * @param {string} userId - The user ID.
+   * @returns {Promise<void>} A promise that resolves when the accounts are loaded.
+   */
   async loadAccountsForUser(userId: string): Promise<void> {
     try {
       const accounts = await this.firebaseService.getAccountsForUser(userId);

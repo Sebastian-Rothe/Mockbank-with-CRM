@@ -17,26 +17,25 @@ import { DashboardDataServiceService } from '../../../../services/dashboard-data
 @Component({
   selector: 'app-transfers',
   standalone: true,
-  imports: [    MatCard,
-      MatIconModule,
-      MatCardContent,
-  
-      MatButtonModule,
-      MatCardModule,
-      MatIcon,
-      CommonModule,
-  
-      ],
+  imports: [
+    MatCard,
+    MatIconModule,
+    MatCardContent,
+    MatButtonModule,
+    MatCardModule,
+    MatIcon,
+    CommonModule,
+    MatMenuModule,
+  ],
   templateUrl: './transfers.component.html',
   styleUrl: './transfers.component.scss'
 })
 export class TransfersComponent {
   transfers: any[] = [];
-  // uid: string | null = null;
   user: User | null = null; // Benutzerdaten
-  // userAccounts: Account[] = []; // Array von Account-Objekten
-  user$ = this.authService.user$; 
-    @Input() userId: string | null = null; 
+  user$ = this.authService.user$;
+  @Input() userId: string | null = null;
+
   constructor(
     private sharedService: SharedService,
     private dashboardData: DashboardDataServiceService,
@@ -47,46 +46,66 @@ export class TransfersComponent {
 
   async ngOnInit(): Promise<void> {
     if (this.userId) {
-      this.user = await this.firebaseService.getUser(this.userId);
-      if (this.user) {
-        console.log('Loaded user:', this.user);
-        await this.dashboardData.loadTransfers(this.user);
-        await this.dashboardData.loadAccounts(this.user.accounts);
-        this.dashboardData.transfers$.subscribe(transfers => {
-          this.transfers = transfers;
-          console.log('Transfers loaded for user:', transfers);
-        });
-        this.dashboardData.accounts$.subscribe(accounts => {
-          console.log('Accounts updated for user:', accounts);
-        });
-      } else {
-        console.log('User not found');
-      }
+      await this.loadUserAndTransfers(this.userId);
     } else {
-      this.dashboardData.transfers$.subscribe((transfers) => {
-        this.transfers = transfers;
-      });
-      
-      this.user$.subscribe(user => {
-        this.user = user;
+      this.user$.subscribe(async (user) => {
         if (user) {
-          this.dashboardData.loadTransfers(user);
-          this.dashboardData.loadAccounts(user.accounts);
+          this.user = user;
+          await this.loadTransfersForUser(user);
         }
       });
     }
   }
-  
 
+  /**
+   * Loads the user and their transfers by user ID.
+   * @param {string} userId - The user ID.
+   */
+  private async loadUserAndTransfers(userId: string): Promise<void> {
+    this.user = await this.firebaseService.getUser(userId);
+    if (this.user) {
+      console.log('Loaded user:', this.user);
+      await this.loadTransfersForUser(this.user);
+    } else {
+      console.log('User not found');
+    }
+  }
+
+  /**
+   * Loads the transfers for the given user.
+   * @param {User} user - The user.
+   */
+  private async loadTransfersForUser(user: User): Promise<void> {
+    await this.dashboardData.loadTransfers(user);
+    this.dashboardData.transfers$.subscribe((transfers) => {
+      this.transfers = transfers;
+    });
+  }
+
+  /**
+   * Formats the transfer date to a readable string.
+   * @param {number} transferDate - The transfer date as a timestamp.
+   * @returns {string} The formatted date string.
+   */
   getFormattedDate(transferDate: number): string {
     return this.sharedService.formatTimestampToDate(transferDate);
   }
 
+  /**
+   * Opens the transfer detail dialog.
+   * @param {Transfer} transfer - The transfer object.
+   */
   openTransferDetailDialog(transfer: Transfer): void {
     this.dialog.open(TransferDetailComponent, {
       data: transfer, // Übergebe das gesamte Transfer-Objekt
     });
   }
+
+  /**
+   * Formats the currency value.
+   * @param {number} value - The currency value.
+   * @returns {string} The formatted currency string.
+   */
   getFormattedCurrency(value: number) {
     return this.sharedService.getFormattedCurrency(value);
   }

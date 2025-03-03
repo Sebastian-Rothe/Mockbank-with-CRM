@@ -28,14 +28,12 @@ export class AccountService {
    */
   async getAccount(accountId: string): Promise<any> {
     try {
-    
       const accountDocRef = doc(this.firestore, 'accounts', accountId);
       const accountSnap = await getDoc(accountDocRef);
 
       if (accountSnap.exists()) {
         return accountSnap.data();
       } else {
-  
         throw new Error('Account not found');
       }
     } catch (error) {
@@ -172,30 +170,22 @@ export class AccountService {
    * @returns {Promise<void>} A promise that resolves when the removal is complete.
    * @throws {Error} If an invalid userId is provided.
    */
-  async removeAccountFromUser(userId: string, accountId: string): Promise<void> {
+  async removeAccountFromUser(
+    userId: string,
+    accountId: string
+  ): Promise<void> {
     if (!userId) {
-       throw new Error('Invalid userId provided.');
+      throw new Error('Invalid userId provided.');
     }
     try {
-       const userDocRef = doc(this.firestore, 'users', userId);
-       const userSnap = await getDoc(userDocRef);
- 
-       if (userSnap.exists()) {
-          const userData = userSnap.data();
-          console.log('Current accounts before removal:', userData['accounts']);
- 
-          await updateDoc(userDocRef, {
-             accounts: arrayRemove(accountId),
-          });
- 
-          console.log(`Account ${accountId} removed from user ${userId}`);
-       } else {
-          console.error('User document does not exist.');
-       }
+      const userDocRef = doc(this.firestore, 'users', userId);
+      await updateDoc(userDocRef, {
+        accounts: arrayRemove(accountId),
+      });
+      console.log(`Account ${accountId} removed from user ${userId}`);
     } catch (error) {
-       console.error('Error removing account from user:', error);
-       throw error;
+      console.error('Error removing account from user:', error);
+      throw error;
     }
- }
- 
+  }
 }
