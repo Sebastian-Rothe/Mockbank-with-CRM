@@ -25,27 +25,31 @@ export class DashboardDataServiceService {
       }
     });
   }
-  // async loadUser(uid: string): Promise<void> {
-  //   try {
-  //     const user = await this.firebaseService.getUser(uid);
-  //     this.user$.next(user);
-  //     if (user && user.accounts.length > 0) {
-  //       await this.loadAccounts(user.accounts);
-  //       await this.loadTransfers(user);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error loading user: ', error);
-  //   }
-  // }
 
   async loadAccounts(accountIds: string[]): Promise<void> {
     try {
-      const accounts = await Promise.all(
-        accountIds.map((accountId) => this.accountService.getAccount(accountId))
+      this.firebaseService.listenForAccounts({ accounts: accountIds } as User).subscribe(
+        (accounts: Account[]) => {
+          const currentAccounts = this.accountsSubject.getValue();
+          const updatedAccounts = [...currentAccounts, ...accounts];
+
+          // Filter out duplicate accounts
+          const uniqueAccounts = updatedAccounts.reduce((acc: Account[], account: Account) => {
+            const existingAccount = acc.find(a => a.accountId === account.accountId);
+            if (existingAccount) {
+              Object.assign(existingAccount, account); // Update existing account
+            } else {
+              acc.push(account);
+            }
+            return acc;
+          }, []);
+
+          this.accountsSubject.next(uniqueAccounts);
+        },
+        (error) => {
+          console.error('Error loading accounts: ', error);
+        }
       );
-      // Wenn du eine Transformation benötigst (z.B. Account.fromJson)
-      const accountObjs = accounts.map(Account.fromJson);
-      this.accountsSubject.next(accountObjs);
     } catch (error) {
       console.error('Error loading accounts: ', error);
     }

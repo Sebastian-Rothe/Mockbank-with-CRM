@@ -79,6 +79,7 @@ export class DialogMoveMoneyComponent {
   }
   async loadAccounts(accountIds: string[]): Promise<void> {
     try {
+     
       const accounts = await Promise.all(
         accountIds.map(async (accountId) => {
           const accountData = await this.accountService.getAccount(accountId);
@@ -109,6 +110,7 @@ export class DialogMoveMoneyComponent {
         )
         .then(() => {
           console.log('Money transferred successfully.');
+          this.updateAccounts();
           this.closeDialog();
         })
         .catch((error) => {
@@ -116,6 +118,12 @@ export class DialogMoveMoneyComponent {
         });
     } else {
       console.error('Sender or receiver account ID missing.');
+    }
+  }
+
+  async updateAccounts(): Promise<void> {
+    if (this.user) {
+      await this.loadAccounts(this.user.accounts);
     }
   }
   

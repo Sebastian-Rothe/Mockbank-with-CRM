@@ -51,9 +51,13 @@ export class TransfersComponent {
       if (this.user) {
         console.log('Loaded user:', this.user);
         await this.dashboardData.loadTransfers(this.user);
+        await this.dashboardData.loadAccounts(this.user.accounts);
         this.dashboardData.transfers$.subscribe(transfers => {
           this.transfers = transfers;
           console.log('Transfers loaded for user:', transfers);
+        });
+        this.dashboardData.accounts$.subscribe(accounts => {
+          console.log('Accounts updated for user:', accounts);
         });
       } else {
         console.log('User not found');
@@ -67,6 +71,7 @@ export class TransfersComponent {
         this.user = user;
         if (user) {
           this.dashboardData.loadTransfers(user);
+          this.dashboardData.loadAccounts(user.accounts);
         }
       });
     }

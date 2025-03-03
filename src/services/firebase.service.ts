@@ -108,7 +108,16 @@ export class FirebaseService {
     userDocRef: DocumentReference,
     accountId: string
   ): Promise<void> {
-    await updateDoc(userDocRef, { accounts: [accountId] });
+    const userSnap = await getDoc(userDocRef);
+    if (userSnap.exists()) {
+      const userData = userSnap.data();
+      const accounts = userData['accounts'] || [];
+      accounts.push(accountId);
+      await updateDoc(userDocRef, { accounts });
+    } else {
+      console.error(`User document not found for ID: ${userDocRef.id}`);
+      throw new Error('User document not found');
+    }
   }
  // End of new code addUserWithAccount -------------------------
 //  ----------------------------
@@ -559,6 +568,29 @@ private async updateAccountBalance(accountId: string, amountChange: number) {
           const transfers = snapshot.docs.map((doc) => new Transfer(doc.data() as Transfer));
           allTransfers.push(...transfers);
           observer.next(allTransfers);
+        }, (error) => {
+          observer.error(error);
+        })
+      );
+
+      return () => {
+        unsubscribes.forEach((unsubscribe) => unsubscribe());
+      };
+    });
+  }
+  
+  listenForAccounts(user: User): Observable<Account[]> {
+    return new Observable<Account[]>((observer) => {
+      const accountRefs = user.accounts.map((accountId) => 
+        doc(this.firestore, 'accounts', accountId)
+      );
+
+      const unsubscribes = accountRefs.map((accountRef) => 
+        onSnapshot(accountRef, (snapshot) => {
+          if (snapshot.exists()) {
+            const account = new Account({ ...snapshot.data(), accountId: snapshot.id });
+            observer.next([account]);
+          }
         }, (error) => {
           observer.error(error);
         })
