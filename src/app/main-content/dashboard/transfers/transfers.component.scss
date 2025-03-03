@@ -126,3 +126,55 @@
     }
   }
 }
+
+@media (max-width: 600px) {
+  .transfer-card {
+    min-width: 320px;
+    padding: 12px;
+  }
+  .transfer-content {
+    gap: 8px;
+  }
+
+  .transfer-description {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .transfer-icon {
+    width: 28px;
+    height: 28px;
+    padding: 6px;
+  }
+
+  .transfer-list {
+    white-space: nowrap;
+  }
+}
+@media (max-width: 400px) {
+  .transfers {
+    mat-card-content {
+      padding: 12px;
+      .transfer-card {
+        padding: 12px;
+      }
+    }
+    mat-card {
+      margin: 0;
+    }
+  }
+
+  .transfer-card {
+    padding: 10px;
+  }
+
+  .transfer-content {
+    gap: 6px !important;
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 368px) {
+  .transfer-description {
+    display: none;
+  }
+}
