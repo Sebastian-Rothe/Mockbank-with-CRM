@@ -22,6 +22,15 @@ import { DialogEditAccountComponent } from '../../../../dialogs/dialog-edit-acco
 //
 import { Account } from '../../../../models/account.class';
 
+/**
+ * AccountsComponent is responsible for displaying and managing user accounts.
+ * It provides functionalities to send money, create new accounts, move money between accounts,
+ * edit account details, and delete accounts.
+ *
+ * @component
+ * @example
+ * <app-accounts [userId]="userId"></app-accounts>
+ */
 @Component({
   selector: 'app-accounts',
   standalone: true,
@@ -40,12 +49,53 @@ import { Account } from '../../../../models/account.class';
   styleUrl: './accounts.component.scss',
 })
 export class AccountsComponent {
-  uid$ = this.authService.uid$; 
+  /**
+   * Observable for the user ID.
+   * @type {Observable<string>}
+   */
+  uid$ = this.authService.uid$;
+
+  /**
+   * User ID.
+   * @type {string}
+   */
   uid: string = '';
+
+  /**
+   * List of user accounts.
+   * @type {Account[]}
+   */
   accounts: Account[] = [];
-  @Input() userId: string | null = null; 
+
+  /**
+   * User ID passed as an input to the component.
+   * @type {string | null}
+   */
+  @Input() userId: string | null = null;
+
+  /**
+   * Flag indicating if the screen size is small.
+   * @type {boolean}
+   */
   isSmallScreen: Boolean = false;
+
+  /**
+   * Flag indicating if the screen size is extra small.
+   * @type {boolean}
+   */
   isExtraSmallScreen: Boolean = false;
+
+  /**
+   * Creates an instance of AccountsComponent.
+   * @param {DashboardDataServiceService} dashboardData - Service to handle dashboard data operations.
+   * @param {MatDialog} dialog - Service to manage dialog interactions.
+   * @param {FirebaseService} firebaseService - Service to handle Firebase operations.
+   * @param {FirebaseAuthService} authService - Service to handle authentication operations.
+   * @param {SharedService} sharedService - Service to handle shared operations.
+   * @param {AccountService} accountService - Service to handle account operations.
+   * @param {SnackbarService} snackbarService - Service to display snackbar messages.
+   * @param {DialogService} dialogService - Service to manage dialog interactions.
+   */
   constructor(
     private dashboardData: DashboardDataServiceService,
     private dialog: MatDialog,
@@ -57,6 +107,9 @@ export class AccountsComponent {
     private dialogService: DialogService
   ) {}
 
+  /**
+   * Initializes the component by loading user accounts and setting screen size flags.
+   */
   ngOnInit(): void {
     if (this.userId) {
       this.dashboardData.loadAccountsForUser(this.userId).then(() => {
@@ -72,43 +125,53 @@ export class AccountsComponent {
     }
     this.onResize();
   }
-  
 
-@HostListener('window:resize', ['$event'])
-onResize() {
-  this.isSmallScreen = window.innerWidth <= 600;
-  this.isExtraSmallScreen = window.innerWidth <= 400;
-}
+  /**
+   * Handles window resize events to set screen size flags.
+   * @param {Event} event - The resize event.
+   */
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.isSmallScreen = window.innerWidth <= 600;
+    this.isExtraSmallScreen = window.innerWidth <= 400;
+  }
 
-
-
+  /**
+   * Opens the send money dialog for the specified account.
+   * @param {string} accountId - The ID of the sender account.
+   */
   openSendMoneyDialog(accountId: string): void {
     const dialogRef = this.dialog.open(DialogSendMoneyComponent, {
-  
       data: { senderAccountId: accountId },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // this.loadUser(this.uid); // Oder: this.loadTransfers();
+        // this.loadUser(this.uid); // Or: this.loadTransfers();
       }
     });
   }
 
+  /**
+   * Opens the dialog to create a new account.
+   */
   openNewPocketDialog(): void {
     const dialogRef = this.dialog.open(DialogOpenNewPocketComponent);
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // this.dashboardData.loadUser(this.uid); // Benutzer-Daten neu laden
+        // this.dashboardData.loadUser(this.uid); // Reload user data
       }
     });
   }
-  
 
+  /**
+   * Opens the move money dialog for the specified account.
+   * @param {string} accountId - The ID of the sender account.
+   */
   openMoveMoneyDialog(accountId: string): void {
     const dialogRef = this.dialog.open(DialogMoveMoneyComponent, {
       width: '400px',
-      data: { senderAccountId: accountId }, // Übergabe der Account-ID
+      data: { senderAccountId: accountId },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -118,10 +181,14 @@ onResize() {
     });
   }
 
+  /**
+   * Opens the edit account dialog for the specified account.
+   * @param {string} accountID - The ID of the account to edit.
+   */
   openEditAccountDialog(accountID: string): void {
     const dialogRef = this.dialog.open(DialogEditAccountComponent, {
       width: '400px',
-      data: { accountID: accountID }, // Übergabe der Account-ID
+      data: { accountID: accountID },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -131,6 +198,10 @@ onResize() {
     });
   }
 
+  /**
+   * Opens the delete account dialog for the specified account.
+   * @param {string} accountId - The ID of the account to delete.
+   */
   openDeleteAccountDialog(accountId: string): void {
     this.dialogService.openDialog(
       'Confirm Deletion',
@@ -152,8 +223,12 @@ onResize() {
       }
     });
   }
-  
 
+  /**
+   * Formats the currency value.
+   * @param {number} value - The currency value.
+   * @returns {string} The formatted currency string.
+   */
   getFormattedCurrency(value: number) {
     return this.sharedService.getFormattedCurrency(value);
   }
