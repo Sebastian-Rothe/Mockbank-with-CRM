@@ -11,11 +11,15 @@ import { SharedService } from '../../../services/shared.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { FirebaseService } from '../../../services/firebase.service';
+// components
+import { DialogEditInterestRateComponent } from '../../../dialogs/dialog-edit-interest-rate/dialog-edit-interest-rate.component';
+import { DialogEditTransactionFeeComponent } from '../../../dialogs/dialog-edit-transaction-fee/dialog-edit-transaction-fee.component';
+
 @Component({
   selector: 'app-bank',
   standalone: true,
@@ -40,7 +44,8 @@ export class BankComponent implements OnInit {
   constructor(
     private bankService: BankService,
     private sharedService: SharedService,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    public dialog: MatDialog
   ) {}
   ngOnInit() {
     this.loadBankData();
@@ -61,5 +66,30 @@ export class BankComponent implements OnInit {
   getFormattedCurrency(value: number) {
     return this.sharedService.getFormattedCurrency(value);
   }
-  openEditDialog() {}
+
+ 
+
+  openEditInterestRateDialog(): void {
+    const dialogRef = this.dialog.open(DialogEditInterestRateComponent, {
+      data: this.bank,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadBankData();
+      }
+    });
+  }
+
+  openEditTransactionFeeDialog(): void {
+    const dialogRef = this.dialog.open(DialogEditTransactionFeeComponent, {
+      data: this.bank,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadBankData();
+      }
+    });
+  }
 }
