@@ -14,23 +14,31 @@
     <div class="stat-box">
       <p class="stat-title">Interest Rate</p>
       <h3>{{ bank!.interestRate * 100 }}%</h3>
-      <button mat-raised-button color="primary" (click)="openEditInterestRateDialog()">
-        <mat-icon>edit</mat-icon> Edit Interest Rate
+      <button mat-icon-button [matMenuTriggerFor]="interestRateMenu" aria-label="Open interest rate menu" class="menu-button">
+        <mat-icon>more_vert</mat-icon>
       </button>
+      <mat-menu #interestRateMenu="matMenu">
+        <button mat-menu-item (click)="openEditInterestRateDialog()" class="edit-icon">
+          <mat-icon>edit</mat-icon> Edit Interest Rate
+        </button>
+      </mat-menu>
     </div>
     <div class="stat-box">
       <p class="stat-title">Transaction Fee</p>
       <h3>{{ getFormattedCurrency(bank.transactionFee) }}</h3>
-      <button mat-raised-button color="primary" (click)="openEditTransactionFeeDialog()">
-        <mat-icon>edit</mat-icon> Edit Transaction Fee
+      <button mat-icon-button [matMenuTriggerFor]="transactionFeeMenu" aria-label="Open transaction fee menu" class="menu-button">
+        <mat-icon>more_vert</mat-icon>
       </button>
+      <mat-menu #transactionFeeMenu="matMenu">
+        <button mat-menu-item (click)="openEditTransactionFeeDialog()" class="edit-icon">
+          <mat-icon>edit</mat-icon> Edit Transaction Fee
+        </button>
+      </mat-menu>
     </div>
     <div class="stat-box">
       <p class="stat-title">Total Capital of Users</p>
       <h3>{{ getFormattedCurrency(totalUserCapital) }}</h3>
     </div>
   </div>
-  <!-- Admin-Funktion: Bearbeiten -->
-  
 </mat-card>
 }

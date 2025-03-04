@@ -7,6 +7,7 @@ import { Bank } from '../../../models/bank.interface';
 import { BankService } from '../../../services/bank.service';
 // import { FirebaseService } from '../../../services/firebase.service';
 import { SharedService } from '../../../services/shared.service';
+import { FirebaseService } from '../../../services/firebase.service';
 // material
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,7 +16,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
-import { FirebaseService } from '../../../services/firebase.service';
+import { MatMenuModule } from '@angular/material/menu';
 // components
 import { DialogEditInterestRateComponent } from '../../../dialogs/dialog-edit-interest-rate/dialog-edit-interest-rate.component';
 import { DialogEditTransactionFeeComponent } from '../../../dialogs/dialog-edit-transaction-fee/dialog-edit-transaction-fee.component';
@@ -32,6 +33,7 @@ import { DialogEditTransactionFeeComponent } from '../../../dialogs/dialog-edit-
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
+    MatMenuModule,
   ],
   templateUrl: './bank.component.html',
   styleUrl: './bank.component.scss',
@@ -62,12 +64,10 @@ export class BankComponent implements OnInit {
   async loadTotalCapital() {
     this.totalCapital = await this.bankService.getTotalCapitalOfBank();
   }
-  
+
   getFormattedCurrency(value: number) {
     return this.sharedService.getFormattedCurrency(value);
   }
-
- 
 
   openEditInterestRateDialog(): void {
     const dialogRef = this.dialog.open(DialogEditInterestRateComponent, {

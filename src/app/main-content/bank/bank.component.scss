@@ -33,11 +33,22 @@
   padding: 16px;
   border-radius: 8px;
   text-align: center;
+  position: relative;
 }
 
 .stat-title {
   font-size: 0.9rem;
   color: gray;
+}
+
+.menu-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.edit-icon mat-icon {
+  margin-right: 8px;
 }
 
 .bank-actions {
