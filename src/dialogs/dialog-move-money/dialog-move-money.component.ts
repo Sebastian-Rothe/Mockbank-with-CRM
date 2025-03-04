@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+//  material
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatIcon } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -7,22 +10,31 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+// models
 import { Transfer } from '../../models/transfer.class';
 import { User } from '../../models/user.class';
 import { Account } from '../../models/account.class';
+//  services
 import { FirebaseService } from '../../services/firebase.service';
 import { FirebaseAuthService } from '../../services/firebase-auth.service';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Inject } from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
 import { AccountService } from '../../services/account.service';
+import { SnackbarService } from '../../services/snackbar.service';
 
+/**
+ * DialogMoveMoneyComponent is responsible for handling the logic to open a dialog that allows a user
+ * to move money between accounts. It includes validation of user input and interaction with the
+ * Firebase service to transfer funds. If the user is not logged in or provides invalid details,
+ * appropriate error messages will be shown.
+ *
+ * @component
+ * @example
+ * <app-dialog-move-money></app-dialog-move-money>
+ */
 @Component({
   selector: 'app-dialog-move-money',
   standalone: true,
   imports: [
     MatDialogModule,
-    // MatDialogClose,
     MatFormFieldModule,
     MatOption,
     MatSelectModule,
@@ -33,28 +45,36 @@ import { AccountService } from '../../services/account.service';
     MatIcon
   ],
   templateUrl: './dialog-move-money.component.html',
-  styleUrl: './dialog-move-money.component.scss',
+  styleUrls: ['./dialog-move-money.component.scss'],
 })
 export class DialogMoveMoneyComponent {
-  uid: string | null = null; // User-ID
+  uid: string | null = null; 
   user: User | null = null;
-  // acc: Account = new Account(); // Neues Konto
-  transfer = new Transfer(); // Neuer Transfer
-  totalBalance: number = 0; // Gesamtsumme der Konten
-  userAccounts: Account[] = []; // Array von Account-Objekten, statt nur einem Account-Objekt
+  transfer = new Transfer(); 
+  totalBalance: number = 0; 
+  userAccounts: Account[] = []; 
 
-  senderAccountId: string; //
+  senderAccountId: string; 
   category: string = 'Internal Transfer';
 
+  /**
+   * Creates an instance of DialogMoveMoneyComponent.
+   * @param {FirebaseService} firebaseService - Service to handle Firebase operations.
+   * @param {AccountService} accountService - Service to handle account operations.
+   * @param {FirebaseAuthService} authService - Service to handle authentication operations.
+   * @param {MatDialogRef<DialogMoveMoneyComponent>} dialogRef - Reference to the current dialog instance.
+   * @param {SnackbarService} snackbarService - Service to display snackbar messages.
+   * @param {any} data - Data passed to the dialog.
+   */
   constructor(
     private firebaseService: FirebaseService,
     private accountService: AccountService,
     private authService: FirebaseAuthService,
     public dialogRef: MatDialogRef<DialogMoveMoneyComponent>,
+    private snackbarService: SnackbarService,
     @Inject(MAT_DIALOG_DATA) public data: { senderAccountId: string }
   ) {
-    this.senderAccountId = data.senderAccountId; // Speichern der übergebenen ID
- 
+    this.senderAccountId = data.senderAccountId; 
   }
 
   ngOnInit(): void {
@@ -65,10 +85,14 @@ export class DialogMoveMoneyComponent {
     }
   }
 
+  /**
+   * Loads the user data.
+   * @param {string} uid - The user ID.
+   * @returns {Promise<void>} A promise that resolves when the user data is loaded.
+   */
   async loadUser(uid: string): Promise<void> {
     try {
       this.user = await this.firebaseService.getUser(uid);
-   
 
       if (this.user && this.user.accounts.length > 0) {
         await this.loadAccounts(this.user.accounts);
@@ -85,7 +109,6 @@ export class DialogMoveMoneyComponent {
    */
   async loadAccounts(accountIds: string[]): Promise<void> {
     try {
-     
       const accounts = await Promise.all(
         accountIds.map(async (accountId) => {
           const accountData = await this.accountService.getAccount(accountId);
@@ -98,7 +121,6 @@ export class DialogMoveMoneyComponent {
         (sum, account) => sum + account.balance,
         0
       );
-      console.log('Total Balance:', this.totalBalance);
     } catch (error) {
       console.error('Error loading accounts:', error);
     }
@@ -118,17 +140,22 @@ export class DialogMoveMoneyComponent {
           this.category
         )
         .then(() => {
-          console.log('Money transferred successfully.');
+          this.snackbarService.success('Money transferred successfully.');
           this.closeDialog();
         })
         .catch((error) => {
           console.error('Transfer failed:', error);
+          this.snackbarService.error('Transfer failed.');
         });
     } else {
       console.error('Sender or receiver account ID missing.');
+      this.snackbarService.error('Sender or receiver account ID missing.');
     }
   }
-  
+
+  /**
+   * Closes the dialog without making any changes.
+   */
   closeDialog(): void {
     this.dialogRef.close();
   }
