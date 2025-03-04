@@ -157,8 +157,8 @@
     text-overflow: ellipsis;
   }
   .transfers mat-card-content .transfer-card .transfer-content .transfer-icon {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     // padding: 6px;
     flex-shrink: 0;
     overflow: visible;
@@ -191,19 +191,18 @@
       margin: 0;
     }
   }
-  
-  .transfer-card {
-    padding: 10px;
-    flex-wrap: wrap;
+  .transfers mat-card-content .transfer-card{
+    padding: 8px;
   }
+
 
   .transfer-content {
     gap: 6px !important;
     flex-wrap: wrap;
   }
   .transfers mat-card-content .transfer-card .transfer-content .transfer-icon {
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
     }
 }
 

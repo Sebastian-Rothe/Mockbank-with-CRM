@@ -4,149 +4,187 @@
   justify-content: center;
   margin: 24px 0;
 }
+.accounts{
+  margin-bottom: 8px;
+}
 
-.accounts {
-  mat-card {
-    margin-top: 16px;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.accounts mat-card {
+  margin-top: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
-    &-header {
-      background-color: #f7f7f7;
-      padding: 16px;
-      border-bottom: 1px solid #ddd;
+.accounts-header {
+  background-color: #f7f7f7;
+  padding: 16px;
+  border-bottom: 1px solid #ddd;
+}
 
-      mat-card-title {
-        font-size: 1.5rem;
-        font-weight: 600;
-      }
-    }
+.accounts-header mat-card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
 
-    &-content {
-      padding: 16px;
+.accounts-content {
+  padding: 16px;
+}
 
-      .account-list {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
+.account-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
 
-      .account-card {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 16px;
-        background-color: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s, box-shadow 0.2s;
+.account-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
 
-        &:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
+.account-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
 
-        .account-content {
-          display: flex;
-          align-items: center;
-          width: 100%;
-          gap: 16px;
+.account-content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
+}
 
-          .account-icon {
-            background-color: #eeeeee;
-            padding: 10px; // Mehr Padding für bessere Sichtbarkeit
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px; // Größer für bessere Sichtbarkeit
-            height: 40px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+.account-icon {
+  background-color: #eeeeee;
+  padding: 10px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
 
-            mat-icon {
-              font-size: 24px; // Größere Icons
-              width: 24px;
-              height: 24px;
-            }
-          }
+.account-icon mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
 
-          .account-description {
-            flex: 2;
-            font-weight: 500;
-            max-height: 80px;
-            overflow: hidden;
+.account-description {
+  flex: 2;
+  font-weight: 500;
+  max-height: 80px;
+  overflow: hidden;
+}
 
-            &::-webkit-scrollbar {
-              display: none;
-            }
-            .accounts-name {
-              font-weight: 500;
-            }
-            .account-id {
-              font-size: 0.85rem;
-              color: #666;
-              white-space: nowrap;  
-              overflow: hidden;     
-              text-overflow: ellipsis; 
-             
-            }
-            
-          }
+.account-description::-webkit-scrollbar {
+  display: none;
+}
 
-          .account-balance {
-            flex: 1;
-            font-weight: 600;
-            text-align: right;
-          }
+.accounts-name {
+  font-weight: 500;
+}
 
-          .account-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+.account-id {
+  font-size: 0.85rem;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-            button {
-              background-color: #f5f5f5;
-              border-radius: 50%;
-              // width: 44px;
-              // height: 44px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              transition: background-color 0.2s, transform 0.2s;
+.account-balance {
+  flex: 1;
+  font-weight: 600;
+  text-align: right;
+}
 
-              mat-icon {
-                font-size: 1.2rem;
-                color: #4e4e4e;
-              }
+.account-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
-              &:hover {
-                background-color: #eeeeee;
-                transform: scale(1.1);
-              }
-            }
-          }
-        }
-      }
-    }
+.account-actions button {
+  background-color: #f5f5f5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s, transform 0.2s;
+  width: 48px;
+  height: 48px;
+}
+
+.account-actions button mat-icon {
+  font-size: 1.2rem;
+  color: #4e4e4e;
+  display: block;  // Ensure the mat-icon is treated as a block element
+  margin: 0 auto;  // Centers it horizontally within the button
+}
+
+.account-actions button:hover {
+  background-color: #eeeeee;
+  transform: scale(1.1);
+}
+
+/* Responsive Anpassungen */
+
+@media (max-width: 600px) {
+  .account-icon {
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+  }
+  .account-actions button {
+    width: 40px;
+    height: 40px;
   }
 }
 @media (max-width: 400px) {
-  .accounts {
-    mat-card-content {
-      padding: 12px;
-      .account-card{
-        padding: 8px;
-      }
-    }
+  .accounts mat-card-content {
+    padding: 12px;
+  }
 
-    mat-card {
-      margin: 0;
-    }
+  .account-card {
+    padding: 8px;
+  }
+
+  .accounts mat-card {
+    margin: 0;
   }
 
   .account-id {
     margin: 0;
   }
-}
+  .account-icon {
+    padding: 10px;
+    width: 36px;
+    height: 36px;
+    mat-icon{
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+    }
+    .account-actions button {
+      width: 36px;    
+      height: 36px;   
+      padding: 0;     
+    }
+  
+    .account-actions button mat-icon {
+      font-size: 18px;    
+      width: 18px;
+      height: 18px;
+      margin: 0;         
+    }
+  }
 
