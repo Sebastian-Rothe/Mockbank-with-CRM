@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+//  material
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { FirebaseAuthService } from '../../services/firebase-auth.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { FormsModule } from '@angular/forms';
 import { MatIcon } from '@angular/material/icon';
+//  services 
+import { FirebaseAuthService } from '../../services/firebase-auth.service';
 import { SnackbarService } from '../../services/snackbar.service';
-import { MessageDialogComponent } from '../message-dialog/message-dialog.component';
+import { DialogService } from '../../services/dialog.service';
 
 /**
  * DialogEditUserEmailComponent is responsible for handling the logic to open a dialog that allows a user
@@ -51,13 +53,13 @@ export class DialogEditUserEmailComponent {
    * @param {MatDialogRef<DialogEditUserEmailComponent>} dialogRef - Reference to the current dialog instance.
    * @param {FirebaseAuthService} authService - Service to handle authentication operations.
    * @param {SnackbarService} snackbarService - Service to display snackbar messages.
-   * @param {MatDialog} dialog - Service to manage dialog interactions.
+   * @param {DialogService} dialogService - Service to manage dialog interactions.
    */
   constructor(
     private dialogRef: MatDialogRef<DialogEditUserEmailComponent>,
     private authService: FirebaseAuthService,
     private snackbarService: SnackbarService,
-    private dialog: MatDialog
+    private dialogService: DialogService
   ) {}
 
   /**
@@ -71,7 +73,7 @@ export class DialogEditUserEmailComponent {
     try {
       await this.authService.reauthenticate(this.currentPassword);
       await this.authService.sendEmailVerification();
-      this.openMessageDialog('Verification Email Sent', 'A verification email has been sent. Please confirm your new email.'); // msg
+      this.dialogService.openDialog('Verification Email Sent', 'A verification email has been sent. Please confirm your new email.'); // msg
       const isVerified = await this.authService.checkEmailVerification();
 
       if (isVerified) {
@@ -82,7 +84,7 @@ export class DialogEditUserEmailComponent {
         this.snackbarService.error('Email was not verified.'); // snack
       }
     } catch (error: any) {
-      this.openMessageDialog('Error', 'Error changing email: ' + error.message); // msg
+      this.dialogService.openDialog('Error', 'Error changing email: ' + error.message); // msg
     }
   }
 
@@ -91,16 +93,5 @@ export class DialogEditUserEmailComponent {
    */
   closeDialog(): void {
     this.dialogRef.close();
-  }
-
-  /**
-   * Opens a message dialog to display an error or informational message to the user.
-   * @param {string} title - The title of the message dialog.
-   * @param {string} message - The message to display in the dialog.
-   */
-  openMessageDialog(title: string, message: string): void {
-    this.dialog.open(MessageDialogComponent, {
-      data: { title, message },
-    });
   }
 }

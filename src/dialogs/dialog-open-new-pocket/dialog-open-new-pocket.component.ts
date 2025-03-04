@@ -17,8 +17,7 @@ import { Account } from '../../models/account.class';
 // services
 import { FirebaseAuthService } from '../../services/firebase-auth.service';
 import { AccountService } from '../../services/account.service';
-// components
-import { MessageDialogComponent } from '../message-dialog/message-dialog.component';
+import { DialogService } from '../../services/dialog.service';
 
 /**
  * DialogOpenNewPocketComponent is responsible for handling the logic to open a dialog that allows a user
@@ -64,13 +63,13 @@ export class DialogOpenNewPocketComponent implements OnInit {
    * @param {AccountService} accountService - Service to handle account operations.
    * @param {FirebaseAuthService} authService - Service to handle authentication operations.
    * @param {MatDialogRef<DialogOpenNewPocketComponent>} dialogRef - Reference to the current dialog instance.
-   * @param {MatDialog} dialog - Service to manage dialog interactions.
+   * @param {DialogService} dialogService - Service to manage dialog interactions.
    */
   constructor(
     private accountService: AccountService,
     private authService: FirebaseAuthService,
     public dialogRef: MatDialogRef<DialogOpenNewPocketComponent>,
-    public dialog: MatDialog
+    private dialogService: DialogService
   ) {}
 
   /**
@@ -86,11 +85,12 @@ export class DialogOpenNewPocketComponent implements OnInit {
       }
     } catch (error) {
       console.error(error);
-      this.openMessageDialog(
+      this.dialogService.openDialog(
         'Error',
         'You must be logged in to create a new account.'
-      );
-      this.closeDialog();
+      ).then(() => {
+        this.closeDialog();
+      });
     }
   }
 
@@ -103,7 +103,7 @@ export class DialogOpenNewPocketComponent implements OnInit {
    */
   async createAccount(): Promise<void> {
     if (!this.uid) {
-      this.openMessageDialog(
+      this.dialogService.openDialog(
         'Error',
         'You must be logged in to create an account.'
       );
@@ -111,7 +111,7 @@ export class DialogOpenNewPocketComponent implements OnInit {
     }
 
     if (this.account.balance <= 0 || !this.account.accountName) {
-      this.openMessageDialog('Error', 'Please enter valid account details.');
+      this.dialogService.openDialog('Error', 'Please enter valid account details.');
       return;
     }
 
@@ -121,7 +121,7 @@ export class DialogOpenNewPocketComponent implements OnInit {
       await this.accountService.addAccount(this.uid, this.account.toJson());
       this.dialogRef.close(true);
     } catch (error) {
-      this.openMessageDialog('Error', 'Failed to create account.');
+      this.dialogService.openDialog('Error', 'Failed to create account.');
     }
   }
 
@@ -130,16 +130,5 @@ export class DialogOpenNewPocketComponent implements OnInit {
    */
   closeDialog(): void {
     this.dialogRef.close();
-  }
-
-  /**
-   * Opens a message dialog to display an error or informational message to the user.
-   * @param {string} title - The title of the message dialog.
-   * @param {string} message - The message to display in the dialog.
-   */
-  openMessageDialog(title: string, message: string): void {
-    this.dialog.open(MessageDialogComponent, {
-      data: { title, message },
-    });
   }
 }
