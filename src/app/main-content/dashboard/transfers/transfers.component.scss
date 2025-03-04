@@ -159,12 +159,9 @@
   .transfers mat-card-content .transfer-card .transfer-content .transfer-icon {
     width: 40px;
     height: 40px;
-    // padding: 6px;
     flex-shrink: 0;
     overflow: visible;
-    >mat-icon{
-     
-    }
+    margin: 0 0 3px 3px;
 }
 
 .transfer-amount {
