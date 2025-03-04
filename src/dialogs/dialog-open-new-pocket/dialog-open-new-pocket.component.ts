@@ -1,15 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+// material
 import { MatButtonModule } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatIcon } from '@angular/material/icon';
+// models
 import { Account } from '../../models/account.class';
+// services 
 import { FirebaseService } from '../../services/firebase.service';
 import { FirebaseAuthService } from '../../services/firebase-auth.service';
-import { MatIcon } from '@angular/material/icon';
 import { AccountService } from '../../services/account.service';
 
 @Component({
@@ -29,12 +32,11 @@ import { AccountService } from '../../services/account.service';
   styleUrls: ['./dialog-open-new-pocket.component.scss'],
 })
 export class DialogOpenNewPocketComponent implements OnInit {
-  uid: string | null = null; // User-ID
-  account: Account = new Account(); // Neues Konto
+  uid: string | null = null; 
+  account: Account = new Account(); 
 
   constructor(
     private firebaseService: FirebaseService,
-
     private accountService: AccountService,
     private authService: FirebaseAuthService,
     public dialogRef: MatDialogRef<DialogOpenNewPocketComponent>
@@ -42,7 +44,7 @@ export class DialogOpenNewPocketComponent implements OnInit {
 
   ngOnInit(): void {
     try {
-      this.uid = this.authService.getUid(); // Benutzer-ID abrufen
+      this.uid = this.authService.getUid(); 
       if (!this.uid) {
         throw new Error('No user is currently logged in.');
       }
@@ -53,9 +55,7 @@ export class DialogOpenNewPocketComponent implements OnInit {
     }
   }
 
-  /**
-   * Erstellt ein neues Konto und speichert es in Firebase
-   */
+
   async createAccount(): Promise<void> {
     if (!this.uid) {
       console.error('No user ID found.');
@@ -63,28 +63,26 @@ export class DialogOpenNewPocketComponent implements OnInit {
       return;
     }
 
-    // Validierung der Kontodetails
-    if (this.account.balance <= 0) {
+ 
+    if (this.account.balance <= 0 || !this.account.accountName) {
       alert('Please enter valid account details.');
       return;
     }
 
-    // Benutzer-ID setzen
+
     this.account.userId = this.uid;
 
     try {
-      // Konto in Firebase hinzufügen
+    
       await this.accountService.addAccount(this.uid, this.account.toJson());
-      this.dialogRef.close(true); // Dialog schließen mit Erfolg
+      this.dialogRef.close(true); 
     } catch (error) {
       console.error('Error creating account:', error);
       alert('Failed to create account.');
     }
   }
 
-  /**
-   * Schließt den Dialog
-   */
+ 
   closeDialog(): void {
     this.dialogRef.close();
   }
