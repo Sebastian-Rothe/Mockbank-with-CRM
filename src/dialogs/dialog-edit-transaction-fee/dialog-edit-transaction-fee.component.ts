@@ -30,7 +30,7 @@ export class DialogEditTransactionFeeComponent implements OnInit {
     private bankService: BankService
   ) {
     this.transactionFeeForm = this.fb.group({
-      transactionFee: [data.transactionFee, Validators.required]
+      transactionFee: [data.transactionFee, [Validators.required, Validators.max(10)]]
     });
   }
 

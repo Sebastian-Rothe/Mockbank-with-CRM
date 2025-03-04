@@ -30,7 +30,7 @@ export class DialogEditInterestRateComponent implements OnInit {
     private bankService: BankService
   ) {
     this.interestRateForm = this.fb.group({
-      interestRate: [data.interestRate, Validators.required]
+      interestRate: [data.interestRate, [Validators.required, Validators.max(0.075)]]
     });
   }
 
