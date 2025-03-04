@@ -56,9 +56,10 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 36px;
-            height: 36px;
+            width: 48px;
+            height: 48px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+           
 
             mat-icon {
               font-size: 20px;
@@ -129,23 +130,53 @@
 
 @media (max-width: 600px) {
   .transfer-card {
-    min-width: 320px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
     padding: 12px;
+    overflow: hidden;
+    white-space: nowrap;
   }
   .transfer-content {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
     gap: 8px;
+    width: 100%;
+    overflow: hidden;
   }
 
   .transfer-description {
+    flex-grow: 1;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
-  .transfer-icon {
-    width: 28px;
-    height: 28px;
-    padding: 6px;
-  }
+  .transfers mat-card-content .transfer-card .transfer-content .transfer-icon {
+    width: 36px;
+    height: 36px;
+    // padding: 6px;
+    flex-shrink: 0;
+    overflow: visible;
+    >mat-icon{
+     
+    }
+}
+
+.transfer-amount {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.transfer-date {
+  flex-shrink: 0;
+  text-align: right;
+  font-size: 0.85rem;
+}
 
   .transfer-list {
     white-space: nowrap;
@@ -155,26 +186,34 @@
   .transfers {
     mat-card-content {
       padding: 12px;
-      .transfer-card {
-        padding: 12px;
-      }
     }
     mat-card {
       margin: 0;
     }
   }
-
+  
   .transfer-card {
     padding: 10px;
+    flex-wrap: wrap;
   }
 
   .transfer-content {
     gap: 6px !important;
     flex-wrap: wrap;
   }
+  .transfers mat-card-content .transfer-card .transfer-content .transfer-icon {
+      width: 32px;
+      height: 32px;
+    }
 }
+
 @media (max-width: 368px) {
   .transfer-description {
     display: none;
   }
+  .transfer-amount,
+  .transfer-date {
+    font-size: 0.8rem;
+  }
 }
+
