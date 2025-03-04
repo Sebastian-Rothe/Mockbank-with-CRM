@@ -6,6 +6,8 @@ import { FirebaseService } from '../../../../services/firebase.service';
 import { SharedService } from '../../../../services/shared.service';
 import { DashboardDataServiceService } from '../../../../services/dashboard-data-service.service';
 import { AccountService } from '../../../../services/account.service';
+import { SnackbarService } from '../../../../services/snackbar.service';
+import { DialogService } from '../../../../services/dialog.service';
 // Materail
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardContent, MatCardModule } from '@angular/material/card';
@@ -17,10 +19,9 @@ import { DialogSendMoneyComponent } from '../../../../dialogs/dialog-send-money/
 import { DialogOpenNewPocketComponent } from '../../../../dialogs/dialog-open-new-pocket/dialog-open-new-pocket.component';
 import { DialogMoveMoneyComponent } from '../../../../dialogs/dialog-move-money/dialog-move-money.component';
 import { DialogEditAccountComponent } from '../../../../dialogs/dialog-edit-account/dialog-edit-account.component';
-import { DialogConfirmDeleteAccComponent } from '../../../../dialogs/dialog-confirm-delete-acc/dialog-confirm-delete-acc.component';
 //
 import { Account } from '../../../../models/account.class';
-import { User } from '../../../../models/user.class';
+
 @Component({
   selector: 'app-accounts',
   standalone: true,
@@ -39,7 +40,7 @@ import { User } from '../../../../models/user.class';
   styleUrl: './accounts.component.scss',
 })
 export class AccountsComponent {
-  uid$ = this.authService.uid$; // Falls nur die UID benötigt wird
+  uid$ = this.authService.uid$; 
   uid: string = '';
   accounts: Account[] = [];
   @Input() userId: string | null = null; 
@@ -51,7 +52,9 @@ export class AccountsComponent {
     private firebaseService: FirebaseService,
     private authService: FirebaseAuthService,
     private sharedService: SharedService,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private snackbarService: SnackbarService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -129,15 +132,10 @@ onResize() {
   }
 
   openDeleteAccountDialog(accountId: string): void {
-    const dialogRef = this.dialog.open(DialogConfirmDeleteAccComponent, {
-      width: '400px',
-      data: {
-        title: 'Confirm Deletion',
-        message: `Are you sure you want to delete the account with ID ${accountId}? The money in the account will be lost.`,
-      },
-    });
-  
-    dialogRef.afterClosed().subscribe(async (confirmed: boolean) => {
+    this.dialogService.openDialog(
+      'Confirm Deletion',
+      `Are you sure you want to delete the account with ID ${accountId}? The money in the account will be lost.`
+    ).then(async (confirmed) => {
       if (confirmed) {
         try {
           const userId = this.userId || (await this.authService.getUid());
@@ -146,10 +144,10 @@ onResize() {
           }
           await this.accountService.deleteAccount(accountId);
           await this.accountService.removeAccountFromUser(userId, accountId);
-          console.log('Account deleted successfully');
-          this.dashboardData.loadAccountsForUser(userId); // Reload accounts
+          this.snackbarService.success('Account deleted successfully.');
+          this.dashboardData.loadAccountsForUser(userId); 
         } catch (error) {
-          console.error('Error deleting account:', error);
+          this.dialogService.openDialog('Error', 'Failed to delete account: ' + error);
         }
       }
     });
