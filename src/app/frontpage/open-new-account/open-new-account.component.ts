@@ -1,31 +1,33 @@
-import { Component, inject, ChangeDetectionStrategy, HostListener} from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatStepperModule } from '@angular/material/stepper';
+import { Component, inject, ChangeDetectionStrategy, HostListener } from '@angular/core';
 import {
   FormBuilder,
   Validators,
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import jsPDF from 'jspdf'; 
+//  material
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
-
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
+// models
 import { User } from '../../../models/user.class';
+// services 
 import { FirebaseService } from '../../../services/firebase.service';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
-import jsPDF from 'jspdf'; // PDF-Bibliothek installieren: `npm install jspdf`
-import { Router } from '@angular/router';
-import { SuccessDialogComponent } from '../../../dialogs/success-dialog/success-dialog.component';
-import { CommonModule } from '@angular/common';
+import { DialogService } from '../../../services/dialog.service';
 
 @Component({
   selector: 'app-open-new-account',
@@ -62,7 +64,8 @@ export class OpenNewAccountComponent {
     private router: Router,
     private dialog: MatDialog,
     private firebaseService: FirebaseService,
-    private firebaseAuthService: FirebaseAuthService
+    private firebaseAuthService: FirebaseAuthService,
+    private dialogService: DialogService
   ) {}
 
   @HostListener('window:resize', ['$event'])
@@ -132,6 +135,7 @@ export class OpenNewAccountComponent {
       this.fourthFormGroup.get('confirmPassword')?.touched
     );
   }
+
   saveNewUser() {
     const email = this.firstFormGroup.get('email')?.value || '';
     const password = this.fourthFormGroup.get('password')?.value || '';
@@ -140,8 +144,7 @@ export class OpenNewAccountComponent {
       .register(email, password)
       .then((firebaseUser) => {
         if (firebaseUser) {
-          // Zusätzliche Daten für Firestore-User setzen
-          this.user.uid = firebaseUser.uid; // UID aus Firebase Auth als ID für Firestore-Dokument
+          this.user.uid = firebaseUser.uid; 
           this.user.email = firebaseUser.email || '';
           this.user.countryCode =
             this.firstFormGroup.get('countryCode')?.value || '';
@@ -168,34 +171,26 @@ export class OpenNewAccountComponent {
 
           // Benutzer in Firestore speichern
           this.firebaseService
-            // .addUser(this.user)
             .addUserWithAccount(this.user)
             .then(() => {
-              // console.log('Benutzer erfolgreich gespeichert:', this.user.uid);
-              // this.router.navigate(['/']);
               // Dialog öffnen
-              const dialogRef = this.dialog.open(SuccessDialogComponent);
-
-              // Dialog-Aktion abfangen
-              dialogRef.afterClosed().subscribe((result) => {
-                if (result === 'goToHome') {
+              this.dialogService.openDialog(
+                'Registration Successful',
+                'The user has been created successfully!'
+              ).then((result) => {
+                if (result) {
                   this.router.navigate(['/']);
                 }
               });
             })
             .catch((error) => {
-              console.error(
-                'Error saving the user in Firestore:',
-                error
-            );
-            
+              console.error('Error saving the user in Firestore:', error);
             });
         }
       })
       .catch((error) => {
         console.error('Error registering the user:', error);
-    });
-    
+      });
   }
 
   downloadPdf() {
