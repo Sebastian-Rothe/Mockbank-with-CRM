@@ -129,6 +129,9 @@
 }
 
 @media (max-width: 600px) {
+  .transfers mat-card-header{
+    padding: 12px;
+  }
   .transfer-card {
     display: flex;
     flex-direction: row;
@@ -180,7 +183,11 @@
   }
 }
 @media (max-width: 400px) {
+  
   .transfers {
+    mat-card-header{
+      padding: 8px;
+    }
     mat-card-content {
       padding: 12px;
     }
