@@ -23,7 +23,7 @@ export class SnackbarService {
     this.snackBar.open(message, action, {
       duration,
       horizontalPosition: 'right',
-      verticalPosition: 'top',
+      verticalPosition: 'bottom',
       panelClass: [panelClass], // Class for styling
     });
   }

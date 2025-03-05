@@ -225,13 +225,15 @@ export class FirebaseAuthService {
   /**
    * Redirects the user after logout.
    *
-   * Navigates to the root path and reloads the window.
+   * Navigates to the root path and reloads the window after a delay to show the snackbar.
    *
    * @returns A promise that resolves when the redirection is complete.
    */
   async redirectAfterLogout(): Promise<void> {
     await this.router.navigate(['/']);
-    window.location.reload();
+    setTimeout(() => {
+      window.location.reload();
+    }, 3000); // 3-second delay to show the snackbar
   }
 
   /**
