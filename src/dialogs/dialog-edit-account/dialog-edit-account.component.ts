@@ -5,7 +5,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Account } from '../../models/account.class';
 import { MatDialogRef } from '@angular/material/dialog';
-import { FirebaseService } from '../../services/firebase.service';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Inject } from '@angular/core';
 import { MatInput } from '@angular/material/input';
@@ -23,7 +22,6 @@ export class DialogEditAccountComponent {
   AccountId: string = '';
 
   constructor(
-    private firebaseService: FirebaseService,
     private accountService: AccountService,
     public dialogRef: MatDialogRef<DialogEditAccountComponent>,
       @Inject(MAT_DIALOG_DATA) public data: { accountID: string }

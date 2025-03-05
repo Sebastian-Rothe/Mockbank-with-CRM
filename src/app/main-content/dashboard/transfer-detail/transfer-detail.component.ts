@@ -6,8 +6,10 @@ import {
   MatDialogActions,
   MatDialogContent,
 } from '@angular/material/dialog';
-import { FirebaseService } from '../../../../services/firebase.service';
+
 import { SharedService } from '../../../../services/shared.service';
+import { UserService } from '../../../../services/user.service';
+import { TransferService } from '../../../../services/transfer.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
@@ -15,6 +17,7 @@ import { MatButton, MatButtonModule } from '@angular/material/button';
 import { Observable, map, from } from 'rxjs';
 import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
 import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-transfer-detail',
   standalone: true,
@@ -42,8 +45,9 @@ export class TransferDetailComponent {
     public dialogRef: MatDialogRef<TransferDetailComponent>,
     private sharedService: SharedService,
     private authService: FirebaseAuthService, // ✅ AuthService nutzen
-    private firebaseService: FirebaseService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private userService: UserService,
+    private transferService: TransferService
   ) {
     this.transfer = data;
     this.uid$ = this.authService.uid$; // ✅ UID aus dem AuthService holen
@@ -51,14 +55,14 @@ export class TransferDetailComponent {
   }
   async ngOnInit() {
     if (this.data.senderUserId) {
-      const sender = await this.firebaseService.getUser(this.data.senderUserId);
+      const sender = await this.userService.getUser(this.data.senderUserId);
       this.senderName = sender ? `${sender.firstName} ${sender.lastName}` : 'Unbekannt';
     } else {
       this.senderName = 'Unbekannt';
     }
 
     if (this.data.receiverUserId) {
-      const receiver = await this.firebaseService.getUser(this.data.receiverUserId);
+      const receiver = await this.userService.getUser(this.data.receiverUserId);
       this.receiverName = receiver ? `${receiver.firstName} ${receiver.lastName}` : 'Unbekannt';
     } else {
       this.receiverName = 'Unbekannt';
@@ -74,7 +78,7 @@ export class TransferDetailComponent {
   async deleteTransfer(transferId: string): Promise<void> {
     try {
       // Call the deleteTransfer function from the service
-      await this.firebaseService.deleteTransfer(transferId);
+      await this.transferService.deleteTransfer(transferId);
 
       // Optional: Display a notification for successful deletion
       this.snackBar.open('Transfer successfully deleted!', 'Close', {

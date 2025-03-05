@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { SharedService } from '../../../../services/shared.service';
-import { FirebaseService } from '../../../../services/firebase.service';
+import { UserService } from '../../../../services/user.service';
 import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
 import { DashboardDataServiceService } from '../../../../services/dashboard-data-service.service';
 import { User } from '../../../../models/user.class';
@@ -26,8 +26,8 @@ export class UserDashboardComponent implements OnInit {
     private dashboardData: DashboardDataServiceService,
     private sharedService: SharedService,
     private authService: FirebaseAuthService,
-    private firebaseService: FirebaseService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
@@ -84,7 +84,7 @@ onFileSelected(event: Event): void {
 async saveProfilePicture(): Promise<void> {
   if (this.user?.uid && this.user?.profilePictureUrl) {
     try {
-      await this.firebaseService.updateUserProfilePicture(
+      await this.userService.updateUserProfilePicture(
         this.user.uid,
         this.user.profilePictureUrl
       );

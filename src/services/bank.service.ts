@@ -9,7 +9,7 @@ import {
   docData,
 } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { FirebaseService } from './firebase.service';
+import { TransferService } from './transfer.service';
 import { Bank } from '../models/bank.interface';
 import { Account } from '../models/account.class';
 import { User } from '../models/user.class';
@@ -28,7 +28,7 @@ export class BankService {
   private accountCollection = collection(this.firestore, 'accounts');
 
   constructor(
-    private firebaseService: FirebaseService,
+    private transferService: TransferService,
     private accountService: AccountService
   ) {}
 
@@ -123,7 +123,7 @@ export class BankService {
    * @returns {Promise<Transfer[]>} - A promise resolving to the list of transfers.
    */
   async getUserTransfers(user: User): Promise<Transfer[]> {
-    return this.firebaseService.getTransfersForUser(user);
+    return this.transferService.getTransfersForUser(user);
   }
 
   /**
@@ -210,7 +210,7 @@ export class BankService {
     start: number
   ): Promise<void> {
     const end = Date.now();
-    await this.firebaseService.transferFunds(
+    await this.transferService.transferFunds(
       'ACC-1738235430074-182',
       accountId,
       amount,

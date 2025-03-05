@@ -2,9 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // services
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
-import { FirebaseService } from '../../../services/firebase.service';
-import { SharedService } from '../../../services/shared.service';
-import { DashboardDataServiceService } from '../../../services/dashboard-data-service.service';
 // models
 import { User } from '../../../models/user.class';
 // material
@@ -19,11 +16,6 @@ import { TransfersComponent } from './transfers/transfers.component';
 import { BankComponent } from '../bank/bank.component';
 import { AccountsComponent } from './accounts/accounts.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
-// charts
-import { FirstChartsComponent } from '../../../charts/first-charts/first-charts.component';
-import { MonthlyExpensesChartComponent } from '../../../charts/monthly-expenses-chart/monthly-expenses-chart.component';
-import { UserGrowthChartComponent } from '../../../charts/user-growth-chart/user-growth-chart.component';
-import { TransfersChartComponent } from '../../../charts/transfers-chart/transfers-chart.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -56,8 +48,6 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private authService: FirebaseAuthService,
-    private firebaseService: FirebaseService,
-    private dashboardData: DashboardDataServiceService,
     public dialog: MatDialog
   ) {}
 

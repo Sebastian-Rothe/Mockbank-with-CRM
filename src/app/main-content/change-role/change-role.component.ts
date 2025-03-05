@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
-import { FirebaseService } from '../../../services/firebase.service';
+
+import { UserService } from '../../../services/user.service';
 import { User } from '../../../models/user.class';
 import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -23,8 +24,8 @@ export class ChangeRoleComponent {
     'management',
   ];
   constructor(
-    private firebaseService: FirebaseService,
     private authService: FirebaseAuthService,
+    private userService: UserService,
     private firestore: Firestore
   ) {}
 
@@ -38,7 +39,7 @@ export class ChangeRoleComponent {
 
   async loadUser(uid: string): Promise<void> {
     try {
-      this.user = await this.firebaseService.getUser(uid);
+      this.user = await this.userService.getUser(uid);
  
     } catch (error) {
       console.error('Error loading user:', error);

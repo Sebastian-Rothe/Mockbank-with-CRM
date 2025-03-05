@@ -13,7 +13,6 @@ import { MatDrawerMode } from '@angular/material/sidenav';
 import { User } from '../../models/user.class';
 // Services
 import { FirebaseAuthService } from '../../services/firebase-auth.service';
-import { FirebaseService } from '../../services/firebase.service';
 import { BankService } from '../../services/bank.service';
 
 @Component({
@@ -41,8 +40,6 @@ export class MainContentComponent implements OnInit, AfterViewInit {
 
   constructor(
     private authService: FirebaseAuthService,
-    private router: Router,
-    private firebaseService: FirebaseService,
     private breakpointObserver: BreakpointObserver,
     private cdRef: ChangeDetectorRef,
     private bankService: BankService

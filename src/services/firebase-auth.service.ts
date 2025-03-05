@@ -25,7 +25,7 @@ import {
   setDoc,
   deleteDoc,
 } from '@angular/fire/firestore';
-import { FirebaseService } from './firebase.service';
+
 import { Router } from '@angular/router';
 import { AccountService } from './account.service';
 import { SnackbarService } from './snackbar.service';
@@ -43,7 +43,6 @@ export class FirebaseAuthService {
   constructor(
     private auth: Auth,
     private firestore: Firestore,
-    private firebaseService: FirebaseService,
     private accountService: AccountService,
     private snackbarService: SnackbarService,
     private dialogService: DialogService,

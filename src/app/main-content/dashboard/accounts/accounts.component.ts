@@ -2,7 +2,6 @@ import { Component, Input, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // services
 import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
-import { FirebaseService } from '../../../../services/firebase.service';
 import { SharedService } from '../../../../services/shared.service';
 import { DashboardDataServiceService } from '../../../../services/dashboard-data-service.service';
 import { AccountService } from '../../../../services/account.service';
@@ -99,7 +98,6 @@ export class AccountsComponent {
   constructor(
     private dashboardData: DashboardDataServiceService,
     private dialog: MatDialog,
-    private firebaseService: FirebaseService,
     private authService: FirebaseAuthService,
     private sharedService: SharedService,
     private accountService: AccountService,

@@ -5,9 +5,9 @@ import { Observable } from 'rxjs';
 import { Bank } from '../../../models/bank.interface';
 // services
 import { BankService } from '../../../services/bank.service';
-// import { FirebaseService } from '../../../services/firebase.service';
+
 import { SharedService } from '../../../services/shared.service';
-import { FirebaseService } from '../../../services/firebase.service';
+
 // material
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -46,7 +46,6 @@ export class BankComponent implements OnInit {
   constructor(
     private bankService: BankService,
     private sharedService: SharedService,
-    private firebaseService: FirebaseService,
     public dialog: MatDialog
   ) {}
   ngOnInit() {

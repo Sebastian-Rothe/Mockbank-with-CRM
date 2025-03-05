@@ -15,8 +15,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import { User } from '../../../models/user.class';
-import { FirebaseService } from '../../../services/firebase.service';
 import { MatIcon } from '@angular/material/icon';
+import { UserService } from '../../../services/user.service';
 @Component({
   selector: 'app-create-new-admin',
   standalone: true,
@@ -44,7 +44,7 @@ export class CreateNewAdminComponent {
   private _formBuilder = inject(FormBuilder);
   constructor(
     private firebaseAuthService: FirebaseAuthService,
-    private firebaseService: FirebaseService
+    private userService: UserService,
   ) {}
 
   formGroup = this._formBuilder.group(
@@ -97,7 +97,7 @@ export class CreateNewAdminComponent {
           this.user.lastName = this.formGroup.get('lastName')?.value || '';
           this.user.role = this.formGroup.get('role')?.value || '';
           // Benutzer in Firestore speichern
-          this.firebaseService
+          this.userService
             .addUserWithAccount(this.user)
             .then(() => {
               console.log('Benutzer erfolgreich gespeichert:', this.user.uid);

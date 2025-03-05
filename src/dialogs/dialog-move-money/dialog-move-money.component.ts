@@ -15,10 +15,11 @@ import { Transfer } from '../../models/transfer.class';
 import { User } from '../../models/user.class';
 import { Account } from '../../models/account.class';
 //  services
-import { FirebaseService } from '../../services/firebase.service';
 import { FirebaseAuthService } from '../../services/firebase-auth.service';
 import { AccountService } from '../../services/account.service';
 import { SnackbarService } from '../../services/snackbar.service';
+import { TransferService } from '../../services/transfer.service';
+import { UserService } from '../../services/user.service';
 
 /**
  * DialogMoveMoneyComponent is responsible for handling the logic to open a dialog that allows a user
@@ -64,14 +65,16 @@ export class DialogMoveMoneyComponent {
    * @param {FirebaseAuthService} authService - Service to handle authentication operations.
    * @param {MatDialogRef<DialogMoveMoneyComponent>} dialogRef - Reference to the current dialog instance.
    * @param {SnackbarService} snackbarService - Service to display snackbar messages.
+   * @param {TransferService} transferService - Service to handle transfer operations.
    * @param {any} data - Data passed to the dialog.
    */
   constructor(
-    private firebaseService: FirebaseService,
     private accountService: AccountService,
     private authService: FirebaseAuthService,
     public dialogRef: MatDialogRef<DialogMoveMoneyComponent>,
     private snackbarService: SnackbarService,
+    private transferService: TransferService,
+    private userService: UserService,
     @Inject(MAT_DIALOG_DATA) public data: { senderAccountId: string }
   ) {
     this.senderAccountId = data.senderAccountId; 
@@ -92,7 +95,7 @@ export class DialogMoveMoneyComponent {
    */
   async loadUser(uid: string): Promise<void> {
     try {
-      this.user = await this.firebaseService.getUser(uid);
+      this.user = await this.userService.getUser(uid);
 
       if (this.user && this.user.accounts.length > 0) {
         await this.loadAccounts(this.user.accounts);
@@ -131,7 +134,7 @@ export class DialogMoveMoneyComponent {
    */
   moveMoney(): void {
     if (this.senderAccountId && this.transfer.receiverAccountId) {
-      this.firebaseService
+      this.transferService
         .transferFunds(
           this.senderAccountId,
           this.transfer.receiverAccountId,

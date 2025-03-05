@@ -7,12 +7,12 @@ import { MatMenu, MatMenuModule } from '@angular/material/menu';
 import { SharedService } from '../../../../services/shared.service';
 import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
 import { User } from '../../../../models/user.class';
-import { Account } from '../../../../models/account.class';
-import { FirebaseService } from '../../../../services/firebase.service';
+import { TransferService } from '../../../../services/transfer.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TransferDetailComponent } from '../transfer-detail/transfer-detail.component';
 import { Transfer } from '../../../../models/transfer.class';
 import { DashboardDataServiceService } from '../../../../services/dashboard-data-service.service';
+import { UserService } from '../../../../services/user.service';
 
 @Component({
   selector: 'app-transfers',
@@ -40,7 +40,8 @@ export class TransfersComponent {
     private sharedService: SharedService,
     private dashboardData: DashboardDataServiceService,
     private authService: FirebaseAuthService,
-    private firebaseService: FirebaseService,
+    private transferService: TransferService,
+    private userService: UserService,
     public dialog: MatDialog
   ) {}
 
@@ -62,7 +63,7 @@ export class TransfersComponent {
    * @param {string} userId - The user ID.
    */
   private async loadUserAndTransfers(userId: string): Promise<void> {
-    this.user = await this.firebaseService.getUser(userId);
+    this.user = await this.userService.getUser(userId);
     if (this.user) {
       console.log('Loaded user:', this.user);
       await this.loadTransfersForUser(this.user);

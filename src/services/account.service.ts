@@ -2,13 +2,19 @@ import { Injectable, inject } from '@angular/core';
 import {
   Firestore,
   collection,
-  arrayRemove,
   doc,
   setDoc,
   updateDoc,
   deleteDoc,
   getDoc,
+  increment,
+  arrayRemove,
+  onSnapshot
 } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+// Models
+import { Account } from '../models/account.class';
+import { User } from '../models/user.class';
 
 @Injectable({
   providedIn: 'root',
@@ -187,5 +193,51 @@ export class AccountService {
       console.error('Error removing account from user:', error);
       throw error;
     }
+  }
+
+  async getAccountsForUser(userId: string): Promise<Account[]> {
+    try {
+      const userDocRef = doc(this.firestore, 'users', userId);
+      const userSnap = await getDoc(userDocRef);
+      if (!userSnap.exists()) return [];
+
+      const userData = userSnap.data();
+      const accountIds = userData['accounts'] || [];
+
+      const accountPromises = accountIds.map((accountId: string) =>
+        getDoc(doc(this.firestore, 'accounts', accountId))
+      );
+
+      const accountDocs = await Promise.all(accountPromises);
+      return accountDocs
+        .filter(doc => doc.exists())
+        .map(doc => new Account({ ...doc.data(), accountId: doc.id }));
+    } catch (error) {
+      console.error('Error loading accounts:', error);
+      return [];
+    }
+  }
+
+  listenForAccounts(user: User): Observable<Account[]> {
+    return new Observable<Account[]>((observer) => {
+      const accountRefs = user.accounts.map((accountId) =>
+        doc(this.firestore, 'accounts', accountId)
+      );
+
+      const unsubscribes = accountRefs.map((accountRef) =>
+        onSnapshot(accountRef, (snapshot) => {
+          if (snapshot.exists()) {
+            const account = new Account({ ...snapshot.data(), accountId: snapshot.id });
+            observer.next([account]);
+          }
+        }, (error) => {
+          observer.error(error);
+        })
+      );
+
+      return () => {
+        unsubscribes.forEach((unsubscribe) => unsubscribe());
+      };
+    });
   }
 }

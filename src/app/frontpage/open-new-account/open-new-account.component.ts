@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectionStrategy, HostListener } from '@angular/core';
+import { Component, inject, HostListener } from '@angular/core';
 import {
   FormBuilder,
   Validators,
@@ -17,17 +17,14 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatInputModule } from '@angular/material/input';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatDialog } from '@angular/material/dialog';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 // models
 import { User } from '../../../models/user.class';
 // services 
-import { FirebaseService } from '../../../services/firebase.service';
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import { DialogService } from '../../../services/dialog.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-open-new-account',
@@ -62,10 +59,9 @@ export class OpenNewAccountComponent {
   private _formBuilder = inject(FormBuilder);
   constructor(
     private router: Router,
-    private dialog: MatDialog,
-    private firebaseService: FirebaseService,
     private firebaseAuthService: FirebaseAuthService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private userService: UserService,
   ) {}
 
   @HostListener('window:resize', ['$event'])
@@ -170,7 +166,7 @@ export class OpenNewAccountComponent {
           this.user.taxId = this.thirdFormGroup.get('taxId')?.value || '';
 
           // Benutzer in Firestore speichern
-          this.firebaseService
+          this.userService
             .addUserWithAccount(this.user)
             .then(() => {
               // Dialog öffnen

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FirebaseAuthService } from '../../services/firebase-auth.service';
-import { FirebaseService } from '../../services/firebase.service';
+import { TransferService } from '../../services/transfer.service';
 import { User } from '../../models/user.class';
 import { Transfer } from '../../models/transfer.class';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
@@ -19,8 +19,8 @@ export class FirstChartsComponent {
   user: User = new User();
 
   constructor(
-    private firebaseService: FirebaseService,
-    private authService: FirebaseAuthService
+    private authService: FirebaseAuthService,
+    private transferService: TransferService
   ) {}
 
   ngOnInit(): void {
@@ -46,7 +46,7 @@ export class FirstChartsComponent {
 
       // Fetch all transfers for the user
       const allTransfers: Transfer[] =
-        await this.firebaseService.getTransfersForUser(this.user);
+        await this.transferService.getTransfersForUser(this.user);
 
       // Filter out transfers where sender and receiver have the same userId
       const filteredTransfers = allTransfers.filter(

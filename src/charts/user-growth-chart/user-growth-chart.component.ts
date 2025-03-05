@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { User } from '../../models/user.class';
-import { FirebaseService } from '../../services/firebase.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-user-growth-chart',
@@ -20,7 +20,7 @@ export class UserGrowthChartComponent implements OnInit {
   chartOptions: any;
   errorMessage: string = '';
 
-  constructor(private firebaseService: FirebaseService) {}
+  constructor(private userService: UserService) {}
 
   async ngOnInit() {
     this.dataPoints = await this.getUserData();
@@ -31,7 +31,7 @@ export class UserGrowthChartComponent implements OnInit {
 
 
   async getUserData(): Promise<{ x: Date, y: number }[]> {
-    const users: User[] = await this.firebaseService.getAllUsers();
+    const users: User[] = await this.userService.getAllUsers();
   
     if (users.length === 0) {
       this.errorMessage = 'No User found!';

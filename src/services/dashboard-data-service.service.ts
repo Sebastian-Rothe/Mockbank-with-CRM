@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { FirebaseService } from './firebase.service';
+import { TransferService } from './transfer.service';
 import { FirebaseAuthService } from './firebase-auth.service';
 import { AccountService } from './account.service';
 import { User } from '../models/user.class';
@@ -16,7 +16,7 @@ export class DashboardDataServiceService {
   private transfersSubject = new BehaviorSubject<Transfer[]>([]);
   transfers$ = this.transfersSubject.asObservable();
 
-  constructor(private firebaseService: FirebaseService, private authService: FirebaseAuthService, private accountService: AccountService) {
+  constructor(private transferService: TransferService, private authService: FirebaseAuthService, private accountService: AccountService) {
     // ⬇️ Direkt auf den User-Stream hören!
     this.authService.user$.subscribe(user => {
       if (user) {
@@ -33,7 +33,7 @@ export class DashboardDataServiceService {
    */
   async loadAccounts(accountIds: string[]): Promise<void> {
     try {
-      this.firebaseService.listenForAccounts({ accounts: accountIds } as User).subscribe(
+      this.accountService.listenForAccounts({ accounts: accountIds } as User).subscribe(
         (accounts: Account[]) => {
           const currentAccounts = this.accountsSubject.getValue();
           const updatedAccounts = [...currentAccounts, ...accounts];
@@ -67,7 +67,7 @@ export class DashboardDataServiceService {
    */
   async loadTransfers(user: User): Promise<void> {
     try {
-      this.firebaseService.listenForTransfers(user).subscribe(
+      this.transferService.listenForTransfers(user).subscribe(
         (transfers) => {
           const userAccounts = this.accountsSubject.getValue();
           const processedTransfers: any[] = [];
@@ -120,7 +120,7 @@ export class DashboardDataServiceService {
    */
   async loadAccountsForUser(userId: string): Promise<void> {
     try {
-      const accounts = await this.firebaseService.getAccountsForUser(userId);
+      const accounts = await this.accountService.getAccountsForUser(userId);
       this.accountsSubject.next(accounts);
     } catch (error) {
       console.error(`Error loading accounts for user ${userId}: `, error);

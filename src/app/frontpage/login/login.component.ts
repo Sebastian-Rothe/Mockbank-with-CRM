@@ -1,6 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { inject } from '@angular/core';
-import { NgModule } from '@angular/core';
+import { Component} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -9,11 +7,9 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { provideNativeDateAdapter } from '@angular/material/core';
 import { User } from '../../../models/user.class';
-import { FirebaseService } from '../../../services/firebase.service';
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
-
+import { UserService } from '../../../services/user.service';
 import { Router } from '@angular/router';
 
 interface GuestUser {
@@ -49,7 +45,7 @@ export class LoginComponent {
   constructor(
     private router: Router,
     private authService: FirebaseAuthService,
-    private firebaseService: FirebaseService,
+    private userService: UserService,
     public dialogRef: MatDialogRef<LoginComponent>
   ) {}
 
@@ -90,7 +86,7 @@ export class LoginComponent {
         });
     
         // Speichern des Gast-Users in Firestore
-        await this.firebaseService.addUserWithAccount(guestUser);
+        await this.userService.addUserWithAccount(guestUser);
     
         // Weiterleitung
         this.router.navigate(['main'], { queryParams: { uid: guestUser.uid } });

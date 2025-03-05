@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FirebaseService } from '../../services/firebase.service';
 import { FirebaseAuthService } from '../../services/firebase-auth.service';
 import { Transfer } from '../../models/transfer.class';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { User } from '../../models/user.class';
+import { TransferService } from '../../services/transfer.service';
 
 
 @Component({
@@ -19,7 +19,7 @@ export class MonthlyExpensesChartComponent {
   user: User = new User();
 
   constructor(
-    private firebaseService: FirebaseService,
+    private transferService: TransferService,
     private authService: FirebaseAuthService
   ) {}
 
@@ -43,7 +43,7 @@ export class MonthlyExpensesChartComponent {
 
       // Fetch all transfers for the user
       const allTransfers: Transfer[] =
-        await this.firebaseService.getTransfersForUser(this.user);
+        await this.transferService.getTransfersForUser(this.user);
       const monthlyStats: {
         [month: string]: { income: number; expenses: number };
       } = {};

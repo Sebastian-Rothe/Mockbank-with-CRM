@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FirebaseService } from '../../services/firebase.service';
 import { Transfer } from '../../models/transfer.class';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
+import { TransferService } from '../../services/transfer.service';
 
 @Component({
   selector: 'app-transfers-chart',
@@ -15,7 +15,7 @@ export class TransfersChartComponent implements OnInit {
   transferCountData: { x: Date, y: number }[] = [];
   transferAmountData: { x: Date, y: number }[] = [];
 
-  constructor(private firebaseService: FirebaseService) {}
+  constructor(private transferService: TransferService) {}
 
   async ngOnInit() {
     await this.getTransfersPerDay();
@@ -24,7 +24,7 @@ export class TransfersChartComponent implements OnInit {
   }
 
   async getTransfersPerDay() {
-    const transfers: Transfer[] = await this.firebaseService.getAllTransfers();
+    const transfers: Transfer[] = await this.transferService.getAllTransfers();
     // console.log('📤 Alle Transfers aus Firestore:', transfers);
 
     const groupedData: Record<string, { count: number; totalAmount: number }> = {};

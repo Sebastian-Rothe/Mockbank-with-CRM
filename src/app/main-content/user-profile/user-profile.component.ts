@@ -1,7 +1,4 @@
 import { Component } from '@angular/core';
-import { FirebaseAuthService } from '../../../services/firebase-auth.service';
-import { FirebaseService } from '../../../services/firebase.service';
-
 import { SharedService } from '../../../services/shared.service';
 import { User } from '../../../models/user.class';
 import { CommonModule } from '@angular/common';
@@ -19,8 +16,6 @@ export class UserProfileComponent {
   user: User | null = null; // Benutzerdaten
 
   constructor(
-    private authService: FirebaseAuthService,
-    private firebaseService: FirebaseService,
     private sharedService: SharedService)
   { }
   ngOnInit(): void {

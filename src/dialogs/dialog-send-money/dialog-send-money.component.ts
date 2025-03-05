@@ -15,9 +15,10 @@ import { Transfer } from '../../models/transfer.class';
 import { User } from '../../models/user.class';
 import { Account } from '../../models/account.class';
 // Firebase Services
-import { FirebaseService } from '../../services/firebase.service';
+import { UserService } from '../../services/user.service';
 import { FirebaseAuthService } from '../../services/firebase-auth.service';
 import { AccountService } from '../../services/account.service';
+import { TransferService } from '../../services/transfer.service';
 
 @Component({
   selector: 'app-dialog-sent-money',
@@ -66,13 +67,14 @@ export class DialogSendMoneyComponent {
   ];
 
   constructor(
-    private firebaseService: FirebaseService,
+    private userService: UserService,
+    private transferService: TransferService,
     private authService: FirebaseAuthService,
     private accountService: AccountService,
     public dialogRef: MatDialogRef<DialogSendMoneyComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { senderAccountId: string }
   ) {
-    this.firebaseService.getUsers().subscribe((users) => {
+    this.userService.getUsers().subscribe((users) => {
       this.users = users;
    
     });
@@ -130,7 +132,7 @@ export class DialogSendMoneyComponent {
 
   async loadFirstAccountsFromAllUsers(): Promise<void> {
     try {
-      const users = await this.firebaseService.getAllUsers();
+      const users = await this.userService.getAllUsers();
 
       const firstAccounts = await Promise.all(
         users
@@ -165,7 +167,7 @@ export class DialogSendMoneyComponent {
 
   sendMoney(): void {
     if (this.senderAccountId && this.transfer.receiverAccountId) {
-      this.firebaseService
+      this.transferService
         .transferFunds(
           this.senderAccountId,
           this.transfer.receiverAccountId,
