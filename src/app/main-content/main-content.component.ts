@@ -81,7 +81,19 @@ export class MainContentComponent implements OnInit, AfterViewInit {
     this.cdRef.detectChanges();
   }
 
+  closeSidenavOnSmallScreen(): void {
+    if (window.innerWidth < 800) {
+      this.isDrawerOpened = false;
+    }
+  }
 
+  onDrawerOpened(): void {
+    this.isDrawerOpened = true;
+  }
+
+  onDrawerClosed(): void {
+    this.isDrawerOpened = false;
+  }
 
   // Berechnung und Verteilung der Zinsen
   async calculateAndDistributeInterest(): Promise<void> {
