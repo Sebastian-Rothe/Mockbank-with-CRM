@@ -1,4 +1,3 @@
-
 <div class="user-profile">
   <!-- User Overview Section -->
   <mat-card appearance="outlined" class="card-header m-32">
@@ -12,6 +11,7 @@
       </button>
       <mat-menu #userDetail="matMenu">
         <button mat-menu-item (click)="editUserDetail()"> <mat-icon class="mr-l6">edit</mat-icon>Edit</button>
+        <button mat-menu-item (click)="deleteUser()"> <mat-icon class="mr-l6">delete</mat-icon>Delete</button>
         <!-- <button mat-menu-item>Delete</button> -->
       </mat-menu>
     </div>

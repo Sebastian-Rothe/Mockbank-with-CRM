@@ -8,6 +8,7 @@ import { doc, onSnapshot } from 'firebase/firestore';
 import { FirebaseService } from '../../../services/firebase.service';
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import { SharedService } from '../../../services/shared.service';
+import { UserService } from '../../../services/user.service';
 // Models
 import { User } from '../../../models/user.class';
 // Angular Material
@@ -53,7 +54,8 @@ export class UserDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private firebaseService: FirebaseService,
     private authService: FirebaseAuthService,
-    private sharedService: SharedService
+    private sharedService: SharedService,
+    private userService: UserService
   ) {}
 
   ngOnInit() {
@@ -139,5 +141,16 @@ export class UserDetailComponent implements OnInit {
     this.dialog.open(DialogEditUserPasswordComponent, {
       width: '400px',
     });
+  }
+
+  deleteUser() {
+    if (this.user && confirm('Are you sure you want to delete this user?')) {
+      this.userService.deleteUser(this.user.uid as string).then(() => {
+        console.log('User deleted successfully');
+        // Redirect or update the UI as needed
+      }).catch(error => {
+        console.error('Error deleting user:', error);
+      });
+    }
   }
 }
