@@ -46,16 +46,8 @@ export class MainContentComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.breakpointObserver.observe([Breakpoints.Handset]).subscribe(result => {
-      if (result.matches) {
-        this.drawerMode = 'over';
-        this.isDrawerOpened = false; 
-      } else {
-        this.drawerMode = 'side';
-        this.isDrawerOpened = true; 
-      }
-      this.cdRef.detectChanges();
-    });
+    this.adjustSidenav(window.innerWidth);
+    window.addEventListener('resize', this.onResize.bind(this));
     
     combineLatest([this.authService.uid$, this.authService.user$]).subscribe(
       ([uid, user]) => {
@@ -73,14 +65,23 @@ export class MainContentComponent implements OnInit, AfterViewInit {
       this.cdRef.detectChanges();
   }
 
- 
-  onDrawerOpened(): void {
-    this.isDrawerOpened = true;
+  onResize(event: Event): void {
+    const target = event.target as Window;
+    this.adjustSidenav(target.innerWidth);
   }
 
-  onDrawerClosed(): void {
-    this.isDrawerOpened = false;
+  adjustSidenav(width: number): void {
+    if (width >= 800) {
+      this.drawerMode = 'side';
+      this.isDrawerOpened = true;
+    } else {
+      this.drawerMode = 'over';
+      this.isDrawerOpened = false;
+    }
+    this.cdRef.detectChanges();
   }
+
+
 
   // Berechnung und Verteilung der Zinsen
   async calculateAndDistributeInterest(): Promise<void> {

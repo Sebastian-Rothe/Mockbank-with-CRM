@@ -3,8 +3,7 @@
     #drawer
     class="sidenav"
     [mode]="drawerMode"
-    (opened)="onDrawerOpened()"
-    (closed)="onDrawerClosed()"
+    [opened]="isDrawerOpened"
     aria-label="Sidebar Navigation"
   >
     <div class="logo-container">
@@ -65,15 +64,11 @@
       >
         <mat-icon>menu</mat-icon>
       </button>
-      @if(!isDrawerOpened){
-        <div class="logo-container" style="padding: 0;">
-          <mat-icon aria-hidden="true">account_balance</mat-icon>
-          <span>MockBank</span>
-        </div>
-      }
-     
+      <div *ngIf="!isDrawerOpened" class="logo-container" style="padding: 0;">
+        <mat-icon aria-hidden="true">account_balance</mat-icon>
+        <span>MockBank</span>
+      </div>
       <span class="example-spacer"></span>
-    
       <button
         mat-icon-button
         class="example-icon"
