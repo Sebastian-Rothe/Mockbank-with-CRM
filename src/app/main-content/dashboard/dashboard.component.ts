@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // services
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
+import { DashboardDataServiceService } from '../../../services/dashboard-data-service.service';
 // models
 import { User } from '../../../models/user.class';
 // material
@@ -48,7 +49,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private authService: FirebaseAuthService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public dashboardData: DashboardDataServiceService
   ) {}
 
  
@@ -61,6 +63,14 @@ export class DashboardComponent implements OnInit {
 
   
     this.isGuest = this.authService.isGuestUser();
+  }
+
+  /**
+   * Type guard to ensure accounts$ is defined.
+   * @returns {boolean} True if accounts$ is defined, false otherwise.
+   */
+  hasAccounts(): boolean {
+    return this.dashboardData.accounts$ !== undefined;
   }
   
   async loadUser(): Promise<void> {

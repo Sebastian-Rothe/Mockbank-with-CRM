@@ -10,7 +10,11 @@
 
   <app-accounts></app-accounts>
 
+@if(hasAccounts()){
   <app-transfers></app-transfers>
+
+}
+
 </div>
 
 } @else {<ng-template #loading> <p>Lade Benutzerdaten...</p> </ng-template>} }
