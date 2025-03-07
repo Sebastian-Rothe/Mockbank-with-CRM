@@ -30,6 +30,7 @@ import { Router } from '@angular/router';
 import { AccountService } from './account.service';
 import { SnackbarService } from './snackbar.service';
 import { DialogService } from './dialog.service';
+import { LoadingService } from './loading.service'; // Import LoadingService
 
 @Injectable({
   providedIn: 'root',
@@ -48,7 +49,8 @@ export class FirebaseAuthService {
     private accountService: AccountService,
     private snackbarService: SnackbarService,
     private dialogService: DialogService,
-    private router: Router
+    private router: Router,
+    private loadingService: LoadingService // Inject LoadingService
   ) {
     // Initialize BehaviorSubject with null
     this.uid$ = new BehaviorSubject<string | null>(null);
@@ -100,6 +102,8 @@ export class FirebaseAuthService {
    */
   async login(email: string, password: string): Promise<User> {
     try {
+      this.loadingService.show(); // Show loading spinner
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Add a 1-second delay
       const userCredential = await signInWithEmailAndPassword(
         this.auth,
         email,
@@ -112,6 +116,8 @@ export class FirebaseAuthService {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
       this.dialogService.openDialog('Error', 'Login failed: ' + errorMessage); // msg
       throw error;
+    } finally {
+      this.loadingService.hide(); // Hide loading spinner
     }
   }
 
@@ -122,6 +128,8 @@ export class FirebaseAuthService {
    */
   async guestLogin(): Promise<UserCredential | null> {
     try {
+      this.loadingService.show(); // Show loading spinner
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Add a 1-second delay
       const userCredential = await signInAnonymously(this.auth);
       await this.ensureGuestUserExists(userCredential.user.uid);
       this.snackbarService.success('Guest login successful!');
@@ -130,6 +138,8 @@ export class FirebaseAuthService {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
       this.dialogService.openDialog('Error', 'Guest login failed: ' + errorMessage); // msg
       throw error;
+    } finally {
+      this.loadingService.hide(); // Hide loading spinner
     }
   }
 
