@@ -249,7 +249,7 @@ export class FirebaseAuthService {
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      this.dialogService.openDialog('Error cleaning up guest user data:', errorMessage); 
+      this.dialogService.openDialog('Error', 'Error cleaning up guest user data: ' + errorMessage); 
       throw error;
     }
   }

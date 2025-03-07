@@ -17,6 +17,9 @@ import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import { User } from '../../../models/user.class';
 import { MatIcon } from '@angular/material/icon';
 import { UserService } from '../../../services/user.service';
+import { SnackbarService } from '../../../services/snackbar.service';
+import { DialogService } from '../../../services/dialog.service';
+
 @Component({
   selector: 'app-create-new-admin',
   standalone: true,
@@ -45,6 +48,8 @@ export class CreateNewAdminComponent {
   constructor(
     private firebaseAuthService: FirebaseAuthService,
     private userService: UserService,
+    private snackbarService: SnackbarService, // snack
+    private dialogService: DialogService // msg
   ) {}
 
   formGroup = this._formBuilder.group(
@@ -100,29 +105,18 @@ export class CreateNewAdminComponent {
           this.userService
             .addUserWithAccount(this.user)
             .then(() => {
-              console.log('Benutzer erfolgreich gespeichert:', this.user.uid);
-              // this.router.navigate(['/']);
-                    // Dialog öffnen
-                    // const dialogRef = this.dialog.open(SuccessDialogComponent);
-
-                    // // Dialog-Aktion abfangen
-                    // dialogRef.afterClosed().subscribe((result) => {
-                    //   if (result === 'goToHome') {
-                    //     this.router.navigate(['/']);
-                    //   }
-                    // });
+              this.snackbarService.success('User successfully saved!'); // snack
+              this.formGroup.reset(); 
+           
               
             })
             .catch((error) => {
-              console.error(
-                'Fehler beim Speichern des Benutzers in Firestore:',
-                error
-              );
+              this.dialogService.openDialog('Error', 'Error saving user to Firestore: ' + error); // msg
             });
         }
       })
       .catch((error) => {
-        console.error('Fehler beim Registrieren des Benutzers:', error);
+        this.dialogService.openDialog('Error', 'Error registering user: ' + error); // msg
       });
   }
 }
