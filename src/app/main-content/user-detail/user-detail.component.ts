@@ -42,7 +42,8 @@ import { TransfersComponent } from '../dashboard/transfers/transfers.component';
     MatButtonModule,
     MatMenuModule,
     AccountsComponent,
-    TransfersComponent
+    TransfersComponent, 
+    MatTooltip
   ],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss',
@@ -139,15 +140,23 @@ export class UserDetailComponent implements OnInit {
   }
 
   openEmailDialog(): void {
-    this.dialog.open(DialogEditUserEmailComponent, {
-      width: '400px',
-    });
+    if (this.userId === this.userIdCheck) {
+      this.dialog.open(DialogEditUserEmailComponent, {
+        width: '400px',
+      });
+    } else {
+      this.dialogService.openDialog('Error', 'You are not authorized to change the email.', 'error');
+    }
   }
 
   openPasswordDialog(): void {
-    this.dialog.open(DialogEditUserPasswordComponent, {
-      width: '400px',
-    });
+    if (this.userId === this.userIdCheck) {
+      this.dialog.open(DialogEditUserPasswordComponent, {
+        width: '400px',
+      });
+    } else {
+      this.dialogService.openDialog('Error', 'You are not authorized to change the password.', 'error'); 
+    }
   }
 
   deleteUser() {
@@ -163,7 +172,7 @@ export class UserDetailComponent implements OnInit {
               }, 1500); 
               this.snackbarService.success('User deleted successfully!');
             } else {
-              this.loadingService.hide(); // Ensure loading spinner is hidden if deletion is not allowed
+              this.loadingService.hide(); 
             }
           }).catch(error => {
             this.dialogService.openDialog('Error', 'Error deleting user: ' + error.message, 'error'); // msg

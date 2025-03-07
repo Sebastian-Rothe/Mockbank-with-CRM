@@ -56,8 +56,12 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #userContact="matMenu">
-        <button mat-menu-item (click)="openEmailDialog()"><mat-icon class="mr-l6">mail</mat-icon>Change Email</button>
-        <button mat-menu-item (click)="openPasswordDialog()"><mat-icon class="mr-l6">password</mat-icon>Change Password</button>
+        <button mat-menu-item (click)="openEmailDialog()" [disabled]="userId !== userIdCheck" matTooltip="You are not authorized to change the email" [matTooltipDisabled]="userId === userIdCheck">
+          <mat-icon class="mr-l6">mail</mat-icon>Change Email
+        </button>
+        <button mat-menu-item (click)="openPasswordDialog()" [disabled]="userId !== userIdCheck" matTooltip="You are not authorized to change the password" [matTooltipDisabled]="userId === userIdCheck">
+          <mat-icon class="mr-l6">password</mat-icon>Change Password
+        </button>
       </mat-menu>
     </div>
     <div class="section-content">
