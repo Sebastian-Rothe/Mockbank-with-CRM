@@ -87,7 +87,7 @@ export class CreateNewAdminComponent {
     const password = this.formGroup.get('password')?.value || '';
 
     this.firebaseAuthService
-      .register(email, password)
+      .registerWithoutLogin(email, password) // Use new method to register without login
       .then((firebaseUser) => {
         if (firebaseUser) {
           // Zusätzliche Daten für Firestore-User setzen

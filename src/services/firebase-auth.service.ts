@@ -83,7 +83,31 @@ export class FirebaseAuthService {
         email,
         password
       );
-      this.uid$.next(userCredential.user.uid);
+      // this.uid$.next(userCredential.user.uid);
+      this.snackbarService.success('Registration successful!');
+
+      return userCredential.user;
+    } catch (error) {
+      this.dialogService.openDialog('Error', 'Registration failed: ' + (error as Error).message); // msg
+      throw error;
+    }
+  }
+
+  /**
+   * Registers a new user without logging them in.
+   *
+   * @param email - The user's email address.
+   * @param password - The user's password.
+   * @returns A promise that resolves to the registered user.
+   */
+  async registerWithoutLogin(email: string, password: string): Promise<User> {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        this.auth,
+        email,
+        password
+      );
+      await signOut(this.auth); // Sign out immediately after registration
       this.snackbarService.success('Registration successful!');
 
       return userCredential.user;
