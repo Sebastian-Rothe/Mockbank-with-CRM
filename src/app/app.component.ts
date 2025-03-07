@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MainContentComponent } from './main-content/main-content.component';
 import { FrontpageComponent } from './frontpage/frontpage.component';
-import { FooterComponent } from './footer/footer.component';
+import { FooterComponent } from './shared-components/footer/footer.component';
 import { OpenNewAccountComponent } from './frontpage/open-new-account/open-new-account.component';
 import { RouterOutlet } from '@angular/router';
 

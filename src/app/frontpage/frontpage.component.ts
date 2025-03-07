@@ -5,7 +5,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { MatDialog } from '@angular/material/dialog';
-import { FooterComponent } from '../footer/footer.component';
+import { FooterComponent } from '../shared-components/footer/footer.component';
 
 @Component({
   selector: 'app-frontpage',
@@ -26,8 +26,8 @@ export class FrontpageComponent {
 
   openLoginDialog(): void {
     this.dialog.open(LoginComponent, {
-      width: '400px', // Optional: Passe die Größe des Dialogs an
-      disableClose: true, // Optional: Verhindert das Schließen des Dialogs durch Klicken außerhalb
+      width: '400px', 
+      disableClose: true, 
     });
   }
 }
