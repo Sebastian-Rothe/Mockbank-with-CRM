@@ -18,12 +18,16 @@ import { Observable } from 'rxjs';
 import { Transfer } from '../models/transfer.class';
 import { Account } from '../models/account.class';
 import { User } from '../models/user.class';
+import { SnackbarService } from './snackbar.service';
+import { DialogService } from './dialog.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TransferService {
   firestore: Firestore = inject(Firestore);
+  private snackbarService: SnackbarService = inject(SnackbarService);
+  private dialogService: DialogService = inject(DialogService);
 
   constructor() {}
 
@@ -119,9 +123,13 @@ export class TransferService {
         bankData
       );
 
-      console.log('Transfer completed successfully!');
+      this.snackbarService.success('Transfer completed successfully!');
     } catch (error) {
-      console.error('Error processing transfer:', error);
+      if (error === 'Insufficient funds for transfer and fee.') {
+        this.dialogService.openDialog('Error', error, 'error');
+      } else {
+        this.dialogService.openDialog('Error', 'Error processing transfer: ' + error, 'error');
+      }
       throw error;
     }
   }
@@ -243,6 +251,7 @@ export class TransferService {
       const transferSnap = await getDoc(transferDocRef);
 
       if (!transferSnap.exists()) {
+        this.dialogService.openDialog('Error', 'Transfer not found.', 'error');
         throw new Error('Transfer not found.');
       }
 
@@ -274,9 +283,9 @@ export class TransferService {
 
       await Promise.all(updates);
 
-      console.log(`Transfer ${transferId} successfully deleted.`);
+      this.snackbarService.success(`Transfer ${transferId} successfully deleted.`);
     } catch (error) {
-      console.error('Error deleting transfer:', error);
+      this.dialogService.openDialog('Error', 'Error deleting transfer: ' + error, 'error');
       throw error;
     }
   }
