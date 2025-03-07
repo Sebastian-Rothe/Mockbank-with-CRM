@@ -172,7 +172,8 @@ export class OpenNewAccountComponent {
               // Dialog öffnen
               this.dialogService.openDialog(
                 'Registration Successful',
-                'The user has been created successfully!'
+                'The user has been created successfully!',
+                'info'
               ).then((result) => {
                 if (result) {
                   this.router.navigate(['/']);
@@ -180,12 +181,12 @@ export class OpenNewAccountComponent {
               });
             })
             .catch((error) => {
-              console.error('Error saving the user in Firestore:', error);
+              this.dialogService.openDialog('Error', 'Error saving the user in Firestore: ' + error, 'error');
             });
         }
       })
       .catch((error) => {
-        console.error('Error registering the user:', error);
+        this.dialogService.openDialog('Error', 'Error registering the user: ' + error, 'error');
       });
   }
 

@@ -111,12 +111,12 @@ export class CreateNewAdminComponent {
               
             })
             .catch((error) => {
-              this.dialogService.openDialog('Error', 'Error saving user to Firestore: ' + error); // msg
+              this.dialogService.openDialog('Error', 'Error saving user to Firestore: ' + error, 'error'); // msg
             });
         }
       })
       .catch((error) => {
-        this.dialogService.openDialog('Error', 'Error registering user: ' + error); // msg
+        this.dialogService.openDialog('Error', 'Error registering user: ' + error, 'error'); // msg
       });
   }
 }

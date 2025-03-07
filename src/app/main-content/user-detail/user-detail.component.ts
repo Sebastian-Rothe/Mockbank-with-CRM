@@ -152,7 +152,7 @@ export class UserDetailComponent implements OnInit {
 
   deleteUser() {
     if (this.user) {
-      this.dialogService.openDialog('Confirm', 'Are you sure you want to delete this user?').then((confirmed) => {
+      this.dialogService.openDialog('Confirm', 'Are you sure you want to delete this user?', 'confirm').then((confirmed) => {
         if (confirmed) {
           this.loadingService.show(); 
           this.userService.deleteUser(this.user?.uid as string).then((deleted) => {
@@ -166,7 +166,7 @@ export class UserDetailComponent implements OnInit {
               this.loadingService.hide(); // Ensure loading spinner is hidden if deletion is not allowed
             }
           }).catch(error => {
-            this.dialogService.openDialog('Error', 'Error deleting user: ' + error.message); // msg
+            this.dialogService.openDialog('Error', 'Error deleting user: ' + error.message, 'error'); // msg
             this.loadingService.hide(); 
           });
         }

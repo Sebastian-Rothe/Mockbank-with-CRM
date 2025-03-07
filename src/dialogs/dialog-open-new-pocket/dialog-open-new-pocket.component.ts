@@ -87,7 +87,8 @@ export class DialogOpenNewPocketComponent implements OnInit {
       console.error(error);
       this.dialogService.openDialog(
         'Error',
-        'You must be logged in to create a new account.'
+        'You must be logged in to create a new account.',
+        'error'
       ).then(() => {
         this.closeDialog();
       });
@@ -105,13 +106,14 @@ export class DialogOpenNewPocketComponent implements OnInit {
     if (!this.uid) {
       this.dialogService.openDialog(
         'Error',
-        'You must be logged in to create an account.'
+        'You must be logged in to create an account.',
+        'error'
       );
       return;
     }
 
     if (this.account.balance <= 0 || !this.account.accountName) {
-      this.dialogService.openDialog('Error', 'Please enter valid account details.');
+      this.dialogService.openDialog('Error', 'Please enter valid account details.', 'error');
       return;
     }
 
@@ -121,7 +123,7 @@ export class DialogOpenNewPocketComponent implements OnInit {
       await this.accountService.addAccount(this.uid, this.account.toJson());
       this.dialogRef.close(true);
     } catch (error) {
-      this.dialogService.openDialog('Error', 'Failed to create account.');
+      this.dialogService.openDialog('Error', 'Failed to create account.', 'error');
     }
   }
 

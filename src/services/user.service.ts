@@ -142,25 +142,25 @@ export class UserService {
     try {
       const currentUserUid = this.authService.getUid();
       if (currentUserUid === userId) {
-        this.dialogService.openDialog('Error', 'The logged-in user cannot be deleted.'); // msg
+        this.dialogService.openDialog('Error', 'The logged-in user cannot be deleted.', 'error'); // msg
         return false;
       }
 
       if (!this.authService.canDeleteUser()) {
-        this.dialogService.openDialog('Error', 'Maximum number of deletions reached.'); 
+        this.dialogService.openDialog('Error', 'Maximum number of deletions reached.', 'error'); // msg
         return false;
       }
 
       const userDocRef = doc(this.firestore, 'users', userId);
       const userSnap = await getDoc(userDocRef);
       if (!userSnap.exists()) {
-        this.dialogService.openDialog('Error', 'User not found.');
+        this.dialogService.openDialog('Error', 'User not found.', 'error'); // msg
         return false;
       }
 
       const userData = userSnap.data();
       if (userData['role'] === 'admin') {
-        this.dialogService.openDialog('Error', 'Admins cannot be deleted.'); 
+        this.dialogService.openDialog('Error', 'Admins cannot be deleted.', 'error'); // msg
         return false;
       }
 

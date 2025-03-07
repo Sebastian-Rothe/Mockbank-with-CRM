@@ -57,14 +57,14 @@ onFileSelected(event: Event): void {
 
   // Check if the file type is allowed
   if (!allowedTypes.includes(file.type)) {
-    this.dialogService.openDialog('Invalid file type', 'Please upload a valid image file (JPG or PNG).');
+    this.dialogService.openDialog('Invalid file type', 'Please upload a valid image file (JPG or PNG).', 'warning');
     return;
   }
 
   // Check if the file size is less than 1MB (1MB = 1024 * 1024 bytes)
   const maxSize = 1 * 1024 * 1024; // 1MB
   if (file.size > maxSize) {
-    this.dialogService.openDialog('File too large', 'The image must be less than 1MB.');
+    this.dialogService.openDialog('File too large', 'The image must be less than 1MB.', 'warning');
     return;
   }
 
@@ -90,11 +90,11 @@ async saveProfilePicture(): Promise<void> {
       );
       this.isImageSelected = false;
     } catch (error) {
-      this.dialogService.openDialog('Error', 'Failed to save the profile picture. Please try again.');
+      this.dialogService.openDialog('Error', 'Failed to save the profile picture. Please try again.', 'error');
       console.error('Error saving profile picture:', error);
     }
   } else {
-    this.dialogService.openDialog('No Image Selected', 'Please select an image first.');
+    this.dialogService.openDialog('No Image Selected', 'Please select an image first.', 'warning');
   }
 }
 

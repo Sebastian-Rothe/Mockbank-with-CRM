@@ -203,7 +203,8 @@ export class AccountsComponent {
   openDeleteAccountDialog(accountId: string): void {
     this.dialogService.openDialog(
       'Confirm Deletion',
-      `Are you sure you want to delete the account with ID ${accountId}? The money in the account will be lost.`
+      `Are you sure you want to delete the account with ID ${accountId}? The money in the account will be lost.`,
+      'confirm'
     ).then(async (confirmed) => {
       if (confirmed) {
         try {
@@ -216,7 +217,7 @@ export class AccountsComponent {
           this.snackbarService.success('Account deleted successfully.');
           this.dashboardData.loadAccountsForUser(userId); 
         } catch (error) {
-          this.dialogService.openDialog('Error', 'Failed to delete account: ' + error);
+          this.dialogService.openDialog('Error', 'Failed to delete account: ' + error, 'error');
         }
       }
     });

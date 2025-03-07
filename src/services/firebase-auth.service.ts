@@ -88,7 +88,7 @@ export class FirebaseAuthService {
 
       return userCredential.user;
     } catch (error) {
-      this.dialogService.openDialog('Error', 'Registration failed: ' + (error as Error).message); // msg
+      this.dialogService.openDialog('Error', 'Registration failed: ' + (error as Error).message, 'error'); // msg
       throw error;
     }
   }
@@ -112,7 +112,7 @@ export class FirebaseAuthService {
 
       return userCredential.user;
     } catch (error) {
-      this.dialogService.openDialog('Error', 'Registration failed: ' + (error as Error).message); // msg
+      this.dialogService.openDialog('Error', 'Registration failed: ' + (error as Error).message, 'error'); // msg
       throw error;
     }
   }
@@ -138,7 +138,7 @@ export class FirebaseAuthService {
       return userCredential.user;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      this.dialogService.openDialog('Error', 'Login failed: ' + errorMessage); // msg
+      this.dialogService.openDialog('Error', 'Login failed: ' + errorMessage, 'error'); // msg
       throw error;
     } finally {
       this.loadingService.hide(); // Hide loading spinner
@@ -160,7 +160,7 @@ export class FirebaseAuthService {
       return userCredential;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      this.dialogService.openDialog('Error', 'Guest login failed: ' + errorMessage); // msg
+      this.dialogService.openDialog('Error', 'Guest login failed: ' + errorMessage, 'error'); // msg
       throw error;
     } finally {
       this.loadingService.hide(); // Hide loading spinner
@@ -249,7 +249,7 @@ export class FirebaseAuthService {
       }
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      this.dialogService.openDialog('Error', 'Error cleaning up guest user data: ' + errorMessage); 
+      this.dialogService.openDialog('Error', 'Error cleaning up guest user data: ' + errorMessage, 'error'); // msg
       throw error;
     }
   }
@@ -314,7 +314,7 @@ export class FirebaseAuthService {
       this.snackbarService.success('Email updated successfully. Please log in again.');
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      this.dialogService.openDialog('Error', 'Error updating email: ' + errorMessage); // msg
+      this.dialogService.openDialog('Error', 'Error updating email: ' + errorMessage, 'error'); // msg
       throw error;
     }
   }
@@ -336,7 +336,7 @@ export class FirebaseAuthService {
       this.snackbarService.success('Password updated successfully.');
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      this.dialogService.openDialog('Error', 'Failed to update password: ' + errorMessage); // msg
+      this.dialogService.openDialog('Error', 'Failed to update password: ' + errorMessage, 'error'); // msg
       throw error;
     }
   }
@@ -362,7 +362,7 @@ export class FirebaseAuthService {
       this.snackbarService.success('User successfully re-authenticated.');
     } catch (error) {
    
-      this.dialogService.openDialog('Error', 'Error during re-authentication: ' + error); // msg
+      this.dialogService.openDialog('Error', 'Error during re-authentication: ' + error, 'error'); // msg
       throw error;
     }
   }
@@ -384,7 +384,7 @@ export class FirebaseAuthService {
       console.log('Verification email sent to:', user.email);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      this.dialogService.openDialog('Error', 'Failed to send verification email: ' + errorMessage); // msg
+      this.dialogService.openDialog('Error', 'Failed to send verification email: ' + errorMessage, 'error'); // msg
       throw error;
     }
   }

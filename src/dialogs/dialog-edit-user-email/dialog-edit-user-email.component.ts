@@ -73,18 +73,18 @@ export class DialogEditUserEmailComponent {
     try {
       await this.authService.reauthenticate(this.currentPassword);
       await this.authService.sendEmailVerification();
-      this.dialogService.openDialog('Verification Email Sent', 'A verification email has been sent. Please confirm your new email.'); // msg
+      this.dialogService.openDialog('Verification Email Sent', 'A verification email has been sent. Please confirm your new email.', 'info'); // msg
       const isVerified = await this.authService.checkEmailVerification();
 
       if (isVerified) {
         await this.authService.updateEmail(this.newEmail, this.currentPassword);
-        this.snackbarService.success('Email successfully changed!'); // snack
+        this.snackbarService.success('Email successfully changed!'); 
         this.dialogRef.close();
       } else {
-        this.snackbarService.error('Email was not verified.'); // snack
+        this.snackbarService.error('Email was not verified.'); 
       }
     } catch (error: any) {
-      this.dialogService.openDialog('Error', 'Error changing email: ' + error.message); // msg
+      this.dialogService.openDialog('Error', 'Error changing email: ' + error.message, 'error'); // msg
     }
   }
 
