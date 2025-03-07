@@ -11,6 +11,7 @@ import { SharedService } from '../../../services/shared.service';
 import { UserService } from '../../../services/user.service';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { DialogService } from '../../../services/dialog.service';
+import { LoadingService } from '../../../services/loading.service';
 // Models
 import { User } from '../../../models/user.class';
 // Angular Material
@@ -60,7 +61,8 @@ export class UserDetailComponent implements OnInit {
     private userService: UserService,
     private snackbarService: SnackbarService,
     private dialogService: DialogService,
-    private router: Router
+    private router: Router,
+    private loadingService: LoadingService // Inject LoadingService
   ) {}
 
   ngOnInit() {
@@ -152,16 +154,19 @@ export class UserDetailComponent implements OnInit {
     if (this.user) {
       this.dialogService.openDialog('Confirm', 'Are you sure you want to delete this user?').then((confirmed) => {
         if (confirmed) {
+          this.loadingService.show(); 
           this.userService.deleteUser(this.user?.uid as string).then((deleted) => {
             if (deleted) {
-              this.snackbarService.success('User deleted successfully!');
-              // Redirect to the user list page
+           
               setTimeout(() => {
                 this.router.navigate(['/main/user']);
-              }, 3000); // 3-second delay to show the snackbar
+                this.loadingService.hide(); 
+              }, 1500); 
+              this.snackbarService.success('User deleted successfully!');
             }
           }).catch(error => {
             this.dialogService.openDialog('Error', 'Error deleting user: ' + error.message); 
+            this.loadingService.hide(); 
           });
         }
       });

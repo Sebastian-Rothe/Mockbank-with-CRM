@@ -185,6 +185,7 @@ export class FirebaseAuthService {
    */
   async logout(): Promise<void> {
     try {
+      this.loadingService.show(); // Show loading spinner
       const currentUser = this.auth.currentUser;
       if (currentUser && currentUser.isAnonymous) {
         await this.cleanupGuestUserData(currentUser.uid);
@@ -192,7 +193,6 @@ export class FirebaseAuthService {
       await signOut(this.auth);
       this.uid$.next(null);
       this.snackbarService.success('Logged out successfully!');
-
       await this.redirectAfterLogout();
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
@@ -238,10 +238,16 @@ export class FirebaseAuthService {
    * @returns A promise that resolves when the redirection is complete.
    */
   async redirectAfterLogout(): Promise<void> {
-    await this.router.navigate(['/']);
-    setTimeout(() => {
-      window.location.reload();
-    }, 3000); // 3-second delay to show the snackbar
+    try {
+      await this.router.navigate(['/']);
+      setTimeout(() => {
+        window.location.reload();
+        this.loadingService.hide(); // Hide loading spinner after reload
+      }, 1500); // Adjust delay as needed
+    } catch (error) {
+      this.loadingService.hide(); // Ensure spinner is hidden in case of error
+      throw error;
+    }
   }
 
   /**
