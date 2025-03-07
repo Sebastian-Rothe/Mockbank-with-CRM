@@ -144,12 +144,12 @@ export class UserDetailComponent implements OnInit {
   }
 
   deleteUser() {
-    if (this.user && confirm('Are you sure you want to delete this user?')) {
+    if (this.user && confirm('Are you sure you want to delete this user?')) { //msg
       this.userService.deleteUser(this.user.uid as string).then(() => {
-        console.log('User deleted successfully');
+        console.log('User deleted successfully'); // snack
         // Redirect or update the UI as needed
       }).catch(error => {
-        console.error('Error deleting user:', error);
+        console.error('Error deleting user:', error); //msg
       });
     }
   }

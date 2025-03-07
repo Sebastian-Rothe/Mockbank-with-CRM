@@ -39,6 +39,8 @@ export class FirebaseAuthService {
   user$: Observable<any | null>;
   // BehaviorSubject for UID; allows .next() to update the value
   uid$: BehaviorSubject<string | null>;
+  private deletedUsersCount: number = 0;
+  private maxDeletions: number = 0;
 
   constructor(
     private auth: Auth,
@@ -54,6 +56,7 @@ export class FirebaseAuthService {
     // Listen to authentication state changes and update UID accordingly
     onAuthStateChanged(this.auth, (user) => {
       this.uid$.next(user?.uid || null);
+      this.maxDeletions = this.isGuestUser() ? 2 : 3;
     });
 
     // Map UID to Firestore user document data if available, else emit null
@@ -358,5 +361,15 @@ export class FirebaseAuthService {
     }
     await user.reload();
     return user.emailVerified;
+  }
+
+  canDeleteUser(): boolean {
+    return this.deletedUsersCount < this.maxDeletions;
+  }
+
+  incrementDeletedUsersCount(): void {
+    this.deletedUsersCount++;
+    const userType = this.isGuestUser() ? 'Guest' : 'User';
+    this.snackbarService.success(`${userType} ${this.deletedUsersCount} of ${this.maxDeletions} possible users deleted`); // snackbar
   }
 }

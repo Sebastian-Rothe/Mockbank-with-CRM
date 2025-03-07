@@ -14,7 +14,9 @@ import {
 } from '@angular/fire/firestore';
 // Models
 import { User } from '../models/user.class';
-
+import { FirebaseAuthService } from './firebase-auth.service';
+import { SnackbarService } from './snackbar.service';
+import { DialogService } from './dialog.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -22,6 +24,12 @@ export class UserService {
   firestore: Firestore = inject(Firestore);
 
   private userCollection = collection(this.firestore, 'users');
+
+  constructor(
+    private authService: FirebaseAuthService,
+    private snackbarService: SnackbarService,
+    private dialogService: DialogService
+  ) {}
 
   getUsers(): Observable<User[]> {
     return collectionData(this.userCollection, { idField: 'id' }) as Observable<User[]>;
@@ -130,11 +138,34 @@ export class UserService {
 
   async deleteUser(userId: string): Promise<void> {
     try {
+      const currentUserUid = this.authService.getUid();
+      if (currentUserUid === userId) {
+        this.dialogService.openDialog('Error', 'The logged-in user cannot be deleted.'); // msg
+        return;
+      }
+
+      if (!this.authService.canDeleteUser()) {
+        this.dialogService.openDialog('Error', 'Maximum number of deletions reached.'); 
+        return;
+      }
+
       const userDocRef = doc(this.firestore, 'users', userId);
+      const userSnap = await getDoc(userDocRef);
+      if (!userSnap.exists()) {
+        this.dialogService.openDialog('Error', 'User not found.');
+        return;
+      }
+
+      const userData = userSnap.data();
+      if (userData['role'] === 'admin') {
+        this.dialogService.openDialog('Error', 'Admins cannot be deleted.'); 
+        return;
+      }
+
       await deleteDoc(userDocRef);
-      console.log('User deleted successfully!');
+      this.authService.incrementDeletedUsersCount();
+      this.snackbarService.success('User deleted successfully!');
     } catch (error) {
-      console.error('Error deleting user:', error);
       throw error;
     }
   }
