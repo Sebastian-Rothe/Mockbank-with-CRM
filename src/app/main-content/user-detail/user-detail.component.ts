@@ -9,6 +9,8 @@ import { FirebaseService } from '../../../services/firebase.service';
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import { SharedService } from '../../../services/shared.service';
 import { UserService } from '../../../services/user.service';
+import { SnackbarService } from '../../../services/snackbar.service';
+import { DialogService } from '../../../services/dialog.service';
 // Models
 import { User } from '../../../models/user.class';
 // Angular Material
@@ -55,7 +57,9 @@ export class UserDetailComponent implements OnInit {
     private firebaseService: FirebaseService,
     private authService: FirebaseAuthService,
     private sharedService: SharedService,
-    private userService: UserService
+    private userService: UserService,
+    private snackbarService: SnackbarService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit() {
@@ -144,12 +148,16 @@ export class UserDetailComponent implements OnInit {
   }
 
   deleteUser() {
-    if (this.user && confirm('Are you sure you want to delete this user?')) { //msg
-      this.userService.deleteUser(this.user.uid as string).then(() => {
-        console.log('User deleted successfully'); // snack
-        // Redirect or update the UI as needed
-      }).catch(error => {
-        console.error('Error deleting user:', error); //msg
+    if (this.user) {
+      this.dialogService.openDialog('Confirm', 'Are you sure you want to delete this user?').then((confirmed) => { // msg
+        if (confirmed) {
+          this.userService.deleteUser(this.user?.uid as string).then(() => {
+            this.snackbarService.success('User deleted successfully!'); // snackbar
+            // Redirect or update the UI as needed
+          }).catch(error => {
+            this.dialogService.openDialog('Error', 'Error deleting user: ' + error.message); // msg
+          });
+        }
       });
     }
   }
