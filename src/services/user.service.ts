@@ -17,6 +17,7 @@ import { User } from '../models/user.class';
 import { FirebaseAuthService } from './firebase-auth.service';
 import { SnackbarService } from './snackbar.service';
 import { DialogService } from './dialog.service';
+import { LoadingService } from './loading.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -28,7 +29,8 @@ export class UserService {
   constructor(
     private authService: FirebaseAuthService,
     private snackbarService: SnackbarService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private loadingService: LoadingService
   ) {}
 
   getUsers(): Observable<User[]> {
@@ -168,6 +170,8 @@ export class UserService {
       return true;
     } catch (error) {
       throw error;
+    } finally {
+      this.loadingService.hide(); // Ensure loading spinner is hidden
     }
   }
 }

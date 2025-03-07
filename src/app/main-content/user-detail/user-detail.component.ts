@@ -157,15 +157,16 @@ export class UserDetailComponent implements OnInit {
           this.loadingService.show(); 
           this.userService.deleteUser(this.user?.uid as string).then((deleted) => {
             if (deleted) {
-           
               setTimeout(() => {
                 this.router.navigate(['/main/user']);
                 this.loadingService.hide(); 
               }, 1500); 
               this.snackbarService.success('User deleted successfully!');
+            } else {
+              this.loadingService.hide(); // Ensure loading spinner is hidden if deletion is not allowed
             }
           }).catch(error => {
-            this.dialogService.openDialog('Error', 'Error deleting user: ' + error.message); 
+            this.dialogService.openDialog('Error', 'Error deleting user: ' + error.message); // msg
             this.loadingService.hide(); 
           });
         }
