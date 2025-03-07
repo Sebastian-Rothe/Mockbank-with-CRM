@@ -136,35 +136,36 @@ export class UserService {
     }
   }
 
-  async deleteUser(userId: string): Promise<void> {
+  async deleteUser(userId: string): Promise<boolean> {
     try {
       const currentUserUid = this.authService.getUid();
       if (currentUserUid === userId) {
         this.dialogService.openDialog('Error', 'The logged-in user cannot be deleted.'); // msg
-        return;
+        return false;
       }
 
       if (!this.authService.canDeleteUser()) {
         this.dialogService.openDialog('Error', 'Maximum number of deletions reached.'); 
-        return;
+        return false;
       }
 
       const userDocRef = doc(this.firestore, 'users', userId);
       const userSnap = await getDoc(userDocRef);
       if (!userSnap.exists()) {
         this.dialogService.openDialog('Error', 'User not found.');
-        return;
+        return false;
       }
 
       const userData = userSnap.data();
       if (userData['role'] === 'admin') {
         this.dialogService.openDialog('Error', 'Admins cannot be deleted.'); 
-        return;
+        return false;
       }
 
       await deleteDoc(userDocRef);
       this.authService.incrementDeletedUsersCount();
       this.snackbarService.success('User deleted successfully!');
+      return true;
     } catch (error) {
       throw error;
     }

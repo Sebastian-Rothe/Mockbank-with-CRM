@@ -1,7 +1,7 @@
 //
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 // Firebase
 import { doc, onSnapshot } from 'firebase/firestore';
 // Services
@@ -59,7 +59,8 @@ export class UserDetailComponent implements OnInit {
     private sharedService: SharedService,
     private userService: UserService,
     private snackbarService: SnackbarService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -149,13 +150,18 @@ export class UserDetailComponent implements OnInit {
 
   deleteUser() {
     if (this.user) {
-      this.dialogService.openDialog('Confirm', 'Are you sure you want to delete this user?').then((confirmed) => { // msg
+      this.dialogService.openDialog('Confirm', 'Are you sure you want to delete this user?').then((confirmed) => {
         if (confirmed) {
-          this.userService.deleteUser(this.user?.uid as string).then(() => {
-            this.snackbarService.success('User deleted successfully!'); // snackbar
-            // Redirect or update the UI as needed
+          this.userService.deleteUser(this.user?.uid as string).then((deleted) => {
+            if (deleted) {
+              this.snackbarService.success('User deleted successfully!');
+              // Redirect to the user list page
+              setTimeout(() => {
+                this.router.navigate(['/main/user']);
+              }, 3000); // 3-second delay to show the snackbar
+            }
           }).catch(error => {
-            this.dialogService.openDialog('Error', 'Error deleting user: ' + error.message); // msg
+            this.dialogService.openDialog('Error', 'Error deleting user: ' + error.message); 
           });
         }
       });
