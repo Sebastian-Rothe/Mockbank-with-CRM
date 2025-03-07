@@ -1,1 +1,9 @@
+<h2 mat-dialog-title [ngClass]="data.type">{{ data.title }}</h2>
+<mat-dialog-content>
+  <p>{{ data.message }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="close(false)" *ngIf="data.type === 'confirm'">Cancel</button>
+  <button mat-raised-button [ngClass]="buttonClass" (click)="close(true)">{{ buttonText }}</button>
+</mat-dialog-actions>
 

@@ -33,13 +33,14 @@ button {
   border-radius: 8px;
   font-weight: bold;
   text-transform: uppercase;
+  transition: background-color 0.3s ease; // Added transition for smooth background color change
 }
 
 button[mat-dialog-close] {
-  background-color: #ccc;
+  background-color: #e0e0e0; // Changed color to a lighter shade
   color: #333;
   &:hover {
-    background-color: #bbb;
+    background-color: #d5d5d5; // Changed hover color to match the new background color
   }
 }
 
@@ -48,5 +49,29 @@ button[mat-dialog-close] {
   color: white;
   &:hover {
     background-color: #0056b3;
+  }
+}
+
+.error-button {
+  background-color: #dc3545;
+  color: white;
+  &:hover {
+    background-color: #c82333;
+  }
+}
+
+.warning-button {
+  background-color: #ffc107;
+  color: #212529;
+  &:hover {
+    background-color: #e0a800;
+  }
+}
+
+.info-button {
+  background-color: #17a2b8;
+  color: white;
+  &:hover {
+    background-color: #138496;
   }
 }
