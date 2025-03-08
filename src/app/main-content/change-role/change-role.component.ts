@@ -6,6 +6,8 @@ import { User } from '../../../models/user.class';
 import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
+import { SnackbarService } from '../../../services/snackbar.service';
+
 @Component({
   selector: 'app-change-role',
   standalone: true,
@@ -26,7 +28,8 @@ export class ChangeRoleComponent {
   constructor(
     private authService: FirebaseAuthService,
     private userService: UserService,
-    private firestore: Firestore
+    private firestore: Firestore,
+    private snackbarService: SnackbarService
   ) {}
 
   ngOnInit(): void {
@@ -50,9 +53,9 @@ export class ChangeRoleComponent {
       try {
         const userDocRef = doc(this.firestore, 'users', this.user.uid);
         await updateDoc(userDocRef, { role: this.user.role });
-        console.log(`User role updated to: ${this.user.role}`); // change the style of the msg
+        this.snackbarService.success(`User role updated to: ${this.user.role}`);
       } catch (error) {
-        console.error('Error updating role:', error);
+        this.snackbarService.error('Error updating role');
       }
     }
   }
