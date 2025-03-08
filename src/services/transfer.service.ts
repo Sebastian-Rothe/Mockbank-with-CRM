@@ -125,10 +125,12 @@ export class TransferService {
 
       this.snackbarService.success('Transfer completed successfully!');
     } catch (error) {
-      if (error === 'Insufficient funds for transfer and fee.') {
-        this.dialogService.openDialog('Error', error, 'error');
+      if (error instanceof Error && error.message === 'Insufficient funds for transfer and fee.') {
+        this.dialogService.openDialog('Error', error.message, 'error');
+      } else if (error instanceof Error) {
+        this.dialogService.openDialog('Error', `Error processing transfer: ${error.message}`, 'error');
       } else {
-        this.dialogService.openDialog('Error', 'Error processing transfer: ' + error, 'error');
+        this.dialogService.openDialog('Error', 'An unknown error occurred.', 'error');
       }
       throw error;
     }
