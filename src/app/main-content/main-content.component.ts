@@ -1,6 +1,5 @@
 import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { RouterLink, RouterOutlet, Router } from '@angular/router';
 import { combineLatest } from 'rxjs';
 // Material
@@ -37,10 +36,10 @@ export class MainContentComponent implements OnInit, AfterViewInit {
   uid: string | null = null;
   user: User | null = null;
   isGuest: boolean = false;
+  private resizeTimeout: any;
 
   constructor(
     private authService: FirebaseAuthService,
-    private breakpointObserver: BreakpointObserver,
     private cdRef: ChangeDetectorRef,
     private bankService: BankService
   ) {}
@@ -73,26 +72,40 @@ export class MainContentComponent implements OnInit, AfterViewInit {
   adjustSidenav(width: number): void {
     if (width >= 800) {
       this.drawerMode = 'side';
-      this.isDrawerOpened = true;
     } else {
       this.drawerMode = 'over';
-      this.isDrawerOpened = false;
     }
     this.cdRef.detectChanges();
+    this.triggerResizeEvent(); // Trigger resize event
   }
 
   closeSidenavOnSmallScreen(): void {
     if (window.innerWidth < 800) {
       this.isDrawerOpened = false;
+      this.triggerResizeEvent(); // Trigger resize event
     }
   }
 
   onDrawerOpened(): void {
     this.isDrawerOpened = true;
+    this.triggerResizeEvent(); // Trigger resize event
   }
 
   onDrawerClosed(): void {
     this.isDrawerOpened = false;
+    this.triggerResizeEvent(); // Trigger resize event
+  }
+
+  /**
+   * Triggers a resize event on the window to force charts to re-render.
+   */
+  private triggerResizeEvent(): void {
+    if (this.resizeTimeout) {
+      clearTimeout(this.resizeTimeout);
+    }
+    this.resizeTimeout = setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 100); 
   }
 
   // Berechnung und Verteilung der Zinsen
