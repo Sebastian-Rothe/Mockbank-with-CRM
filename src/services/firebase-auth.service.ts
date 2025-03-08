@@ -13,6 +13,7 @@ import {
   sendPasswordResetEmail,
   UserCredential,
   signInAnonymously,
+  onIdTokenChanged, // Import onIdTokenChanged
 } from '@angular/fire/auth';
 import { Observable, BehaviorSubject, of, switchMap } from 'rxjs';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -42,6 +43,9 @@ export class FirebaseAuthService {
   uid$: BehaviorSubject<string | null>;
   private deletedUsersCount: number = 0;
   private maxDeletions: number = 0;
+  private inactivityTimer: any; // Timer for inactivity
+  private countdownTimer: any; // Timer for countdown
+  private visibilityChangeListener: () => void = () => {}; // Initialize with an empty function
 
   constructor(
     private auth: Auth,
@@ -67,6 +71,14 @@ export class FirebaseAuthService {
         uid ? docData(doc(this.firestore, 'users', uid)) : of(null)
       )
     );
+
+    // // Listen for ID token changes to detect token expiration
+    // onIdTokenChanged(this.auth, (user) => {
+    //   if (!user) {
+    //     console.log('ID token expired, logging out...');
+    //     this.logout(); // Auto logout if token is expired
+    //   }
+    // });
   }
 
   /**
@@ -135,6 +147,12 @@ export class FirebaseAuthService {
       );
       this.uid$.next(userCredential.user.uid);
       this.snackbarService.success('Login successful!');
+      
+      // Set up inactivity timer and visibility change listener after login
+      this.resetInactivityTimer();
+      this.setupInactivityListener();
+      this.setupVisibilityChangeListener();
+
       return userCredential.user;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
@@ -157,6 +175,12 @@ export class FirebaseAuthService {
       const userCredential = await signInAnonymously(this.auth);
       await this.ensureGuestUserExists(userCredential.user.uid);
       this.snackbarService.success('Guest login successful!');
+      
+      // Set up inactivity timer and visibility change listener after guest login
+      this.resetInactivityTimer();
+      this.setupInactivityListener();
+      this.setupVisibilityChangeListener();
+
       return userCredential;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
@@ -209,6 +233,7 @@ export class FirebaseAuthService {
    */
   async logout(): Promise<void> {
     try {
+      console.log('Logging out...');
       this.loadingService.show(); // Show loading spinner
       const currentUser = this.auth.currentUser;
       if (currentUser && currentUser.isAnonymous) {
@@ -222,6 +247,8 @@ export class FirebaseAuthService {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
       this.dialogService.openDialog('Error', 'Logout failed: ' + errorMessage); 
       throw error;
+    } finally {
+      this.loadingService.hide(); // Hide loading spinner
     }
   }
 
@@ -411,5 +438,72 @@ export class FirebaseAuthService {
     this.deletedUsersCount++;
     const userType = this.isGuestUser() ? 'Guest' : 'User';
     this.snackbarService.success(`${userType} ${this.deletedUsersCount} of ${this.maxDeletions} possible users deleted`); // snackbar
+  }
+
+  /**
+   * Resets the inactivity timer.
+   */
+  private resetInactivityTimer(): void {
+    if (this.inactivityTimer) {
+      clearTimeout(this.inactivityTimer);
+    }
+    if (this.countdownTimer) {
+      clearTimeout(this.countdownTimer);
+    }
+    this.inactivityTimer = setTimeout(() => {
+      this.showCountdownMessage(); // Show countdown message after inactivity period
+    }, 1 * 60 * 1000); // Set to 1 minute (adjust as needed)
+  }
+
+  /**
+   * Shows a countdown message to the user.
+   */
+  private showCountdownMessage(): void {
+    let countdown = 10; // 10 seconds countdown
+    this.snackbarService.info(`You will be logged out in ${countdown} seconds unless you interact with the page.`);
+
+    this.countdownTimer = setInterval(() => {
+      countdown--;
+      if (countdown > 0) {
+        this.snackbarService.info(`You will be logged out in ${countdown} seconds unless you interact with the page.`);
+      } else {
+        clearInterval(this.countdownTimer);
+        this.logout(); // Auto logout after countdown
+      }
+    }, 1000); // Update every second
+
+    // Add event listener to prevent logout if user interacts with the page
+    document.addEventListener('click', this.preventLogout);
+  }
+
+  /**
+   * Prevents the logout by resetting the inactivity timer.
+   */
+  private preventLogout = (): void => {
+    clearInterval(this.countdownTimer);
+    this.resetInactivityTimer();
+    document.removeEventListener('click', this.preventLogout);
+  };
+
+  /**
+   * Sets up event listeners to reset the inactivity timer on user activity.
+   */
+  private setupInactivityListener(): void {
+    ['click', 'mousemove', 'keydown', 'scroll'].forEach((event) => {
+      window.addEventListener(event, () => this.resetInactivityTimer());
+    });
+  }
+
+  /**
+   * Sets up a listener for visibility change events to detect if the user switches tabs or minimizes the window.
+   */
+  private setupVisibilityChangeListener(): void {
+    this.visibilityChangeListener = () => {
+      console.log('Visibility changed:', document.visibilityState);
+      if (document.visibilityState === 'visible') {
+        this.resetInactivityTimer(); // Reset timer when user returns to the tab
+      }
+    };
+    document.addEventListener('visibilitychange', this.visibilityChangeListener);
   }
 }
