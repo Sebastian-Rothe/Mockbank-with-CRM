@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
+import { DialogService } from './dialog.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SharedService {
+  constructor(private dialogService: DialogService) {}
+
   private uid: string | null = null;
 
   /**
@@ -50,5 +53,22 @@ export class SharedService {
       currency: 'EUR',
       currencyDisplay: 'narrowSymbol',
     }).format(value).replace(/\s€/g, '€'); // Removes spaces before €
+  }
+
+  /**
+   * Handles errors by showing a dialog and logging the error.
+   *
+   * @param message - The error message to display.
+   * @param error - The error object.
+   */
+  handleError(message: string, error: any): void {
+    const errorMessage =
+      error instanceof Error ? error.message : 'An unexpected error occurred';
+    this.dialogService.openDialog(
+      'Error',
+      `${message}: ${errorMessage}`,
+      'error'
+    );
+    console.error(message, error);
   }
 }
