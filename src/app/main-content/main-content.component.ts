@@ -9,10 +9,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDrawer, MatDrawerContainer } from '@angular/material/sidenav';
 import { MatDrawerMode } from '@angular/material/sidenav';
 // Models
-import { User } from '../../models/user.class';
+import { User } from '../models/user.class';
 // Services
-import { FirebaseAuthService } from '../../services/firebase-auth.service';
-import { BankService } from '../../services/bank.service';
+import { FirebaseAuthService } from '../services/firebase-auth.service';
+import { BankService } from '../services/bank.service';
 
 @Component({
   selector: 'app-main-content',

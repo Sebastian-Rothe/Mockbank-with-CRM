@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // services
-import { FirebaseAuthService } from '../../../services/firebase-auth.service';
-import { DashboardDataServiceService } from '../../../services/dashboard-data-service.service';
+import { FirebaseAuthService } from '../../services/firebase-auth.service';
+import { DashboardDataServiceService } from '../../services/dashboard-data-service.service';
 // models
-import { User } from '../../../models/user.class';
+import { User } from '../../models/user.class';
 // material
 import { MatDialog } from '@angular/material/dialog';
 import { MatCard, } from '@angular/material/card';

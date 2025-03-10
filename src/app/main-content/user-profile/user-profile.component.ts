@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { SharedService } from '../../../services/shared.service';
-import { User } from '../../../models/user.class';
+import { SharedService } from '../../services/shared.service';
+import { User } from '../../models/user.class';
 import { CommonModule } from '@angular/common';
 
 @Component({

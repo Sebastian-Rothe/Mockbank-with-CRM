@@ -20,11 +20,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { provideNativeDateAdapter } from '@angular/material/core';
 // models
-import { User } from '../../../models/user.class';
+import { User } from '../../models/user.class';
 // services 
-import { FirebaseAuthService } from '../../../services/firebase-auth.service';
-import { DialogService } from '../../../services/dialog.service';
-import { UserService } from '../../../services/user.service';
+import { FirebaseAuthService } from '../../services/firebase-auth.service';
+import { DialogService } from '../../services/dialog.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-open-new-account',

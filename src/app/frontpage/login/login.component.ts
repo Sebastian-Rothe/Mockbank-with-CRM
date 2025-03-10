@@ -7,9 +7,9 @@ import { MatDialogRef } from '@angular/material/dialog';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { User } from '../../../models/user.class';
-import { FirebaseAuthService } from '../../../services/firebase-auth.service';
-import { UserService } from '../../../services/user.service';
+import { User } from '../../models/user.class';
+import { FirebaseAuthService } from '../../services/firebase-auth.service';
+import { UserService } from '../../services/user.service';
 import { Router } from '@angular/router';
 
 interface GuestUser {

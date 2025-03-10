@@ -1,12 +1,12 @@
 import { Component, Input, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 // services
-import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
-import { SharedService } from '../../../../services/shared.service';
-import { DashboardDataServiceService } from '../../../../services/dashboard-data-service.service';
-import { AccountService } from '../../../../services/account.service';
-import { SnackbarService } from '../../../../services/snackbar.service';
-import { DialogService } from '../../../../services/dialog.service';
+import { FirebaseAuthService } from '../../../services/firebase-auth.service';
+import { SharedService } from '../../../services/shared.service';
+import { DashboardDataServiceService } from '../../../services/dashboard-data-service.service';
+import { AccountService } from '../../../services/account.service';
+import { SnackbarService } from '../../../services/snackbar.service';
+import { DialogService } from '../../../services/dialog.service';
 // Materail
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardContent, MatCardModule } from '@angular/material/card';
@@ -14,12 +14,12 @@ import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
 import { MatDialog } from '@angular/material/dialog';
 // components
-import { DialogSendMoneyComponent } from '../../../../dialogs/dialog-send-money/dialog-send-money.component';
-import { DialogOpenNewPocketComponent } from '../../../../dialogs/dialog-open-new-pocket/dialog-open-new-pocket.component';
-import { DialogMoveMoneyComponent } from '../../../../dialogs/dialog-move-money/dialog-move-money.component';
-import { DialogEditAccountComponent } from '../../../../dialogs/dialog-edit-account/dialog-edit-account.component';
+import { DialogSendMoneyComponent } from '../../../dialogs/dialog-send-money/dialog-send-money.component';
+import { DialogOpenNewPocketComponent } from '../../../dialogs/dialog-open-new-pocket/dialog-open-new-pocket.component';
+import { DialogMoveMoneyComponent } from '../../../dialogs/dialog-move-money/dialog-move-money.component';
+import { DialogEditAccountComponent } from '../../../dialogs/dialog-edit-account/dialog-edit-account.component';
 //
-import { Account } from '../../../../models/account.class';
+import { Account } from '../../../models/account.class';
 
 /**
  * AccountsComponent is responsible for displaying and managing user accounts.

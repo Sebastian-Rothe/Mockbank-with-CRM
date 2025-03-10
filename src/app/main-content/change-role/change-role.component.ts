@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { Firestore, doc, updateDoc } from '@angular/fire/firestore';
 // services
-import { FirebaseAuthService } from '../../../services/firebase-auth.service';
-import { UserService } from '../../../services/user.service';
-import { SnackbarService } from '../../../services/snackbar.service';
+import { FirebaseAuthService } from '../../services/firebase-auth.service';
+import { UserService } from '../../services/user.service';
+import { SnackbarService } from '../../services/snackbar.service';
 // models
-import { User } from '../../../models/user.class';
+import { User } from '../../models/user.class';
 // material
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';

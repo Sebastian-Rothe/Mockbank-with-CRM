@@ -5,7 +5,7 @@ import { FooterComponent } from './shared-components/footer/footer.component';
 import { OpenNewAccountComponent } from './frontpage/open-new-account/open-new-account.component';
 import { RouterOutlet } from '@angular/router';
 import { LoadingComponent } from './shared-components/loading/loading.component';
-import { LoadingService } from '../services/loading.service';
+import { LoadingService } from './services/loading.service';
 
 @Component({
   selector: 'app-root',

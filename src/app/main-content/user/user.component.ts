@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 // import { DialogAddUserComponent } from '../dialog-add-user/dialog-add-user.component';
-import { User } from '../../../models/user.class';
+import { User } from '../../models/user.class';
 import { MatCardModule } from '@angular/material/card';
 
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { UserService } from '../../../services/user.service';
+import { UserService } from '../../services/user.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
 
 import { MatInputModule } from '@angular/material/input';

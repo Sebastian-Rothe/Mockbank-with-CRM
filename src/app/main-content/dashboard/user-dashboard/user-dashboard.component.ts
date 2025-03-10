@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { SharedService } from '../../../../services/shared.service';
-import { UserService } from '../../../../services/user.service';
-import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
-import { DashboardDataServiceService } from '../../../../services/dashboard-data-service.service';
-import { User } from '../../../../models/user.class';
+import { SharedService } from '../../../services/shared.service';
+import { UserService } from '../../../services/user.service';
+import { FirebaseAuthService } from '../../../services/firebase-auth.service';
+import { DashboardDataServiceService } from '../../../services/dashboard-data-service.service';
+import { User } from '../../../models/user.class';
 import { MatIcon } from '@angular/material/icon';
-import { DialogService } from '../../../../services/dialog.service';
+import { DialogService } from '../../../services/dialog.service';
 @Component({
   selector: 'app-user-dashboard',
   standalone: true,

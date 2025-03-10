@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
 // models
-import { Bank } from '../../../models/bank.interface';
+import { Bank } from '../../models/bank.interface';
 // services
-import { BankService } from '../../../services/bank.service';
+import { BankService } from '../../services/bank.service';
 
-import { SharedService } from '../../../services/shared.service';
+import { SharedService } from '../../services/shared.service';
 
 // material
 import { MatCardModule } from '@angular/material/card';
@@ -18,8 +18,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu';
 // components
-import { DialogEditInterestRateComponent } from '../../../dialogs/dialog-edit-interest-rate/dialog-edit-interest-rate.component';
-import { DialogEditTransactionFeeComponent } from '../../../dialogs/dialog-edit-transaction-fee/dialog-edit-transaction-fee.component';
+import { DialogEditInterestRateComponent } from '../../dialogs/dialog-edit-interest-rate/dialog-edit-interest-rate.component';
+import { DialogEditTransactionFeeComponent } from '../../dialogs/dialog-edit-transaction-fee/dialog-edit-transaction-fee.component';
 
 @Component({
   selector: 'app-bank',

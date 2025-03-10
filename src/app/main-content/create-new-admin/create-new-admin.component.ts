@@ -13,12 +13,12 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { FirebaseAuthService } from '../../../services/firebase-auth.service';
-import { User } from '../../../models/user.class';
+import { FirebaseAuthService } from '../../services/firebase-auth.service';
+import { UserService } from '../../services/user.service';
+import { SnackbarService } from '../../services/snackbar.service';
+import { DialogService } from '../../services/dialog.service';
+import { User } from '../../models/user.class';
 import { MatIcon } from '@angular/material/icon';
-import { UserService } from '../../../services/user.service';
-import { SnackbarService } from '../../../services/snackbar.service';
-import { DialogService } from '../../../services/dialog.service';
 
 @Component({
   selector: 'app-create-new-admin',

@@ -1,21 +1,21 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Transfer } from '../../../../models/transfer.class';
+import { Transfer } from '../../../models/transfer.class';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
   MatDialogContent,
 } from '@angular/material/dialog';
 
-import { SharedService } from '../../../../services/shared.service';
-import { UserService } from '../../../../services/user.service';
-import { TransferService } from '../../../../services/transfer.service';
+import { SharedService } from '../../../services/shared.service';
+import { UserService } from '../../../services/user.service';
+import { TransferService } from '../../../services/transfer.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
 import { MatIcon } from '@angular/material/icon';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { Observable, map, from } from 'rxjs';
-import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
+import { FirebaseAuthService } from '../../../services/firebase-auth.service';
 import { CommonModule } from '@angular/common';
 
 @Component({

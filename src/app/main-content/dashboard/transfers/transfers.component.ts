@@ -4,15 +4,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardContent, MatCardModule } from '@angular/material/card';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
-import { SharedService } from '../../../../services/shared.service';
-import { FirebaseAuthService } from '../../../../services/firebase-auth.service';
-import { User } from '../../../../models/user.class';
-import { TransferService } from '../../../../services/transfer.service';
+import { SharedService } from '../../../services/shared.service';
+import { FirebaseAuthService } from '../../../services/firebase-auth.service';
+import { User } from '../../../models/user.class';
+import { TransferService } from '../../../services/transfer.service';
 import { MatDialog } from '@angular/material/dialog';
 import { TransferDetailComponent } from '../transfer-detail/transfer-detail.component';
-import { Transfer } from '../../../../models/transfer.class';
-import { DashboardDataServiceService } from '../../../../services/dashboard-data-service.service';
-import { UserService } from '../../../../services/user.service';
+import { Transfer } from '../../../models/transfer.class';
+import { DashboardDataServiceService } from '../../../services/dashboard-data-service.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'app-transfers',

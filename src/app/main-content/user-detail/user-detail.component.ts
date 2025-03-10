@@ -5,15 +5,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 // Firebase
 import { doc, onSnapshot } from 'firebase/firestore';
 // Services
-import { FirebaseService } from '../../../services/firebase.service';
-import { FirebaseAuthService } from '../../../services/firebase-auth.service';
-import { SharedService } from '../../../services/shared.service';
-import { UserService } from '../../../services/user.service';
-import { SnackbarService } from '../../../services/snackbar.service';
-import { DialogService } from '../../../services/dialog.service';
-import { LoadingService } from '../../../services/loading.service';
+import { FirebaseService } from '../../services/firebase.service';
+import { FirebaseAuthService } from '../../services/firebase-auth.service';
+import { SharedService } from '../../services/shared.service';
+import { UserService } from '../../services/user.service';
+import { SnackbarService } from '../../services/snackbar.service';
+import { DialogService } from '../../services/dialog.service';
+import { LoadingService } from '../../services/loading.service';
 // Models
-import { User } from '../../../models/user.class';
+import { User } from '../../models/user.class';
 // Angular Material
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatIcon } from '@angular/material/icon';
@@ -23,11 +23,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 // Dialoge
-import { DialogEditUserAddressComponent } from '../../../dialogs/dialog-edit-user-address/dialog-edit-user-address.component';
-import { DialogEditUserDetailComponent } from '../../../dialogs/dialog-edit-user-detail/dialog-edit-user-detail.component';
-import { DialogEditUserDetailsComponent } from '../../../dialogs/dialog-edit-user-details/dialog-edit-user-details.component';
-import { DialogEditUserEmailComponent } from '../../../dialogs/dialog-edit-user-email/dialog-edit-user-email.component';
-import { DialogEditUserPasswordComponent } from '../../../dialogs/dialog-edit-user-password/dialog-edit-user-password.component';
+import { DialogEditUserAddressComponent } from '../../dialogs/dialog-edit-user-address/dialog-edit-user-address.component';
+import { DialogEditUserDetailComponent } from '../../dialogs/dialog-edit-user-detail/dialog-edit-user-detail.component';
+import { DialogEditUserDetailsComponent } from '../../dialogs/dialog-edit-user-details/dialog-edit-user-details.component';
+import { DialogEditUserEmailComponent } from '../../dialogs/dialog-edit-user-email/dialog-edit-user-email.component';
+import { DialogEditUserPasswordComponent } from '../../dialogs/dialog-edit-user-password/dialog-edit-user-password.component';
 import { AccountsComponent } from '../dashboard/accounts/accounts.component';
 import { TransfersComponent } from '../dashboard/transfers/transfers.component';
 
