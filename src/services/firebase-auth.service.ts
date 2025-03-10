@@ -25,6 +25,10 @@ import {
   getDoc,
   setDoc,
   deleteDoc,
+  query,
+  where,
+  collection,
+  getDocs,
 } from '@angular/fire/firestore';
 
 import { Router } from '@angular/router';
@@ -46,7 +50,7 @@ export class FirebaseAuthService {
   private inactivityTimer: any; // Timer for inactivity
   private countdownTimer: any; // Timer for countdown
   private visibilityChangeListener: () => void = () => {}; // Initialize with an empty function
-
+  private userCollection = collection(this.firestore, 'users');
   constructor(
     private auth: Auth,
     private firestore: Firestore,
@@ -100,7 +104,11 @@ export class FirebaseAuthService {
 
       return userCredential.user;
     } catch (error) {
-      this.dialogService.openDialog('Error', 'Registration failed: ' + (error as Error).message, 'error'); // msg
+      this.dialogService.openDialog(
+        'Error',
+        'Registration failed: ' + (error as Error).message,
+        'error'
+      ); // msg
       throw error;
     }
   }
@@ -124,7 +132,11 @@ export class FirebaseAuthService {
 
       return userCredential.user;
     } catch (error) {
-      this.dialogService.openDialog('Error', 'Registration failed: ' + (error as Error).message, 'error'); // msg
+      this.dialogService.openDialog(
+        'Error',
+        'Registration failed: ' + (error as Error).message,
+        'error'
+      ); // msg
       throw error;
     }
   }
@@ -139,7 +151,7 @@ export class FirebaseAuthService {
   async login(email: string, password: string): Promise<User> {
     try {
       this.loadingService.show(); // Show loading spinner
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Add a 1-second delay
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Add a 1-second delay
       const userCredential = await signInWithEmailAndPassword(
         this.auth,
         email,
@@ -147,7 +159,7 @@ export class FirebaseAuthService {
       );
       this.uid$.next(userCredential.user.uid);
       this.snackbarService.success('Login successful!');
-      
+
       // Set up inactivity timer and visibility change listener after login
       this.resetInactivityTimer();
       this.setupInactivityListener();
@@ -155,8 +167,13 @@ export class FirebaseAuthService {
 
       return userCredential.user;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      this.dialogService.openDialog('Error', 'Login failed: ' + errorMessage, 'error'); // msg
+      const errorMessage =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
+      this.dialogService.openDialog(
+        'Error',
+        'Login failed: ' + errorMessage,
+        'error'
+      ); // msg
       throw error;
     } finally {
       this.loadingService.hide(); // Hide loading spinner
@@ -171,11 +188,11 @@ export class FirebaseAuthService {
   async guestLogin(): Promise<UserCredential | null> {
     try {
       this.loadingService.show(); // Show loading spinner
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Add a 1-second delay
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Add a 1-second delay
       const userCredential = await signInAnonymously(this.auth);
       await this.ensureGuestUserExists(userCredential.user.uid);
       this.snackbarService.success('Guest login successful!');
-      
+
       // Set up inactivity timer and visibility change listener after guest login
       this.resetInactivityTimer();
       this.setupInactivityListener();
@@ -183,8 +200,13 @@ export class FirebaseAuthService {
 
       return userCredential;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      this.dialogService.openDialog('Error', 'Guest login failed: ' + errorMessage, 'error'); // msg
+      const errorMessage =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
+      this.dialogService.openDialog(
+        'Error',
+        'Guest login failed: ' + errorMessage,
+        'error'
+      ); // msg
       throw error;
     } finally {
       this.loadingService.hide(); // Hide loading spinner
@@ -233,19 +255,18 @@ export class FirebaseAuthService {
    */
   async logout(): Promise<void> {
     try {
-      console.log('Logging out...');
       this.loadingService.show(); // Show loading spinner
-      const currentUser = this.auth.currentUser;
-      if (currentUser && currentUser.isAnonymous) {
-        await this.cleanupGuestUserData(currentUser.uid);
-      }
+
+      await this.cleanupGuestUserData();
+
       await signOut(this.auth);
       this.uid$.next(null);
       this.snackbarService.success('Logged out successfully!');
       await this.redirectAfterLogout();
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      this.dialogService.openDialog('Error', 'Logout failed: ' + errorMessage); 
+      const errorMessage =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
+      this.dialogService.openDialog('Error', 'Logout failed: ' + errorMessage);
       throw error;
     } finally {
       this.loadingService.hide(); // Hide loading spinner
@@ -260,23 +281,25 @@ export class FirebaseAuthService {
    * @param uid - The user ID of the guest user.
    * @returns A promise that resolves when the cleanup is complete.
    */
-  async cleanupGuestUserData(uid: string): Promise<void> {
+  async cleanupGuestUserData(): Promise<void> {
     try {
-      const userDocRef = doc(this.firestore, 'users', uid);
-      const userSnap = await getDoc(userDocRef);
-      if (userSnap.exists()) {
-        const userData = userSnap.data();
+      const guestUsersQuery = query(
+        this.userCollection,
+        where('email', '==', 'guest@temporary.com')
+      );
+      const guestUsersSnapshot = await getDocs(guestUsersQuery);
+
+      const deletePromises = guestUsersSnapshot.docs.map(async (doc) => {
+        const userData = doc.data();
         if (Array.isArray(userData['accounts'])) {
           for (const accountId of userData['accounts']) {
             await this.accountService.deleteAccount(accountId);
           }
         }
-        await deleteDoc(userDocRef);
-        this.snackbarService.success('Guest user data has been deleted.'); 
-      }
+        await deleteDoc(doc.ref);
+      });
+      await Promise.all(deletePromises);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      this.dialogService.openDialog('Error', 'Error cleaning up guest user data: ' + errorMessage, 'error'); // msg
       throw error;
     }
   }
@@ -294,7 +317,7 @@ export class FirebaseAuthService {
       setTimeout(() => {
         window.location.reload();
         this.loadingService.hide(); // Hide loading spinner after reload
-      }, 1500); // Adjust delay as needed
+      }, 1000); // Adjust delay as needed
     } catch (error) {
       this.loadingService.hide(); // Ensure spinner is hidden in case of error
       throw error;
@@ -338,10 +361,17 @@ export class FirebaseAuthService {
       // Update the authentication email and log out
       await updateEmail(user, newEmail);
       await this.logout();
-      this.snackbarService.success('Email updated successfully. Please log in again.');
+      this.snackbarService.success(
+        'Email updated successfully. Please log in again.'
+      );
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      this.dialogService.openDialog('Error', 'Error updating email: ' + errorMessage, 'error'); // msg
+      const errorMessage =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
+      this.dialogService.openDialog(
+        'Error',
+        'Error updating email: ' + errorMessage,
+        'error'
+      ); // msg
       throw error;
     }
   }
@@ -362,8 +392,13 @@ export class FirebaseAuthService {
       await updatePassword(user, newPassword);
       this.snackbarService.success('Password updated successfully.');
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      this.dialogService.openDialog('Error', 'Failed to update password: ' + errorMessage, 'error'); // msg
+      const errorMessage =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
+      this.dialogService.openDialog(
+        'Error',
+        'Failed to update password: ' + errorMessage,
+        'error'
+      ); // msg
       throw error;
     }
   }
@@ -388,8 +423,11 @@ export class FirebaseAuthService {
       await reauthenticateWithCredential(user, credential);
       this.snackbarService.success('User successfully re-authenticated.');
     } catch (error) {
-   
-      this.dialogService.openDialog('Error', 'Error during re-authentication: ' + error, 'error'); // msg
+      this.dialogService.openDialog(
+        'Error',
+        'Error during re-authentication: ' + error,
+        'error'
+      ); // msg
       throw error;
     }
   }
@@ -410,8 +448,13 @@ export class FirebaseAuthService {
       this.snackbarService.success('Verification email sent successfully.');
       console.log('Verification email sent to:', user.email);
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred';
-      this.dialogService.openDialog('Error', 'Failed to send verification email: ' + errorMessage, 'error'); // msg
+      const errorMessage =
+        error instanceof Error ? error.message : 'An unexpected error occurred';
+      this.dialogService.openDialog(
+        'Error',
+        'Failed to send verification email: ' + errorMessage,
+        'error'
+      ); // msg
       throw error;
     }
   }
@@ -437,7 +480,9 @@ export class FirebaseAuthService {
   incrementDeletedUsersCount(): void {
     this.deletedUsersCount++;
     const userType = this.isGuestUser() ? 'Guest' : 'User';
-    this.snackbarService.success(`${userType} ${this.deletedUsersCount} of ${this.maxDeletions} possible users deleted`); // snackbar
+    this.snackbarService.success(
+      `${userType} ${this.deletedUsersCount} of ${this.maxDeletions} possible users deleted`
+    ); // snackbar
   }
 
   /**
@@ -460,12 +505,16 @@ export class FirebaseAuthService {
    */
   private showCountdownMessage(): void {
     let countdown = 10; // 10 seconds countdown
-    this.snackbarService.info(`You will be logged out in ${countdown} seconds unless you interact with the page.`);
+    this.snackbarService.info(
+      `You will be logged out in ${countdown} seconds unless you interact with the page.`
+    );
 
     this.countdownTimer = setInterval(() => {
       countdown--;
       if (countdown > 0) {
-        this.snackbarService.info(`You will be logged out in ${countdown} seconds unless you interact with the page.`);
+        this.snackbarService.info(
+          `You will be logged out in ${countdown} seconds unless you interact with the page.`
+        );
       } else {
         clearInterval(this.countdownTimer);
         this.logout(); // Auto logout after countdown
@@ -504,6 +553,9 @@ export class FirebaseAuthService {
         this.resetInactivityTimer(); // Reset timer when user returns to the tab
       }
     };
-    document.addEventListener('visibilitychange', this.visibilityChangeListener);
+    document.addEventListener(
+      'visibilitychange',
+      this.visibilityChangeListener
+    );
   }
 }
