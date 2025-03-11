@@ -113,7 +113,6 @@ export class AccountsComponent {
       this.dashboardData.loadAccountsForUser(this.userId).then(() => {
         this.dashboardData.accounts$.subscribe(accounts => {
           this.accounts = accounts;
-          console.log('Accounts loaded for user:', accounts);
         });
       });
     } else {
@@ -185,7 +184,6 @@ export class AccountsComponent {
    */
   openEditAccountDialog(accountID: string): void {
     const dialogRef = this.dialog.open(DialogEditAccountComponent, {
-     
       data: { accountID: accountID },
     });
 
