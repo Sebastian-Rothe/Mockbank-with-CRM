@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { SnackbarService } from '../../services/snackbar.service';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dialog-edit-transaction-fee',
@@ -16,7 +17,8 @@ import { SnackbarService } from '../../services/snackbar.service';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIcon
   ],
   templateUrl: './dialog-edit-transaction-fee.component.html',
   styleUrls: ['./dialog-edit-transaction-fee.component.scss']

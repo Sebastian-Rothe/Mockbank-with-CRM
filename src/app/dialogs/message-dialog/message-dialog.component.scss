@@ -1,3 +1,5 @@
+@import "../../styles/dialog-style.scss";
+
 mat-dialog-container {
   padding: 24px;
   border-radius: 12px;
@@ -7,24 +9,10 @@ mat-dialog-container {
   text-align: center;
 }
 
-h2 {
-  margin: 0;
-  font-size: 22px;
-  font-weight: bold;
-  color: #333;
-}
-
-mat-dialog-content {
-  font-size: 16px;
-  padding: 16px 0;
-  color: #555;
-}
-
 mat-dialog-actions {
-  margin-top: 20px;
   display: flex;
   justify-content: center;
-  gap: 12px;
+  padding-right: 8px;
 }
 
 button {
@@ -33,14 +21,14 @@ button {
   border-radius: 8px;
   font-weight: bold;
   text-transform: uppercase;
-  transition: background-color 0.3s ease; // Added transition for smooth background color change
+  transition: background-color 0.3s ease; 
 }
 
 button[mat-dialog-close] {
-  background-color: #e0e0e0; // Changed color to a lighter shade
+  background-color: #e0e0e0; 
   color: #333;
   &:hover {
-    background-color: #d5d5d5; // Changed hover color to match the new background color
+    background-color: #d5d5d5; 
   }
 }
 

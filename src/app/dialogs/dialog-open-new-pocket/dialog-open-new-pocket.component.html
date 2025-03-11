@@ -1,42 +1,40 @@
 <h2>Create New Account</h2>
-<form (ngSubmit)="createAccount()">
-  <!-- <mat-form-field appearance="fill">
-    <mat-label>Account Name</mat-label>
-    <input matInput [(ngModel)]="account.accountId" name="accountId" required />
-  </mat-form-field> -->
-
-  <mat-form-field appearance="outline">
-    <mat-label>Initial Balance</mat-label>
-    <input
-      matInput
-      type="number"
-      [(ngModel)]="account.balance"
-      name="balance"
-      required
-      min="1"
-    />
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>Name</mat-label>
-    <input
-      matInput
-      type="string"
-      [(ngModel)]="account.accountName"
-      name="accountName"
-      required
-    />
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Currency</mat-label>
-    <mat-select [(ngModel)]="account.currency" name="currency"  disabled>
-      <mat-option value="EUR">EUR</mat-option>
-      <mat-option value="USD">USD</mat-option>
-      <mat-option value="GBP">GBP</mat-option>
-    </mat-select>
-  </mat-form-field>
-</form>
-<mat-dialog-actions>
-  <button mat-button type="button" (click)="closeDialog()"><mat-icon>cancel</mat-icon>Cancel</button>
-  <button mat-raised-button color="primary" type="submit" (click)="createAccount()"><mat-icon>save</mat-icon>Create</button>
-</mat-dialog-actions>
+<div class="dialog-container">
+  <mat-dialog-content>
+    <form (ngSubmit)="createAccount()">
+      <mat-form-field appearance="outline">
+        <mat-label>Initial Balance</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="account.balance"
+          name="balance"
+          required
+          min="1"
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input
+          matInput
+          type="string"
+          [(ngModel)]="account.accountName"
+          name="accountName"
+          required
+        />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Currency</mat-label>
+        <mat-select [(ngModel)]="account.currency" name="currency" disabled>
+          <mat-option value="EUR">EUR</mat-option>
+          <mat-option value="USD">USD</mat-option>
+          <mat-option value="GBP">GBP</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-dialog-actions>
+        <button mat-button type="button" (click)="closeDialog()"><mat-icon>cancel</mat-icon>Cancel</button>
+        <button mat-raised-button color="primary" type="submit" (click)="createAccount()"><mat-icon>save</mat-icon>Create</button>
+      </mat-dialog-actions>
+    </form>
+  </mat-dialog-content>
+</div>

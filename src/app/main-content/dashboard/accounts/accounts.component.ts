@@ -168,7 +168,7 @@ export class AccountsComponent {
    */
   openMoveMoneyDialog(accountId: string): void {
     const dialogRef = this.dialog.open(DialogMoveMoneyComponent, {
-      width: '400px',
+  
       data: { senderAccountId: accountId },
     });
 
@@ -185,7 +185,7 @@ export class AccountsComponent {
    */
   openEditAccountDialog(accountID: string): void {
     const dialogRef = this.dialog.open(DialogEditAccountComponent, {
-      width: '400px',
+     
       data: { accountID: accountID },
     });
 

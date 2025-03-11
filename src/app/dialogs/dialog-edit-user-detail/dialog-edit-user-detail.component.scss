@@ -1,36 +1,50 @@
 @import '../../styles/dialog-style.scss';
 
-.profile-actions{
-    margin-top: 24px;
+.profile-actions {
+  margin-top: 24px;
 }
+
 .file-input-label {
-    background-color: #007bff;
-    color: white;
-    padding: 6px 12px;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+  background-color: #007bff;
+  color: white;
+  padding: 6px 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 
-    &:hover {
-      background-color: #0056b3;
-      transform: scale(1.05);
-    }
-
-    &:active {
-      background-color: #004085;
-      transform: scale(1);
-    }
-
-    input[type="file"] {
-      opacity: 0;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      cursor: pointer;
-    }
+  &:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
   }
+
+  &:active {
+    background-color: #004085;
+    transform: scale(1);
+  }
+
+  input[type="file"] {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+}
+
+// mat-dialog-actions {
+//   display: flex;
+//   justify-content: space-between;
+//   padding: 8px 0;
+// }
+
+// @media (max-width: 780px) {
+//   mat-dialog-actions {
+//     flex-direction: column;
+//     gap: 10px;
+//   }
+// }
 

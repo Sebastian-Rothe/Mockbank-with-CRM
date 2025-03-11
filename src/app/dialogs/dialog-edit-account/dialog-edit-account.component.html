@@ -1,22 +1,23 @@
-<h2 mat-dialog-title>Edit Account Name</h2>
-
-<mat-dialog-content>
-  <mat-form-field appearance="outline">
-    <mat-label>Account Name</mat-label>
-    <input
-      matInput
-      [(ngModel)]="account.accountName"
-      placeholder="{{ account.accountName }}"
-    />
-  </mat-form-field>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-raised-button (click)="closeDialog()">
-    <mat-icon>cancel</mat-icon>
-    Cancel
-  </button>
-  <button mat-raised-button color="primary" (click)="saveChanges()">
-    <mat-icon>save</mat-icon>
-    Save
-  </button>
-</mat-dialog-actions>
+<div class="dialog-container">
+  <h2 mat-dialog-title>Edit Account Name</h2>
+  <mat-dialog-content>
+    <mat-form-field appearance="outline">
+      <mat-label>Account Name</mat-label>
+      <input
+        matInput
+        [(ngModel)]="account.accountName"
+        placeholder="{{ account.accountName }}"
+      />
+    </mat-form-field>
+    <mat-dialog-actions>
+      <button mat-raised-button (click)="closeDialog()">
+        <mat-icon>cancel</mat-icon>
+        Cancel
+      </button>
+      <button mat-raised-button color="primary" (click)="saveChanges()">
+        <mat-icon>save</mat-icon>
+        Save
+      </button>
+    </mat-dialog-actions>
+  </mat-dialog-content>
+</div>

@@ -1,3 +1,9 @@
+.dialog-container {
+  max-width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
 h2 {
   padding: 18px;
   text-align: center;
@@ -10,40 +16,57 @@ mat-dialog-content {
   gap: 16px;
 }
 
-
 mat-form-field {
-  padding-top: 8px;
+  padding-top: 4px;
   max-width: 360px;
   width: 100%;
 }
 
 mat-dialog-actions {
-  display: flex;
-  align-items: center;
+display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 8px 0;
+}
+
+form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
   justify-content: center;
-  gap: 20%;
+  align-items: center;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
+@media (max-width: 790px) {
+  h2 {
+    margin: 0;
+  }
+  form {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
 
+  mat-dialog-content {
+    grid-template-columns: 1fr;
+  }
 
-form {
-padding: 24px;
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-gap: 16px;
-justify-content: center;
-align-items: center;
-max-width: 800px;
-margin: 0 auto;
+  mat-dialog-actions {
+    gap: 8px;
+    padding: 0;
+  }
+
+  .dialog-container {
+    padding: 0;
+  }
+
+  mat-form-field {
+    max-width: 100%;
+  }
 }
-
-
-
-
-
-@media (max-width: 780px) {
-form {
-  grid-template-columns: 1fr; 
+@media (max-width: 400px) {
+  mat-dialog-content {
+    padding: 12px !important;
+  }
 }
-}
-

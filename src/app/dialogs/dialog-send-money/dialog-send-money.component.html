@@ -1,82 +1,82 @@
-<h2>Transfer Funds</h2>
-<form (ngSubmit)="sendMoney()" #sentMoneyForm="ngForm">
-  <mat-form-field appearance="outline">
-    <mat-label>User</mat-label>
-    <mat-select
-      [(ngModel)]="selectedUser"
-      name="selectedUser"
-      (selectionChange)="onUserSelect($event.value)"
-      required
-    >
-      @for(user of users; track $index) { @if(user.uid !== uid) {
-      <mat-option value="{{ user.uid }}">{{
-        user.firstName + " " + user.lastName
-      }}</mat-option>
+<div class="dialog-container">
+  <h2>Transfer Funds</h2>
+  <mat-dialog-content>
+    <form (ngSubmit)="sendMoney()" #sentMoneyForm="ngForm">
+      <mat-form-field appearance="outline">
+        <mat-label>User</mat-label>
+        <mat-select
+          [(ngModel)]="selectedUser"
+          name="selectedUser"
+          (selectionChange)="onUserSelect($event.value)"
+          required
+        >
+          @for(user of users; track $index) { @if(user.uid !== uid) {
+          <mat-option value="{{ user.uid }}">{{
+            user.firstName + " " + user.lastName
+          }}</mat-option>
+          } }
+        </mat-select>
+      </mat-form-field>
 
-      } }
-    </mat-select>
-  </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Account</mat-label>
+        <mat-select
+          [(ngModel)]="transfer.receiverAccountId"
+          name="account"
+          required
+        >
+          @for(a of userAccounts; track $index) {
+          <mat-option value="{{ a.accountId }}">{{
+            a.accountName ? a.accountName : a.accountId
+          }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Account</mat-label>
-    <mat-select
-      [(ngModel)]="transfer.receiverAccountId"
-      name="account"
-      required
-    >
-      @for(a of userAccounts; track $index) {
-      <mat-option value="{{ a.accountId }}">{{
-        a.accountName ? a.accountName : a.accountId
-      }}</mat-option>
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select [(ngModel)]="transfer.category" name="category" required>
+          @for(category of categories; track $index) {
+          <mat-option value="{{ category }}">{{ category }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
 
-      }
-    </mat-select>
-  </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <textarea
+          matInput
+          type="string"
+          [(ngModel)]="transfer.description"
+          name="description"
+        >
+        </textarea>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Amount</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="transfer.amount"
+          name="amount"
+          required
+          min="1"
+        />
+      </mat-form-field>
 
-  <mat-form-field appearance="outline">
-    <mat-label>Category</mat-label>
-    <mat-select [(ngModel)]="transfer.category" name="category" required>
-      @for(category of categories; track $index) {
-      <mat-option value="{{ category }}">{{ category }}</mat-option>
+      <mat-form-field appearance="outline">
+        <mat-label>Currency</mat-label>
+        <mat-select [(ngModel)]="transfer.currency" name="currency" disabled>
+          <mat-option value="EUR">EUR</mat-option>
+          <mat-option value="USD">USD</mat-option>
+          <mat-option value="GBP">GBP</mat-option>
+        </mat-select>
+      </mat-form-field>
 
-      }
-    </mat-select>
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Description</mat-label>
-
-    <textarea
-      matInput
-      type="string"
-      [(ngModel)]="transfer.description"
-      name="description"
-    >
-    </textarea>
-  </mat-form-field>
-  <mat-form-field appearance="outline">
-    <mat-label>Amount</mat-label>
-    <input
-      matInput
-      type="number"
-      [(ngModel)]="transfer.amount"
-      name="amount"
-      required
-      min="1"
-    />
-  </mat-form-field>
-
-  <mat-form-field appearance="outline">
-    <mat-label>Currency</mat-label>
-    <mat-select [(ngModel)]="transfer.currency" name="currency" disabled>
-      <mat-option value="EUR">EUR</mat-option>
-      <mat-option value="USD">USD</mat-option>
-      <mat-option value="GBP">GBP</mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <mat-dialog-actions>
-    <button mat-button type="button" (click)="closeDialog()"><mat-icon>cancel</mat-icon>Cancel</button>
-    <button mat-raised-button color="primary" type="submit"><mat-icon>send</mat-icon>Send</button>
-  </mat-dialog-actions>
-</form>
+      <mat-dialog-actions>
+        <button mat-button type="button" (click)="closeDialog()"><mat-icon>cancel</mat-icon>Cancel</button>
+        <button mat-raised-button color="primary" type="submit"><mat-icon>send</mat-icon>Send</button>
+      </mat-dialog-actions>
+    </form>
+  </mat-dialog-content>
+</div>
