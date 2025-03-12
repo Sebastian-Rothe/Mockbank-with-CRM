@@ -7,6 +7,7 @@ import { DashboardDataServiceService } from '../../../services/dashboard-data-se
 import { AccountService } from '../../../services/account.service';
 import { SnackbarService } from '../../../services/snackbar.service';
 import { DialogService } from '../../../services/dialog.service';
+import { UserService } from '../../../services/user.service';
 // Materail
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardContent, MatCardModule } from '@angular/material/card';
@@ -85,6 +86,18 @@ export class AccountsComponent {
   isExtraSmallScreen: Boolean = false;
 
   /**
+   * Flag indicating if the user is a guest.
+   * @type {boolean}
+   */
+  isGuest: boolean = true;
+
+  /**
+   * User ID check.
+   * @type {string | null}
+   */
+  userIdCheck: string | null = '';
+
+  /**
    * Creates an instance of AccountsComponent.
    * @param {DashboardDataServiceService} dashboardData - Service to handle dashboard data operations.
    * @param {MatDialog} dialog - Service to manage dialog interactions.
@@ -94,6 +107,7 @@ export class AccountsComponent {
    * @param {AccountService} accountService - Service to handle account operations.
    * @param {SnackbarService} snackbarService - Service to display snackbar messages.
    * @param {DialogService} dialogService - Service to manage dialog interactions.
+   * @param {UserService} userService - Service to handle user operations.
    */
   constructor(
     private dashboardData: DashboardDataServiceService,
@@ -102,7 +116,8 @@ export class AccountsComponent {
     private sharedService: SharedService,
     private accountService: AccountService,
     private snackbarService: SnackbarService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private userService: UserService
   ) {}
 
   /**
@@ -120,6 +135,8 @@ export class AccountsComponent {
         this.accounts = accounts;
       });
     }
+    this.userIdCheck = this.authService.getUid();
+    this.isGuest = this.authService.isGuestUser();
     this.onResize();
   }
 
