@@ -37,6 +37,7 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
     AccountsComponent,
     UserDashboardComponent,
    
+   
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],

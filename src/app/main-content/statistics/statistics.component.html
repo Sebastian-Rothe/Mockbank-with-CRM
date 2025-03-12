@@ -1,12 +1,11 @@
-
 @if(user?.role === 'admin' || user?.role === 'management'){
 
     <app-transfers-chart></app-transfers-chart>
     <app-user-growth-chart></app-user-growth-chart>
 } @else {
 
-    <app-first-charts></app-first-charts>
+    <app-income-expenses-chart></app-income-expenses-chart>
     <app-monthly-expenses-chart></app-monthly-expenses-chart>
 
-}    
+}
 

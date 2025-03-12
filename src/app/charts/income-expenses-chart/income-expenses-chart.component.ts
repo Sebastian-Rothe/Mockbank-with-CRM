@@ -7,14 +7,13 @@ import { Transfer } from '../../models/transfer.class';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 
 @Component({
-  selector: 'app-first-charts',
+  selector: 'app-income-expenses-chart',
   standalone: true,
   imports: [CommonModule, CanvasJSAngularChartsModule],
-  templateUrl: './first-charts.component.html',
-  styleUrl: './first-charts.component.scss',
+  templateUrl: './income-expenses-chart.component.html',
+  styleUrl: './income-expenses-chart.component.scss',
 })
-export class FirstChartsComponent {
-//   uid: string = '';
+export class IncomeExpensesChartComponent {
   chartOptions: any;
   user: User = new User();
 
@@ -24,11 +23,6 @@ export class FirstChartsComponent {
   ) {}
 
   ngOnInit(): void {
-    // this.authService.uid$.subscribe((uid) => {
-    //   if (uid) {
-    //     this.uid = uid;
-    //   }
-    // });
     this.authService.user$.subscribe((user) => {
 		if(user){
 			this.user = user;

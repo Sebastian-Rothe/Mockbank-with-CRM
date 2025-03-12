@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
-import { FirstChartsComponent } from '../../charts/first-charts/first-charts.component';
 import { MonthlyExpensesChartComponent } from '../../charts/monthly-expenses-chart/monthly-expenses-chart.component';
 import { UserGrowthChartComponent } from '../../charts/user-growth-chart/user-growth-chart.component';
 import { TransfersChartComponent } from '../../charts/transfers-chart/transfers-chart.component';
 import { FirebaseAuthService } from '../../services/firebase-auth.service';
 import { User } from '../../models/user.class';
+import { IncomeExpensesChartComponent } from '../../charts/income-expenses-chart/income-expenses-chart.component';
 @Component({
   selector: 'app-statistics',
   standalone: true,
   imports: [
-    FirstChartsComponent,
+    IncomeExpensesChartComponent,
     MonthlyExpensesChartComponent,
     TransfersChartComponent,
     UserGrowthChartComponent,
