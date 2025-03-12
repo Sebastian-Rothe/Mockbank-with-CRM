@@ -38,15 +38,13 @@ export class FirstChartsComponent {
   }
   async loadUserAndTransfers(): Promise<void> {
     try {
-    
       if (!this.user) {
         console.error('User not found.');
         return;
       }
 
       // Fetch all transfers for the user
-      const allTransfers: Transfer[] =
-        await this.transferService.getTransfersForUser(this.user);
+      const allTransfers: Transfer[] = await this.transferService.getTransfersForUser(this.user);
 
       // Filter out transfers where sender and receiver have the same userId
       const filteredTransfers = allTransfers.filter(
@@ -58,8 +56,8 @@ export class FirstChartsComponent {
       // Group filtered transfers by category
       filteredTransfers.forEach((transfer) => {
         if (transfer.category) {
-          categoryMap[transfer.category] =
-            (categoryMap[transfer.category] || 0) + transfer.amount;
+          const amount = transfer.receiverUserId === this.user.uid ? transfer.amount : -transfer.amount;
+          categoryMap[transfer.category] = (categoryMap[transfer.category] || 0) + amount;
         }
       });
 
@@ -82,4 +80,5 @@ export class FirstChartsComponent {
       console.error('Error loading transfers:', error);
     }
   }
+
 }
