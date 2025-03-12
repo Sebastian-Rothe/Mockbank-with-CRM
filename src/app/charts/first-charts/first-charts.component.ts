@@ -72,7 +72,7 @@ export class FirstChartsComponent {
       // Set chart options
       this.chartOptions = {
         animationEnabled: true,
-        theme: 'dark2',
+        theme: 'light',
         exportEnabled: true,
         title: { text: 'Transfers by Category' },
         subtitles: [{ text: 'Distribution by Amount' }],

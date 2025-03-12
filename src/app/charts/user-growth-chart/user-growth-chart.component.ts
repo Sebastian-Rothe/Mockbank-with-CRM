@@ -65,7 +65,7 @@ export class UserGrowthChartComponent implements OnInit {
   loadChart() {
     this.chartOptions = {
       animationEnabled: true,
-      theme: 'dark2',
+      theme: 'light',
       title: { text: 'Total Number of Users (Daily)' },
       axisX: { title: 'Date', valueFormatString: 'DD MMM' },
       axisY: { title: 'Number of Users', minimum: 0 },

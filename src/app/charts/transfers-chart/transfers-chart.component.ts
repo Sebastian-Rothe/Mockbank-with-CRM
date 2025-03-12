@@ -60,7 +60,7 @@ export class TransfersChartComponent implements OnInit {
   loadChart() {
     this.chartOptions = {
       animationEnabled: true,
-      theme: 'dark2',
+      theme: 'light',
       title: { text: 'Transfers per Day & Total Amount (€)' },
       axisX: { title: 'Date', valueFormatString: 'DD MMM' },
       axisY: { title: 'Number of Transfers', minimum: 0 },

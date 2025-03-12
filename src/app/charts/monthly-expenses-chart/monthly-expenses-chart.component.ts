@@ -82,7 +82,7 @@ export class MonthlyExpensesChartComponent {
       // Set chart options
       this.chartOptions = {
         animationEnabled: true,
-        theme: 'dark2',
+        theme: 'light',
         exportEnabled: true,
         title: { text: 'Monthly Income vs. Expenses' },
         axisX: { title: 'Month' },
