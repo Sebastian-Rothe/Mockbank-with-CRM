@@ -30,6 +30,7 @@ import { DialogEditUserEmailComponent } from '../../dialogs/dialog-edit-user-ema
 import { DialogEditUserPasswordComponent } from '../../dialogs/dialog-edit-user-password/dialog-edit-user-password.component';
 import { AccountsComponent } from '../dashboard/accounts/accounts.component';
 import { TransfersComponent } from '../dashboard/transfers/transfers.component';
+import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 
 // import { CommonModule } from '@angular/common';
 @Component({
@@ -43,7 +44,9 @@ import { TransfersComponent } from '../dashboard/transfers/transfers.component';
     MatMenuModule,
     AccountsComponent,
     TransfersComponent, 
-    MatTooltip
+    MatTooltip,
+    MatAccordion,
+    MatExpansionModule
   ],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.scss',

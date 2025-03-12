@@ -88,3 +88,15 @@ mat-card {
     }
   }
 }
+
+.mat-accordion .mat-expansion-panel{
+  margin-bottom: 10px;
+}
+
+::ng-deep {
+  mat-expansion-panel {
+    .mat-expansion-panel-body {
+      padding: 0;
+    }
+  }
+}

@@ -10,8 +10,12 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #userDetail="matMenu">
-        <button mat-menu-item (click)="editUserDetail()"> <mat-icon class="mr-l6">edit</mat-icon>Edit</button>
-        <button mat-menu-item (click)="deleteUser()"> <mat-icon class="mr-l6">delete</mat-icon>Delete</button>
+        <button mat-menu-item (click)="editUserDetail()">
+          <mat-icon class="mr-l6">edit</mat-icon>Edit
+        </button>
+        <button mat-menu-item (click)="deleteUser()">
+          <mat-icon class="mr-l6">delete</mat-icon>Delete
+        </button>
         <!-- <button mat-menu-item>Delete</button> -->
       </mat-menu>
     </div>
@@ -41,9 +45,27 @@
     </div>
   </mat-card>
   @if(isGuest && userId !== userIdCheck){
-    <app-accounts [userId]="userId"></app-accounts>
-    <app-transfers [userId]="userId"></app-transfers>
+  <mat-accordion>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Accounts ({{ (user?.accounts)!.length }})
+        </mat-panel-title>
+        <mat-panel-description>
+          View and manage accounts
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <app-accounts [userId]="userId"></app-accounts>
+    </mat-expansion-panel>
 
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title> Transfers </mat-panel-title>
+        <mat-panel-description> View recent transfers </mat-panel-description>
+      </mat-expansion-panel-header>
+      <app-transfers [userId]="userId"></app-transfers>
+    </mat-expansion-panel>
+  </mat-accordion>
   }
   <mat-card appearance="outlined" class="m-32">
     <div class="section-header">
@@ -56,10 +78,22 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #userContact="matMenu">
-        <button mat-menu-item (click)="openEmailDialog()" [disabled]="userId !== userIdCheck" matTooltip="You are not authorized to change the email" [matTooltipDisabled]="userId === userIdCheck">
+        <button
+          mat-menu-item
+          (click)="openEmailDialog()"
+          [disabled]="userId !== userIdCheck"
+          matTooltip="You are not authorized to change the email"
+          [matTooltipDisabled]="userId === userIdCheck"
+        >
           <mat-icon class="mr-l6">mail</mat-icon>Change Email
         </button>
-        <button mat-menu-item (click)="openPasswordDialog()" [disabled]="userId !== userIdCheck" matTooltip="You are not authorized to change the password" [matTooltipDisabled]="userId === userIdCheck">
+        <button
+          mat-menu-item
+          (click)="openPasswordDialog()"
+          [disabled]="userId !== userIdCheck"
+          matTooltip="You are not authorized to change the password"
+          [matTooltipDisabled]="userId === userIdCheck"
+        >
           <mat-icon class="mr-l6">password</mat-icon>Change Password
         </button>
       </mat-menu>
@@ -76,8 +110,6 @@
     </div>
   </mat-card>
 
-
-
   <!-- Address Section -->
   <mat-card appearance="outlined" class="m-32">
     <div class="section-header">
@@ -90,7 +122,9 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #userAddress="matMenu">
-        <button mat-menu-item (click)="editUserAddress()"><mat-icon class="mr-l6">edit</mat-icon>Edit</button>
+        <button mat-menu-item (click)="editUserAddress()">
+          <mat-icon class="mr-l6">edit</mat-icon>Edit
+        </button>
         <!-- <button mat-menu-item>Delete</button> -->
       </mat-menu>
     </div>
@@ -146,7 +180,9 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #userDetailsMenu="matMenu">
-        <button mat-menu-item (click)="editUserDetails()"><mat-icon class="mr-l6">edit</mat-icon>Edit</button>
+        <button mat-menu-item (click)="editUserDetails()">
+          <mat-icon class="mr-l6">edit</mat-icon>Edit
+        </button>
         <!-- <button mat-menu-item>Delete</button> -->
       </mat-menu>
     </div>
