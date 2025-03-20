@@ -10,6 +10,8 @@ import { Inject } from '@angular/core';
 import { MatInput } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
 import { AccountService } from '../../services/account.service';
+import { SnackbarService } from '../../services/snackbar.service';
+
 @Component({
   selector: 'app-dialog-edit-account',
   standalone: true,
@@ -24,26 +26,25 @@ export class DialogEditAccountComponent {
   constructor(
     private accountService: AccountService,
     public dialogRef: MatDialogRef<DialogEditAccountComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: { accountID: string }
+    private snackbarService: SnackbarService, // Inject SnackbarService
+    @Inject(MAT_DIALOG_DATA) public data: { accountID: string }
   ) {
     this.AccountId = data.accountID; // Speichern der übergebenen ID
  
   }
 
   ngOnInit(): void {
-    // Laden der Account-Daten
     this.accountService.getAccount(this.AccountId).then((accountData) => {
       if (accountData) {
-        this.account = { ...accountData, accountId: this.AccountId }; // Daten in das Account-Objekt laden
+        this.account = { ...accountData, accountId: this.AccountId }; 
       }
     }).catch((error) => {
       console.error('Error loading account data:', error);
     });
   }
   saveChanges(): void {
-    // Speichern der Änderungen
     this.accountService.updateAccount(this.AccountId, this.account).then(() => {
-      console.log('Account successfully updated');
+      this.snackbarService.success('Account successfully updated'); 
       this.dialogRef.close();
     }).catch((error) => {
       console.error('Error updating account:', error);

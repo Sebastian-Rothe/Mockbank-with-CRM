@@ -56,7 +56,7 @@ export class LoginComponent {
       if (user) {
         // Weiterleitung mit UID als Query-Parameter
         this.router.navigate(['main'], { queryParams: { uid: user.uid } });
-        console.log(user.uid);
+        // console.log(user.uid);
         this.cancel();
       }
     } catch (error: any) {
