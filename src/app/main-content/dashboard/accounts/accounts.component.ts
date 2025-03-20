@@ -89,7 +89,7 @@ export class AccountsComponent {
    * Flag indicating if the user is a guest.
    * @type {boolean}
    */
-  isGuest: boolean = true;
+  isGuest: boolean = false;
 
   /**
    * User ID check.
