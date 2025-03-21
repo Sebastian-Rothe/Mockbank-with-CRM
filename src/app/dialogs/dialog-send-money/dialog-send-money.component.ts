@@ -19,6 +19,8 @@ import { UserService } from '../../services/user.service';
 import { FirebaseAuthService } from '../../services/firebase-auth.service';
 import { AccountService } from '../../services/account.service';
 import { TransferService } from '../../services/transfer.service';
+import { DialogService } from '../../services/dialog.service';
+import { SnackbarService } from '../../services/snackbar.service';
 
 @Component({
   selector: 'app-dialog-sent-money',
@@ -72,13 +74,15 @@ export class DialogSendMoneyComponent {
     private authService: FirebaseAuthService,
     private accountService: AccountService,
     public dialogRef: MatDialogRef<DialogSendMoneyComponent>,
+    private dialogService: DialogService,
+    private snackbarService: SnackbarService,
     @Inject(MAT_DIALOG_DATA) public data: { senderAccountId: string }
   ) {
     this.userService.getUsers().subscribe((users) => {
       this.users = users;
    
     });
-    this.senderAccountId = data.senderAccountId; // Speichern der übergebenen ID
+    this.senderAccountId = data.senderAccountId;
   
   }
 
@@ -105,13 +109,13 @@ export class DialogSendMoneyComponent {
         await this.loadFirstAccountsFromAllUsers();
       }
     } catch (error) {
-      console.error('Error loading user:', error);
+      this.dialogService.openDialog('Error', 'Error loading user.', 'error');
     }
   }
 
   async loadAccounts(accountIds: string[]): Promise<void> {
     if (!accountIds || accountIds.length === 0) {
-      console.error('No accounts to load.');
+      this.dialogService.openDialog('Error', 'No accounts to load.', 'error');
       return;
     }
 
@@ -126,7 +130,7 @@ export class DialogSendMoneyComponent {
       this.userAccounts = accounts; // Speichere die geladenen Konten
     
     } catch (error) {
-      console.error('Error loading accounts:', error);
+      this.dialogService.openDialog('Error', 'Error loading accounts.', 'error');
     }
   }
 
@@ -148,15 +152,14 @@ export class DialogSendMoneyComponent {
       this.userAccounts = firstAccounts;
 
     } catch (error) {
-      console.error('Error loading first accounts from all users:', error);
+      this.dialogService.openDialog('Error', 'Error loading first accounts from all users.', 'error');
     }
   }
 
   onUserSelect(userId: string): void {
-    console.log('Selected user UID:', userId);
     this.selectedUser = userId;
     const user = this.users.find((user) => user.uid === userId);
-    console.log('Selected user:', user);
+
 
     if (user) {
       this.loadAccounts(user.accounts);
@@ -176,14 +179,14 @@ export class DialogSendMoneyComponent {
           this.transfer.category
         )
         .then(() => {
-          console.log('Money transferred successfully.');
+          this.snackbarService.success('Money transferred successfully.');
           this.closeDialog();
         })
         .catch((error) => {
-          console.error('Transfer failed:', error);
+          this.dialogService.openDialog('Error', 'Transfer failed.', 'error');
         });
     } else {
-      console.error('Sender or receiver account ID missing.');
+      this.dialogService.openDialog('Error', 'Sender or receiver account ID missing.', 'error');
     }
   }
 
