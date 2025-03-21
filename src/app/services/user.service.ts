@@ -54,7 +54,6 @@ export class UserService {
       const userDocRef = await this.createUserDoc(user.uid, userData);
       const accountId = await this.createAccountDoc(user);
       await this.updateUserAccounts(userDocRef, accountId);
-      console.log('User and account created successfully!');
     } catch (error) {
       console.error('Error creating user and account:', error);
       throw error;
@@ -109,13 +108,13 @@ export class UserService {
       const userDocSnap = await getDoc(userDocRef);
 
       if (!userDocSnap.exists()) {
-        console.log('No such user!');
+        this.dialogService.openDialog('Error', 'No such user!', 'error'); // msg
         return null;
       }
 
       return this.createUserFromSnapshot(userDocSnap);
     } catch (error) {
-      console.error('Error getting user:', error);
+      this.dialogService.openDialog('Error', 'Error getting user.', 'error'); // msg
       return null;
     }
   }
@@ -131,9 +130,9 @@ export class UserService {
     try {
       const userDocRef = doc(this.firestore, 'users', userId);
       await updateDoc(userDocRef, { profilePictureUrl });
-      console.log('Profile picture updated successfully!');
+      this.snackbarService.success('Profile picture updated successfully!'); // snack
     } catch (error) {
-      console.error('Error updating profile picture:', error);
+      this.dialogService.openDialog('Error', 'Error updating profile picture.', 'error'); // msg
       throw error;
     }
   }

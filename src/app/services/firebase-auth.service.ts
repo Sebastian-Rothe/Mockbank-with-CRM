@@ -52,6 +52,7 @@ export class FirebaseAuthService {
   private countdownTimer: any; // Timer for countdown
   private visibilityChangeListener: () => void = () => {}; // Initialize with an empty function
   private userCollection = collection(this.firestore, 'users');
+
   constructor(
     private auth: Auth,
     private firestore: Firestore,
@@ -425,8 +426,7 @@ export class FirebaseAuthService {
 
     try {
       await sendEmailVerification(user);
-      this.snackbarService.success('Verification email sent successfully.');
-      console.log('Verification email sent to:', user.email);
+      this.snackbarService.success(`Verification email sent to: ${user.email}`);
     } catch (error) {
       this.sharedService.handleError('Failed to send verification email', error);
       throw error;
@@ -522,7 +522,7 @@ export class FirebaseAuthService {
    */
   private setupVisibilityChangeListener(): void {
     this.visibilityChangeListener = () => {
-      console.log('Visibility changed:', document.visibilityState);
+      // console.log('Visibility changed:', document.visibilityState);
       if (document.visibilityState === 'visible') {
         this.resetInactivityTimer(); // Reset timer when user returns to the tab
       }

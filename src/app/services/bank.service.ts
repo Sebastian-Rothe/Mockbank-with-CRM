@@ -219,7 +219,7 @@ export class BankService {
       ).toLocaleString()}`,
       'Interest'
     );
-    console.log(`Interest of ${amount} EUR credited to ${accountId}.`);
+    // console.log(`Interest of ${amount} EUR credited to ${accountId}.`);
   }
 
 
