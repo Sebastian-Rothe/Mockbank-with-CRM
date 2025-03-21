@@ -15,6 +15,9 @@ import { Observable } from 'rxjs';
 // Models
 import { Account } from '../models/account.class';
 import { User } from '../models/user.class';
+// services
+import { DialogService } from './dialog.service';
+import { SnackbarService } from './snackbar.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +27,10 @@ export class AccountService {
 
   private accountCollection = collection(this.firestore, 'accounts');
 
-  constructor() {}
+  constructor(
+    private dialogService: DialogService,
+    private snackbarService: SnackbarService
+  ) {}
 
   /**
    * Retrieves an account document from the 'accounts' collection by its ID.
@@ -43,7 +49,7 @@ export class AccountService {
         throw new Error('Account not found');
       }
     } catch (error) {
-      console.error('Error getting account:', error);
+      this.dialogService.openDialog('Error', 'Error getting account.', 'error');
       throw error;
     }
   }
@@ -130,8 +136,9 @@ export class AccountService {
       );
       await this.addAccountToFirestore(accountId, accountData);
       await this.updateUserAccounts(userId, accountId);
+      this.snackbarService.success('Account added successfully');
     } catch (error) {
-      console.error('Error adding account:', error);
+      this.dialogService.openDialog('Error', 'Error adding account.', 'error');
       throw error;
     }
   }
@@ -146,9 +153,9 @@ export class AccountService {
     try {
       const accountDocRef = doc(this.firestore, 'accounts', accountId);
       await updateDoc(accountDocRef, accountData);
-      console.log('Account updated successfully');
+      this.snackbarService.success('Account updated successfully');
     } catch (error) {
-      console.error('Error updating account:', error);
+      this.dialogService.openDialog('Error', 'Error updating account.', 'error');
       throw error;
     }
   }
@@ -162,9 +169,9 @@ export class AccountService {
     try {
       const accountDocRef = doc(this.firestore, 'accounts', accountId);
       await deleteDoc(accountDocRef);
-      console.log('Account successfully deleted');
+      this.snackbarService.success('Account successfully deleted');
     } catch (error) {
-      console.error('Error deleting account:', error);
+      this.dialogService.openDialog('Error', 'Error deleting account.', 'error');
       throw error;
     }
   }
@@ -188,9 +195,9 @@ export class AccountService {
       await updateDoc(userDocRef, {
         accounts: arrayRemove(accountId),
       });
-      console.log(`Account ${accountId} removed from user ${userId}`);
+      this.snackbarService.success(`Account ${accountId} removed from user ${userId}`);
     } catch (error) {
-      console.error('Error removing account from user:', error);
+      this.dialogService.openDialog('Error', 'Error removing account from user.', 'error');
       throw error;
     }
   }
@@ -213,7 +220,7 @@ export class AccountService {
         .filter(doc => doc.exists())
         .map(doc => new Account({ ...doc.data(), accountId: doc.id }));
     } catch (error) {
-      console.error('Error loading accounts:', error);
+      this.dialogService.openDialog('Error', 'Error loading accounts.', 'error');
       return [];
     }
   }
