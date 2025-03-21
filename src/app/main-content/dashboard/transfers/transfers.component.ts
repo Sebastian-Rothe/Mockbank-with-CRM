@@ -1,18 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+// material
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardContent, MatCardModule } from '@angular/material/card';
 import { MatIcon, MatIconModule } from '@angular/material/icon';
 import { MatMenu, MatMenuModule } from '@angular/material/menu';
+import { MatDialog } from '@angular/material/dialog';
+// services
 import { SharedService } from '../../../services/shared.service';
 import { FirebaseAuthService } from '../../../services/firebase-auth.service';
-import { User } from '../../../models/user.class';
 import { TransferService } from '../../../services/transfer.service';
-import { MatDialog } from '@angular/material/dialog';
 import { TransferDetailComponent } from '../transfer-detail/transfer-detail.component';
-import { Transfer } from '../../../models/transfer.class';
 import { DashboardDataServiceService } from '../../../services/dashboard-data-service.service';
 import { UserService } from '../../../services/user.service';
+import { DialogService } from '../../../services/dialog.service';
+// models
+import { User } from '../../../models/user.class';
+import { Transfer } from '../../../models/transfer.class';
 
 @Component({
   selector: 'app-transfers',
@@ -42,7 +46,8 @@ export class TransfersComponent {
     private authService: FirebaseAuthService,
     private transferService: TransferService,
     private userService: UserService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private dialogService: DialogService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -65,10 +70,9 @@ export class TransfersComponent {
   private async loadUserAndTransfers(userId: string): Promise<void> {
     this.user = await this.userService.getUser(userId);
     if (this.user) {
-      console.log('Loaded user:', this.user);
       await this.loadTransfersForUser(this.user);
     } else {
-      console.log('User not found');
+      this.dialogService.openDialog('Error', 'User not found', 'error');
     }
   }
 
