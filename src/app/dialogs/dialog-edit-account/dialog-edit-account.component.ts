@@ -11,6 +11,7 @@ import { MatInput } from '@angular/material/input';
 import { MatIcon } from '@angular/material/icon';
 import { AccountService } from '../../services/account.service';
 import { SnackbarService } from '../../services/snackbar.service';
+import { DialogService } from '../../services/dialog.service';
 
 @Component({
   selector: 'app-dialog-edit-account',
@@ -27,6 +28,7 @@ export class DialogEditAccountComponent {
     private accountService: AccountService,
     public dialogRef: MatDialogRef<DialogEditAccountComponent>,
     private snackbarService: SnackbarService, // Inject SnackbarService
+    private dialogService: DialogService, // Inject DialogService
     @Inject(MAT_DIALOG_DATA) public data: { accountID: string }
   ) {
     this.AccountId = data.accountID; // Speichern der übergebenen ID
@@ -39,7 +41,7 @@ export class DialogEditAccountComponent {
         this.account = { ...accountData, accountId: this.AccountId }; 
       }
     }).catch((error) => {
-      console.error('Error loading account data:', error);
+      this.dialogService.openDialog('Error', 'Error loading account data.', 'error');
     });
   }
   saveChanges(): void {
@@ -47,7 +49,7 @@ export class DialogEditAccountComponent {
       this.snackbarService.success('Account successfully updated'); 
       this.dialogRef.close();
     }).catch((error) => {
-      console.error('Error updating account:', error);
+      this.dialogService.openDialog('Error', 'Error updating account.', 'error');
     });
   }
 

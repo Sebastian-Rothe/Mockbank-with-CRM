@@ -22,6 +22,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
+import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 // Dialoge
 import { DialogEditUserAddressComponent } from '../../dialogs/dialog-edit-user-address/dialog-edit-user-address.component';
 import { DialogEditUserDetailComponent } from '../../dialogs/dialog-edit-user-detail/dialog-edit-user-detail.component';
@@ -30,7 +31,6 @@ import { DialogEditUserEmailComponent } from '../../dialogs/dialog-edit-user-ema
 import { DialogEditUserPasswordComponent } from '../../dialogs/dialog-edit-user-password/dialog-edit-user-password.component';
 import { AccountsComponent } from '../dashboard/accounts/accounts.component';
 import { TransfersComponent } from '../dashboard/transfers/transfers.component';
-import { MatAccordion, MatExpansionModule } from '@angular/material/expansion';
 
 // import { CommonModule } from '@angular/common';
 @Component({
@@ -72,17 +72,17 @@ export class UserDetailComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe((params) => {
       this.userId = params['uid'];
-      console.log('User ID from route:', this.userId);
+      // console.log('User ID from route:', this.userId);
     });
     this.getUserDetails(this.userId);
    
     this.userIdCheck = this.authService.getUid();
-    console.log(
-      'the userId at user-detail:',
-      this.userId,
-      '???',
-      this.userIdCheck
-    );
+    // console.log(
+    //   'the userId at user-detail:',
+    //   this.userId,
+    //   '???',
+    //   this.userIdCheck
+    // );
   }
 
   // getUser(userID: string) {
@@ -90,28 +90,28 @@ export class UserDetailComponent implements OnInit {
   // }
   getUserDetails(userId: string): void {
     if (!userId) {
-      console.error('No user ID provided!');
+      this.dialogService.openDialog('Error', 'No user ID provided!', 'error');
       return;
     }
   
-    console.log('Fetching user details for ID:', userId);
+    // console.log('Fetching user details for ID:', userId);
   
     const userRef = doc(this.firebaseService.firestore, 'users', userId);
   
     onSnapshot(userRef, (docSnap) => {
       if (docSnap.exists()) {
         const userData = docSnap.data();
-        console.log('User document found:', userData);
+        // console.log('User document found:', userData);
   
         this.user = new User({ ...userData, uid: docSnap.id });
-        console.log('User object after instantiation:', this.user);
+        // console.log('User object after instantiation:', this.user);
       } else {
-        console.error('User not found in Firestore!');
+        this.dialogService.openDialog('Error', 'User not found in Firestore!', 'error');
       }
     });
   
     this.isGuest = this.authService.isGuestUser();
-    console.log('Is guest user?', this.isGuest);
+    // console.log('Is guest user?', this.isGuest);
   }
   
 
@@ -132,9 +132,6 @@ export class UserDetailComponent implements OnInit {
     return this.sharedService.formatTimestampToDate(this.user?.birthDate || 0);
   }
 
-  editUserContact() {
-    console.log('Edit User Contact');
-  }
   editUserDetails() {
     if (this.user) {
       const dialog = this.dialog.open(DialogEditUserDetailsComponent);
