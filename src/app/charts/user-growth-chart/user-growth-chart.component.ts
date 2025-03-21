@@ -24,7 +24,7 @@ export class UserGrowthChartComponent implements OnInit {
 
   async ngOnInit() {
     this.dataPoints = await this.getUserData();
-    console.log('📊 Final dataPoints für Chart:', this.dataPoints); // Debugging
+    // console.log('📊 Final dataPoints für Chart:', this.dataPoints); // Debugging
     this.loadChart();
   }
   
