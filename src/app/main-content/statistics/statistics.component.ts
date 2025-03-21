@@ -31,11 +31,6 @@ export class StatisticsComponent {
     ngOnInit(): void {
       this.user$.subscribe(user => {
         this.user = user;
-        if (user) {
-          console.log(user.role);
-        } else {
-          console.log('User is null');
-        }
       });
     }
   }
