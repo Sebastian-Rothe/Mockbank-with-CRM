@@ -1,23 +1,14 @@
 <div class="main-content-frontpage">
   <mat-toolbar>
-   
     <span>MockBank</span>
     <span class="example-spacer"></span>
     <div class="button-align">
-      <a mat-flat-button class="btn-outline" routerLink="/open-account"
-        >Open new Account</a
-      >
-      <button
-        mat-raised-button
-        class="btn-gradient"
-        (click)="openLoginDialog()"
-      >
-        Login
-      </button>
+      <a mat-flat-button class="btn-outline" routerLink="/open-account">Open new Account</a>
+      <button mat-raised-button class="btn-gradient" (click)="openLoginDialog()">Login</button>
     </div>
   </mat-toolbar>
   <div class="router" style="margin-top: 68px;">
-    <router-outlet ></router-outlet>
+    <router-outlet></router-outlet>
   </div>
 </div>
 <app-footer></app-footer>

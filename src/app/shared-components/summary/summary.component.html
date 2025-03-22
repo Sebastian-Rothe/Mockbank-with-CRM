@@ -1,155 +1,330 @@
-<div class="summary-container">
-  <h1>Project Overview</h1>
-  <p>
-    This project is a comprehensive banking application with CRM functionalities
-    built using Angular and Firebase. It includes features for user
-    authentication, role management, account management, transfers, and more.
-    The application also utilizes Material Design for a modern and responsive
-    user interface.
-  </p>
+@if(data) {
+<div class="summary-dialog">
+  <div class="summary-message">
+    {{ data.message }}
+  </div>
+  <div class="summary-container">
+    <h1>Project Overview</h1>
+    <p>
+      This project is a comprehensive banking application with CRM
+      functionalities built using Angular and Firebase. It includes features for
+      user authentication, role management, account management, transfers, and
+      more. The application also utilizes Material Design for a modern and
+      responsive user interface.
+    </p>
 
-  <h2>Key Features</h2>
-  <ul>
-    <li>
-      <strong>User Authentication</strong>
-      <ul>
-        <li>
-          Firebase Authentication: Users can log in using Firebase
-          authentication.
-        </li>
-        <li>
-          Guest Login: Guests can log in without creating an account. Guest data
-          is deleted upon logout.
-        </li>
-      </ul>
-    </li>
-    <li>
-      <strong>Role Management</strong>
-      <ul>
-        <li>
-          Role Change: Guests can change their role to user, admin, or manager.
-        </li>
-        <li>
-          Role-Based Access: Different functionalities are available based on
-          the user's role.
-        </li>
-      </ul>
-    </li>
-    <li>
-      <strong>Account Management</strong>
-      <ul>
-        <li>Create New Accounts: Users can create new accounts.</li>
-        <li>
-          View and Edit Accounts: Users can view and edit account details.
-        </li>
-        <li>Delete Accounts: Users can delete accounts.</li>
-      </ul>
-    </li>
-    <li>
-      <strong>Transfers</strong>
-      <ul>
-        <li>Send Money: Users can send money to other accounts.</li>
-        <li>Move Money: Users can move money between their own accounts.</li>
-        <li>
-          Transfer Fees: Transfer fees are applied based on the type of
-          transfer.
-        </li>
-        <li>Transfer Details: Users can view details of their transfers.</li>
-      </ul>
-    </li>
-    <li>
-      <strong>Automatic Interest Payment</strong>
-      <ul>
-        <li>
-          Interest Calculation: Interest is automatically calculated and
-          credited to user accounts.
-        </li>
-      </ul>
-    </li>
-    <li>
-      <strong>Dashboard</strong>
-      <ul>
-        <li>
-          User Dashboard: Displays user information, account balances, and
-          recent transfers.
-        </li>
-        <li>
-          Admin Dashboard: Displays bank statistics, user growth, and other
-          admin-specific information.
-        </li>
-      </ul>
-    </li>
-    <li>
-      <strong>Profile Management</strong>
-      <ul>
-        <li>
-          Profile Picture: Users can upload and update their profile picture.
-        </li>
-        <li>
-          Edit Profile: Users can edit their profile information, including
-          email and password (with email verification for non-guests).
-        </li>
-      </ul>
-    </li>
-    <li>
-      <strong>Statistics and Charts</strong>
-      <ul>
-        <li>
-          Income and Expenses Chart: Displays a chart of income and expenses.
-        </li>
-        <li>User Growth Chart: Displays a chart of user growth over time.</li>
-        <li>Transfers Chart: Displays a chart of transfers.</li>
-      </ul>
-    </li>
-    <li>
-      <strong>Notifications</strong>
-      <ul>
-        <li>
-          Snackbar Notifications: Users receive notifications for successful
-          actions and errors.
-        </li>
-        <li>
-          Dialog Service: Users receive dialog notifications for important messages and errors.
-        </li>
-      </ul>
-    </li>
-    <li>
-      <strong>Dialogs</strong>
-      <ul>
-        <li>Edit Account Dialog: Allows users to edit account details.</li>
-        <li>
-          Send Money Dialog: Allows users to send money to other accounts.
-        </li>
-        <li>
-          Move Money Dialog: Allows users to move money between their own
-          accounts.
-        </li>
-        <li>
-          Edit Interest Rate Dialog: Allows admins to edit the bank's interest
-          rate.
-        </li>
-        <li>
-          Edit Transaction Fee Dialog: Allows admins to edit the bank's
-          transaction fee.
-        </li>
-      </ul>
-    </li>
-  </ul>
+    <h2>Key Features</h2>
+    <ul>
+      <li>
+        <strong>User Authentication</strong>
+        <ul>
+          <li>
+            Firebase Authentication: Users can log in using Firebase
+            authentication.
+          </li>
+          <li>
+            Guest Login: Guests can log in without creating an account. Guest
+            data is deleted upon logout.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Role Management</strong>
+        <ul>
+          <li>
+            Role Change: Guests can change their role to user, admin, or
+            manager.
+          </li>
+          <li>
+            Role-Based Access: Different functionalities are available based on
+            the user's role.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Account Management</strong>
+        <ul>
+          <li>Create New Accounts: Users can create new accounts.</li>
+          <li>
+            View and Edit Accounts: Users can view and edit account details.
+          </li>
+          <li>Delete Accounts: Users can delete accounts.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Transfers</strong>
+        <ul>
+          <li>Send Money: Users can send money to other accounts.</li>
+          <li>Move Money: Users can move money between their own accounts.</li>
+          <li>
+            Transfer Fees: Transfer fees are applied based on the type of
+            transfer.
+          </li>
+          <li>Transfer Details: Users can view details of their transfers.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Automatic Interest Payment</strong>
+        <ul>
+          <li>
+            Interest Calculation: Interest is automatically calculated and
+            credited to user accounts.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Dashboard</strong>
+        <ul>
+          <li>
+            User Dashboard: Displays user information, account balances, and
+            recent transfers.
+          </li>
+          <li>
+            Admin Dashboard: Displays bank statistics, user growth, and other
+            admin-specific information.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Profile Management</strong>
+        <ul>
+          <li>
+            Profile Picture: Users can upload and update their profile picture.
+          </li>
+          <li>
+            Edit Profile: Users can edit their profile information, including
+            email and password (with email verification for non-guests).
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Statistics and Charts</strong>
+        <ul>
+          <li>
+            Income and Expenses Chart: Displays a chart of income and expenses.
+          </li>
+          <li>User Growth Chart: Displays a chart of user growth over time.</li>
+          <li>Transfers Chart: Displays a chart of transfers.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Notifications</strong>
+        <ul>
+          <li>
+            Snackbar Notifications: Users receive notifications for successful
+            actions and errors.
+          </li>
+          <li>
+            Dialog Service: Users receive dialog notifications for important
+            messages and errors.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Dialogs</strong>
+        <ul>
+          <li>Edit Account Dialog: Allows users to edit account details.</li>
+          <li>
+            Send Money Dialog: Allows users to send money to other accounts.
+          </li>
+          <li>
+            Move Money Dialog: Allows users to move money between their own
+            accounts.
+          </li>
+          <li>
+            Edit Interest Rate Dialog: Allows admins to edit the bank's interest
+            rate.
+          </li>
+          <li>
+            Edit Transaction Fee Dialog: Allows admins to edit the bank's
+            transaction fee.
+          </li>
+        </ul>
+      </li>
+    </ul>
 
-  <h2>Additional Functionalities</h2>
-  <ul>
-    <li>
-      Email Verification: When a non-guest user changes their email, the new
-      email must be verified.
-    </li>
-    <li>
-      Loading Spinner: A loading spinner is displayed during data fetching and
-      processing.
-    </li>
-    <li>
-      Error Handling: Comprehensive error handling with user-friendly messages.
-    </li>
-  </ul>
+    <h2>Additional Functionalities</h2>
+    <ul>
+      <li>
+        Email Verification: When a non-guest user changes their email, the new
+        email must be verified.
+      </li>
+      <li>
+        Loading Spinner: A loading spinner is displayed during data fetching and
+        processing.
+      </li>
+      <li>
+        Error Handling: Comprehensive error handling with user-friendly
+        messages.
+      </li>
+    </ul>
 
-  <button mat-raised-button color="primary" (click)="downloadSummary()">Download Summary</button>
-</div>
+    <button mat-raised-button color="primary" (click)="downloadSummary()">
+      Download Summary
+    </button>
+  </div>
+  </div>
+  } @if(!data){
+
+  <div class="summary-container">
+    <h1>Project Overview</h1>
+    <p>
+      This project is a comprehensive banking application with CRM
+      functionalities built using Angular and Firebase. It includes features for
+      user authentication, role management, account management, transfers, and
+      more. The application also utilizes Material Design for a modern and
+      responsive user interface.
+    </p>
+
+    <h2>Key Features</h2>
+    <ul>
+      <li>
+        <strong>User Authentication</strong>
+        <ul>
+          <li>
+            Firebase Authentication: Users can log in using Firebase
+            authentication.
+          </li>
+          <li>
+            Guest Login: Guests can log in without creating an account. Guest
+            data is deleted upon logout.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Role Management</strong>
+        <ul>
+          <li>
+            Role Change: Guests can change their role to user, admin, or
+            manager.
+          </li>
+          <li>
+            Role-Based Access: Different functionalities are available based on
+            the user's role.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Account Management</strong>
+        <ul>
+          <li>Create New Accounts: Users can create new accounts.</li>
+          <li>
+            View and Edit Accounts: Users can view and edit account details.
+          </li>
+          <li>Delete Accounts: Users can delete accounts.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Transfers</strong>
+        <ul>
+          <li>Send Money: Users can send money to other accounts.</li>
+          <li>Move Money: Users can move money between their own accounts.</li>
+          <li>
+            Transfer Fees: Transfer fees are applied based on the type of
+            transfer.
+          </li>
+          <li>Transfer Details: Users can view details of their transfers.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Automatic Interest Payment</strong>
+        <ul>
+          <li>
+            Interest Calculation: Interest is automatically calculated and
+            credited to user accounts.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Dashboard</strong>
+        <ul>
+          <li>
+            User Dashboard: Displays user information, account balances, and
+            recent transfers.
+          </li>
+          <li>
+            Admin Dashboard: Displays bank statistics, user growth, and other
+            admin-specific information.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Profile Management</strong>
+        <ul>
+          <li>
+            Profile Picture: Users can upload and update their profile picture.
+          </li>
+          <li>
+            Edit Profile: Users can edit their profile information, including
+            email and password (with email verification for non-guests).
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Statistics and Charts</strong>
+        <ul>
+          <li>
+            Income and Expenses Chart: Displays a chart of income and expenses.
+          </li>
+          <li>User Growth Chart: Displays a chart of user growth over time.</li>
+          <li>Transfers Chart: Displays a chart of transfers.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Notifications</strong>
+        <ul>
+          <li>
+            Snackbar Notifications: Users receive notifications for successful
+            actions and errors.
+          </li>
+          <li>
+            Dialog Service: Users receive dialog notifications for important
+            messages and errors.
+          </li>
+        </ul>
+      </li>
+      <li>
+        <strong>Dialogs</strong>
+        <ul>
+          <li>Edit Account Dialog: Allows users to edit account details.</li>
+          <li>
+            Send Money Dialog: Allows users to send money to other accounts.
+          </li>
+          <li>
+            Move Money Dialog: Allows users to move money between their own
+            accounts.
+          </li>
+          <li>
+            Edit Interest Rate Dialog: Allows admins to edit the bank's interest
+            rate.
+          </li>
+          <li>
+            Edit Transaction Fee Dialog: Allows admins to edit the bank's
+            transaction fee.
+          </li>
+        </ul>
+      </li>
+    </ul>
+
+    <h2>Additional Functionalities</h2>
+    <ul>
+      <li>
+        Email Verification: When a non-guest user changes their email, the new
+        email must be verified.
+      </li>
+      <li>
+        Loading Spinner: A loading spinner is displayed during data fetching and
+        processing.
+      </li>
+      <li>
+        Error Handling: Comprehensive error handling with user-friendly
+        messages.
+      </li>
+    </ul>
+
+    <button mat-raised-button color="primary" (click)="downloadSummary()">
+      Download Summary
+    </button>
+  </div>
+  }
+

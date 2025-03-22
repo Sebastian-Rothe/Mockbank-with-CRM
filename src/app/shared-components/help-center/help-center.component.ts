@@ -1,6 +1,7 @@
-import { Component} from '@angular/core';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { Component } from '@angular/core';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { SummaryComponent } from '../summary/summary.component';
+
 @Component({
   selector: 'app-help-center',
   standalone: true,
