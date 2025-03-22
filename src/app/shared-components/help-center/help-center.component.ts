@@ -1,9 +1,10 @@
 import { Component} from '@angular/core';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { SummaryComponent } from '../summary/summary.component';
 @Component({
   selector: 'app-help-center',
   standalone: true,
-  imports: [MatExpansionModule],
+  imports: [MatExpansionModule, SummaryComponent],
   templateUrl: './help-center.component.html',
   styleUrl: './help-center.component.scss'
 })
