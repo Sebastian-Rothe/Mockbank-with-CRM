@@ -112,6 +112,11 @@
 mat-card-content {
   padding: 18px;
 }
+@media (max-width: 400px) {
+  .card-header {
+  margin-bottom: 16px;
+  }
+}
 
 @media (max-width: 340px) {
   .card-header {

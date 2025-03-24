@@ -35,11 +35,8 @@
 }
 
 .hero-image img {
-  width: 100%;
   max-width: 500px;
   height: auto;
-  border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .btn-outline {
@@ -87,9 +84,6 @@
     font-size: 1rem;
   }
 
-  .hero-image {
-    margin-top: 2rem;
-  }
 }
 
 @media (max-width: 600px) {
