@@ -1,6 +1,5 @@
 .summary-container {
   padding: 20px;
-  font-family: 'Roboto', sans-serif;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -48,7 +47,6 @@
   max-height: 90vh;
   overflow-y: auto;
   padding: 20px;
-  font-family: 'Roboto', sans-serif;
   background-color: #f9f9f9;
   border-radius: 12px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -97,6 +95,80 @@
 
     button {
       margin-top: 20px;
+    }
+  }
+}
+
+@media (max-width: 650px) {
+  .summary-dialog {
+    .summary-container {
+      padding: 8px;
+
+      ul {
+        margin-left: 0;
+        padding-left: 20px;
+        li {
+          ul {
+            margin-left: 8px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .summary-dialog {
+    padding: 10px;
+    border-radius: 8px;
+  }
+
+  .summary-container {
+    padding: 10px;
+
+    h1 {
+      font-size: 1.5em;
+    }
+
+    h2 {
+      font-size: 1.2em;
+    }
+
+    p,
+    ul {
+      font-size: 0.9em;
+    }
+
+    button {
+      margin-top: 15px;
+    }
+  }
+}
+
+@media (max-width: 320px) {
+  .summary-dialog {
+    padding: 5px;
+    border-radius: 5px;
+  }
+
+  .summary-container {
+    padding: 5px;
+
+    h1 {
+      font-size: 1.2em;
+    }
+
+    h2 {
+      font-size: 1em;
+    }
+
+    p,
+    ul {
+      font-size: 0.8em;
+    }
+
+    button {
+      margin-top: 10px;
     }
   }
 }
