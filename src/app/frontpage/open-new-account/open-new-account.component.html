@@ -13,17 +13,18 @@
               <h6 class="contact-headline m-0">
                 Phone (Mo. - Fr. 08:00 - 20:00 Uhr)
               </h6>
-              <a href="tel:+4969242469000">176 52968778</a>
+              <a href="">...</a>
             </li>
 
             <li class="">
               <h6 class="contact-headline mb-0 mt-3">E-Mail</h6>
-              <a href="mailto:kundenservice@c24.de">customerserviceMB.de</a>
+              <a href="">...</a>
             </li>
 
             <li class="">
               <h6 class="contact-headline mb-0 mt-3">Q&A</h6>
-              <a target="_blank" href="">To Help Center</a>
+              
+              <a routerLink="help-center">To Help Center</a>
             </li>
           </div>
         </ul>
@@ -260,9 +261,8 @@
             <mat-error> Password is required. </mat-error>}
             @if((fourthFormGroup.get('password')?.hasError('pattern'))){
             <mat-error>
-              Password must be at least 8 characters and include a number, a
-              special character, and a capital letter. </mat-error
-            >}
+              Password must be at least 8 characters and include a number and a lowercase letter.
+            </mat-error>}
           </mat-form-field>
 
           <mat-form-field>

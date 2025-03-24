@@ -91,7 +91,7 @@ export class OpenNewAccountComponent {
     streetAddress: ['', Validators.required],
     zipCode: [
       '',
-      [Validators.required, Validators.pattern(/^\d{6}$/)], // 5-digit zip code
+      [Validators.required, Validators.pattern(/^\d{5}$/)], // 5-digit zip code
     ],
     city: ['', Validators.required],
   });
@@ -108,10 +108,9 @@ export class OpenNewAccountComponent {
         '',
         [
           Validators.required,
-          // Validators.pattern(
-          //   /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-          // ),
-          Validators.minLength(6), // for testing
+          Validators.pattern(
+            /^(?=.*[a-z])(?=.*\d)[a-z\d]{8,}$/
+          ),
         ],
       ],
       confirmPassword: ['', Validators.required],
