@@ -48,8 +48,8 @@ export class CreateNewAdminComponent {
   constructor(
     private firebaseAuthService: FirebaseAuthService,
     private userService: UserService,
-    private snackbarService: SnackbarService, // snack
-    private dialogService: DialogService // msg
+    private snackbarService: SnackbarService, 
+    private dialogService: DialogService 
   ) {}
 
   formGroup = this._formBuilder.group(
@@ -62,9 +62,9 @@ export class CreateNewAdminComponent {
         '',
         [
           Validators.required,
-          // Validators.pattern(
-          //   /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
-          // ), => not in use
+          Validators.pattern(
+            /^(?=.*[a-z])(?=.*\d)[a-z\d]{8,}$/
+          ),
         ],
       ],
       confirmPassword: ['', Validators.required],
@@ -92,20 +92,20 @@ export class CreateNewAdminComponent {
     const password = this.formGroup.get('password')?.value || '';
 
     this.firebaseAuthService
-      .registerWithoutLogin(email, password) // Use new method to register without login
+      .registerWithoutLogin(email, password) 
       .then((firebaseUser) => {
         if (firebaseUser) {
-          // Zusätzliche Daten für Firestore-User setzen
-          this.user.uid = firebaseUser.uid; // UID aus Firebase Auth als ID für Firestore-Dokument
+          
+          this.user.uid = firebaseUser.uid; 
           this.user.email = firebaseUser.email || '';
           this.user.firstName = this.formGroup.get('firstName')?.value || '';
           this.user.lastName = this.formGroup.get('lastName')?.value || '';
           this.user.role = this.formGroup.get('role')?.value || '';
-          // Benutzer in Firestore speichern
+
           this.userService
             .addUserWithAccount(this.user)
             .then(() => {
-              this.snackbarService.success('User successfully saved!'); // snack
+              this.snackbarService.success('User successfully saved!'); 
               this.formGroup.reset(); 
            
               
@@ -116,7 +116,7 @@ export class CreateNewAdminComponent {
         }
       })
       .catch((error) => {
-        this.dialogService.openDialog('Error', 'Error registering user: ' + error, 'error'); // msg
+        this.dialogService.openDialog('Error', 'Error registering user: ' + error, 'error'); 
       });
   }
 }
