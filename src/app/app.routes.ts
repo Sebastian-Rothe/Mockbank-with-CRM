@@ -13,6 +13,11 @@ import { PrivacyPolicyComponent } from './shared-components/privacy-policy/priva
 import { StatisticsComponent } from './main-content/statistics/statistics.component';
 import { HelpCenterComponent } from './shared-components/help-center/help-center.component';
 
+// Guards
+import { authGuard } from './guards/auth.guard';
+import { roleGuard } from './guards/role.guard';
+import { guestGuard } from './guards/guest.guard';
+
 export const routes: Routes = [
   {
     path: '',
@@ -28,16 +33,31 @@ export const routes: Routes = [
   {
     path: 'main',
     component: MainContentComponent,
+    canActivate: [authGuard], // Protect all /main routes
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }, // Default-Route
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'imprint', component: ImprintComponent },
       { path: 'privacy-policy', component: PrivacyPolicyComponent },
       { path: 'help-center', component: HelpCenterComponent },
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'user', component: UserComponent },
+      { 
+        path: 'user', 
+        component: UserComponent,
+        canActivate: [roleGuard],
+        data: { roles: ['admin', 'management'] } // Only admins can search users
+      },
       { path: 'user/:uid', component: UserDetailComponent },
-      { path: 'new-admin', component: CreateNewAdminComponent },
-      { path: 'change-role', component: ChangeRoleComponent },
+      { 
+        path: 'new-admin', 
+        component: CreateNewAdminComponent,
+        canActivate: [roleGuard, guestGuard],
+        data: { roles: ['admin', 'management'] } // Only admins, no guests
+      },
+      { 
+        path: 'change-role', 
+        component: ChangeRoleComponent,
+        // Only for guests to upgrade their account
+      },
       { path: 'statistics', component: StatisticsComponent },
     ],
   },
