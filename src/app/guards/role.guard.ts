@@ -3,7 +3,8 @@ import { Router, ActivatedRouteSnapshot } from '@angular/router';
 import { CanActivateFn } from '@angular/router';
 import { FirebaseAuthService } from '../services/firebase-auth.service';
 import { SnackbarService } from '../services/snackbar.service';
-import { map, take } from 'rxjs/operators';
+import { map, filter, take, timeout, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 /**
  * Role Guard - Protects routes based on user roles
@@ -19,7 +20,9 @@ export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state) =
   const requiredRoles = route.data['roles'] as string[];
 
   return authService.user$.pipe(
+    filter((user) => user !== undefined), // Wait for auth to load
     take(1),
+    timeout(5000),
     map((user) => {
       if (!user) {
         // User not authenticated
@@ -38,6 +41,10 @@ export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state) =
       }
 
       return true; // User has required role
+    }),
+    catchError(() => {
+      router.navigate(['/']);
+      return of(false);
     })
   );
 };
