@@ -5,6 +5,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideAuth, getAuth } from '@angular/fire/auth';
+import { environment } from '../environments/environment';
 
 
 export const appConfig: ApplicationConfig = {
@@ -12,16 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideFirebaseApp(() =>
-      initializeApp({
-        apiKey: "AIzaSyA6sjgrec6hzkCFlANaK2QbOg9ln4VyZNQ",
-        authDomain: "mb-with-crm.firebaseapp.com",
-        projectId: "mb-with-crm",
-        storageBucket: "mb-with-crm.firebasestorage.app",
-        messagingSenderId: "406632378127",
-        appId: "1:406632378127:web:dde6d36e01fdd3090b987a"
-      })
-    ),
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideFirestore(() => getFirestore()),
   ],
 };
