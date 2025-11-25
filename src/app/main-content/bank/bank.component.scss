@@ -56,3 +56,36 @@
   justify-content: center;
   margin-top: 20px;
 }
+
+// Dark Mode Styles
+:host-context(.dark-theme) {
+  .bank-card {
+    background-color: #1e1e1e;
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .bank-header mat-icon {
+    color: #64b5f6;
+  }
+
+  .bank-id {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .stat-box {
+    background: #2d2d2d;
+    color: rgba(255, 255, 255, 0.87);
+
+    .stat-title {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    h3 {
+      color: rgba(255, 255, 255, 0.87);
+    }
+  }
+
+  .menu-button {
+    color: rgba(255, 255, 255, 0.87);
+  }
+}
