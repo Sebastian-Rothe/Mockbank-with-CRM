@@ -124,3 +124,36 @@ mat-card-content {
     padding: 0px;
   }
 }
+
+// Dark Mode Styles
+:host-context(.dark-theme) {
+  .card-header {
+    background: linear-gradient(135deg, #1e3a5f, #2c5282);
+    
+    .total-balance {
+      color: rgba(255, 255, 255, 0.95);
+    }
+
+    .profile-container {
+      .profile-image-wrapper {
+        border-color: rgba(255, 255, 255, 0.9);
+      }
+
+      .upload-overlay {
+        background: #0288d1;
+      }
+
+      .profile-info {
+        color: rgba(255, 255, 255, 0.95);
+        
+        h3 {
+          color: white;
+        }
+        
+        p {
+          color: rgba(255, 255, 255, 0.8);
+        }
+      }
+    }
+  }
+}

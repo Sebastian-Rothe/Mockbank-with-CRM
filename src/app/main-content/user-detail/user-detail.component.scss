@@ -100,3 +100,44 @@ mat-card {
     }
   }
 }
+
+// Dark Mode Styles
+:host-context(.dark-theme) {
+  .card-header {
+    background: linear-gradient(135deg, #1a4d4d, #2d7373);
+
+    .user-basic-info {
+      p {
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .user-role {
+        color: rgba(255, 255, 255, 0.9);
+      }
+    }
+  }
+
+  mat-card {
+    background-color: #1e1e1e;
+    color: rgba(255, 255, 255, 0.87);
+
+    .section-content {
+      .detail-item {
+        border-bottom-color: #333;
+
+        label {
+          color: rgba(255, 255, 255, 0.87);
+        }
+
+        span {
+          color: rgba(255, 255, 255, 0.7);
+        }
+      }
+    }
+  }
+
+  .mat-accordion .mat-expansion-panel {
+    background-color: #2d2d2d;
+    color: rgba(255, 255, 255, 0.87);
+  }
+}
