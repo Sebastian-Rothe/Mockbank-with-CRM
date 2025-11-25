@@ -74,6 +74,14 @@
       <button
         mat-icon-button
         class="example-icon"
+        aria-label="Toggle Theme"
+        (click)="toggleTheme()"
+      >
+        <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
+      <button
+        mat-icon-button
+        class="example-icon"
         aria-label="Share"
         (click)="share()"
       >

@@ -1,69 +1,108 @@
-/* You can add global styles to this file, and also import other style files */
+// Import custom theme and variables
+@import './styles/theme.scss';
+@import './styles/variables';
 
+// Global styles
 html,
 body {
   height: 100%;
 }
+
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: $font-family-primary;
+  transition: background-color $transition-base, color $transition-base;
 }
 
-*{
-    box-sizing: border-box;
+// Dark mode body styles
+.dark-theme body {
+  background-color: $dark-bg-primary;
+  color: rgba(255, 255, 255, 0.87);
 }
 
-button, input, a, li{
-    cursor: pointer;
+* {
+  box-sizing: border-box;
 }
-.mr-l6{
-  margin: 0 6px 0 0 !important;
+
+button, input, a, li {
+  cursor: pointer;
 }
-.mr-16{
-  margin-right: 16px;
+
+// Utility classes
+.mr-l6 {
+  margin: 0 $spacing-sm 0 0 !important;
 }
-.mr-32{
-  margin-right: 32px;
+
+.mr-16 {
+  margin-right: $spacing-md;
 }
-.full-width{
+
+.mr-32 {
+  margin-right: $spacing-xl;
+}
+
+.full-width {
   width: 100%;
 }
 
-/* Chrome, Safari, Edge, Opera */
+// Remove number input spinners
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-/* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
 }
 
-// Snackbar Design für verschiedene Typen
+// Snackbar styles
 .success {
-  background: #4caf50 !important; // Grün
+  background: $success !important;
   color: white;
 }
 
 .error {
-  background: #f44336 !important; // Rot
+  background: $error !important;
   color: white;
 }
 
 .warning {
-  background: #ff9800 !important; // Orange
+  background: $warning !important;
   color: black;
 }
 
 .info {
-  background: #2196f3 !important; // Blau
+  background: $info !important;
   color: white;
 }
 
+// Content container
 .content-limit-container {
-  max-width: 1920px; 
+  max-width: $breakpoint-xxl; 
   margin: 0 auto; 
+}
+
+// Dark mode specific adjustments
+.dark-theme {
+  mat-card {
+    background: $dark-surface;
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  mat-toolbar {
+    background: $dark-bg-secondary;
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .mat-drawer {
+    background: $dark-bg-secondary;
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  .mat-drawer-container {
+    background: $dark-bg-primary;
+    color: rgba(255, 255, 255, 0.87);
+  }
 }
 

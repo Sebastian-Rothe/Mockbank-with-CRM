@@ -13,6 +13,7 @@ import { User } from '../models/user.class';
 // Services
 import { FirebaseAuthService } from '../services/firebase-auth.service';
 import { BankService } from '../services/bank.service';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
   selector: 'app-main-content',
@@ -37,11 +38,15 @@ export class MainContentComponent implements OnInit, AfterViewInit {
   user: User | null = null;
   isGuest: boolean = false;
   private resizeTimeout: any;
+  
+  // Theme
+  isDarkMode = this.themeService.isDarkMode;
 
   constructor(
     private authService: FirebaseAuthService,
     private cdRef: ChangeDetectorRef,
-    private bankService: BankService
+    private bankService: BankService,
+    private themeService: ThemeService
   ) {}
 
   ngOnInit(): void {
@@ -124,6 +129,10 @@ export class MainContentComponent implements OnInit, AfterViewInit {
     } catch (error) {
       console.error('Error on logout:', error);
     }
+  }
+
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
   }
 
   share() {

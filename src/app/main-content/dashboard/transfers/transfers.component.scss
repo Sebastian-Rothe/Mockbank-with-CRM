@@ -128,6 +128,48 @@
   }
 }
 
+// Dark Mode Styles
+:host-context(.dark-theme) {
+  .transfers mat-card {
+    background-color: #1e1e1e;
+    border-color: #333;
+  }
+
+  .transfers mat-card-header {
+    background-color: #2d2d2d;
+    border-bottom-color: #333;
+  }
+
+  .transfer-card {
+    background-color: #2d2d2d;
+    color: rgba(255, 255, 255, 0.87);
+    
+    &:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  .transfer-icon {
+    background-color: #3d3d3d !important;
+    
+    &.internal {
+      background-color: #1a3a5a !important;
+    }
+
+    &.negative {
+      background-color: #4a1a1a !important;
+    }
+
+    &.positive {
+      background-color: #1a4a1a !important;
+    }
+  }
+
+  .transfer-date {
+    color: rgba(255, 255, 255, 0.6);
+  }
+}
+
 @media (max-width: 600px) {
   .transfers mat-card-header{
     padding: 12px;
