@@ -6,3 +6,11 @@ div{
  justify-content: center;
  align-items: center;   
 }
+
+// Dark Mode Styles
+:host-context(.dark-theme) {
+    div {
+        background-color: #1e1e1e;
+        color: rgba(255, 255, 255, 0.87);
+    }
+}

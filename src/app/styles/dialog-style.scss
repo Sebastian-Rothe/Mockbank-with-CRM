@@ -70,3 +70,26 @@ form {
     padding: 12px !important;
   }
 }
+
+// Dark Mode Styles for Dialogs
+.dark-theme {
+  .dialog-container {
+    background-color: #1e1e1e;
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  mat-dialog-container {
+    background-color: #1e1e1e;
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  h2 {
+    color: rgba(255, 255, 255, 0.87);
+  }
+
+  mat-form-field {
+    .mat-mdc-form-field-label {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+}

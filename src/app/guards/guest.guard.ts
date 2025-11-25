@@ -5,10 +5,11 @@ import { Auth } from '@angular/fire/auth';
 import { authState } from '@angular/fire/auth';
 import { FirebaseAuthService } from '../services/firebase-auth.service';
 import { SnackbarService } from '../services/snackbar.service';
-import { map, take } from 'rxjs/operators';
+import { map, take, switchMap } from 'rxjs/operators';
 
 /**
- * Guest Guard - Prevents guest users from accessing certain features
+ * Guest Guard - Prevents guest users (with role 'guest') from accessing certain features
+ * Now checks the actual role in Firestore, not just isAnonymous status
  */
 export const guestGuard: CanActivateFn = (route, state) => {
   const auth = inject(Auth);
@@ -18,21 +19,26 @@ export const guestGuard: CanActivateFn = (route, state) => {
 
   return authState(auth).pipe(
     take(1),
-    map((user) => {
+    switchMap((user) => {
       if (!user) {
         router.navigate(['/']);
-        return false;
+        return [false];
       }
 
-      const isGuest = authService.isGuestUser();
-      
-      if (isGuest) {
-        snackbarService.warning('Not available for guests');
-        router.navigate(['/main/dashboard']);
-        return false;
-      }
+      // Get the actual user data with role from Firestore
+      return authService.user$.pipe(
+        take(1),
+        map((userData) => {
+          // Check if user role is 'guest'
+          if (userData?.role === 'guest') {
+            snackbarService.warning('Not available for guests. Please upgrade your account.');
+            router.navigate(['/main/dashboard']);
+            return false;
+          }
 
-      return true;
+          return true;
+        })
+      );
     })
   );
 };
