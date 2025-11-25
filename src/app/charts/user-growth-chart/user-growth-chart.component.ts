@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, effect } from '@angular/core';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { User } from '../../models/user.class';
 import { UserService } from '../../services/user.service';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-user-growth-chart',
@@ -20,7 +21,18 @@ export class UserGrowthChartComponent implements OnInit {
   chartOptions: any;
   errorMessage: string = '';
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private themeService: ThemeService
+  ) {
+    effect(() => {
+      const isDark = this.themeService.isDarkMode();
+      if (this.chartOptions) {
+        this.chartOptions.theme = isDark ? 'dark2' : 'light2';
+        this.chartOptions.backgroundColor = isDark ? '#1e1e1e' : '#ffffff';
+      }
+    });
+  }
 
   async ngOnInit() {
     this.dataPoints = await this.getUserData();
@@ -63,9 +75,11 @@ export class UserGrowthChartComponent implements OnInit {
   
 
   loadChart() {
+    const isDark = this.themeService.isDarkMode();
     this.chartOptions = {
       animationEnabled: true,
-      theme: 'light',
+      theme: isDark ? 'dark2' : 'light2',
+      backgroundColor: isDark ? '#1e1e1e' : '#ffffff',
       title: { text: 'Total Number of Users (Daily)' },
       axisX: { title: 'Date', valueFormatString: 'DD MMM' },
       axisY: { title: 'Number of Users', minimum: 0 },

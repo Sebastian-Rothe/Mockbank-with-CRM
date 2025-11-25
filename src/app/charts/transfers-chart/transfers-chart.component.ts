@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, effect } from '@angular/core';
 import { Transfer } from '../../models/transfer.class';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { TransferService } from '../../services/transfer.service';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-transfers-chart',
@@ -15,7 +16,18 @@ export class TransfersChartComponent implements OnInit {
   transferCountData: { x: Date, y: number }[] = [];
   transferAmountData: { x: Date, y: number }[] = [];
 
-  constructor(private transferService: TransferService) {}
+  constructor(
+    private transferService: TransferService,
+    private themeService: ThemeService
+  ) {
+    effect(() => {
+      const isDark = this.themeService.isDarkMode();
+      if (this.chartOptions) {
+        this.chartOptions.theme = isDark ? 'dark2' : 'light2';
+        this.chartOptions.backgroundColor = isDark ? '#1e1e1e' : '#ffffff';
+      }
+    });
+  }
 
   async ngOnInit() {
     await this.getTransfersPerDay();
@@ -58,9 +70,11 @@ export class TransfersChartComponent implements OnInit {
   }
 
   loadChart() {
+    const isDark = this.themeService.isDarkMode();
     this.chartOptions = {
       animationEnabled: true,
-      theme: 'light',
+      theme: isDark ? 'dark2' : 'light2',
+      backgroundColor: isDark ? '#1e1e1e' : '#ffffff',
       title: { text: 'Transfers per Day & Total Amount (€)' },
       axisX: { title: 'Date', valueFormatString: 'DD MMM' },
       axisY: { title: 'Number of Transfers', minimum: 0 },

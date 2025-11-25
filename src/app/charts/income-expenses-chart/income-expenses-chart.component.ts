@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FirebaseAuthService } from '../../services/firebase-auth.service';
 import { TransferService } from '../../services/transfer.service';
 import { User } from '../../models/user.class';
 import { Transfer } from '../../models/transfer.class';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-income-expenses-chart',
@@ -19,8 +20,17 @@ export class IncomeExpensesChartComponent {
 
   constructor(
     private authService: FirebaseAuthService,
-    private transferService: TransferService
-  ) {}
+    private transferService: TransferService,
+    private themeService: ThemeService
+  ) {
+    effect(() => {
+      const isDark = this.themeService.isDarkMode();
+      if (this.chartOptions) {
+        this.chartOptions.theme = isDark ? 'dark2' : 'light2';
+        this.chartOptions.backgroundColor = isDark ? '#1e1e1e' : '#ffffff';
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.authService.user$.subscribe((user) => {
@@ -62,9 +72,11 @@ export class IncomeExpensesChartComponent {
       }));
 
       // Set chart options
+      const isDark = this.themeService.isDarkMode();
       this.chartOptions = {
         animationEnabled: true,
-        theme: 'light',
+        theme: isDark ? 'dark2' : 'light2',
+        backgroundColor: isDark ? '#1e1e1e' : '#ffffff',
         exportEnabled: true,
         title: { text: 'Transfers by Category' },
         subtitles: [{ text: 'Distribution by Amount' }],
