@@ -124,3 +124,41 @@ table {
     display: none;
   }
 }
+
+// Dark Mode Styles
+:host-context(.dark-theme) {
+  .search-container {
+    background-color: #1e1e1e;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    
+    .user-count {
+      color: rgba(255, 255, 255, 0.87);
+    }
+  }
+
+  .user-table-container {
+    background: #1e1e1e;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+  }
+
+  table {
+    color: rgba(255, 255, 255, 0.87);
+
+    thead {
+      border-bottom-color: rgba(255, 255, 255, 0.3);
+    }
+
+    th {
+      background: #2d2d2d;
+      color: rgba(255, 255, 255, 0.87);
+    }
+
+    tr {
+      border-bottom-color: rgba(255, 255, 255, 0.1);
+    }
+
+    tr:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+}
