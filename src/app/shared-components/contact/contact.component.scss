@@ -1,0 +1,290 @@
+.contact-container {
+  width: 100%;
+  max-height: calc(100vh - 64px); // 64px for header
+//   overflow-y: auto;
+//   padding: 40px 20px;
+  
+  h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #3f51b5;
+  }
+}
+
+.contact-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.contact-info-card,
+.contact-form-card {
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    color: #3f51b5;
+  }
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.contact-item {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+
+  mat-icon {
+    color: #3f51b5;
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+    margin-top: 5px;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    margin: 0 0 5px 0;
+    color: #333;
+  }
+
+  p {
+    margin: 0;
+    color: #666;
+    line-height: 1.6;
+  }
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  mat-form-field {
+    width: 100%;
+  }
+
+  button {
+    margin-top: 10px;
+    padding: 12px;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+}
+
+// Responsive Design
+@media (max-width: 900px) {
+  .contact-content {
+    grid-template-columns: 1fr;
+  }
+  
+  // Adjust for sidenav on small screens when open
+//   .contact-container {
+//     padding: 20px 15px;
+//   }
+}
+
+@media (max-width: 768px) {
+  .contact-container {
+    padding: 20px 15px;
+    max-height: calc(100vh - 56px); // Smaller header on mobile
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+    }
+  }
+
+  .contact-info-card,
+  .contact-form-card {
+    padding: 20px;
+
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-container {
+    h1 {
+      font-size: 1.6rem;
+    }
+  }
+
+  .contact-info-card,
+  .contact-form-card {
+    padding: 15px;
+  }
+
+  .contact-item {
+    mat-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+
+    h3 {
+      font-size: 1rem;
+    }
+
+    p {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+// Dark Mode Styles
+:host-context(.dark-theme) {
+  .contact-container {
+    h1 {
+      color: #64b5f6;
+    }
+  }
+
+  .contact-info-card,
+  .contact-form-card {
+    background-color: #1e1e1e;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+
+    h2 {
+      color: #64b5f6;
+    }
+  }
+
+  .contact-item {
+    mat-icon {
+      color: #64b5f6;
+    }
+
+    h3 {
+      color: rgba(255, 255, 255, 0.87);
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+}
+
+// Success Popup Styles
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 9999; // Higher than sidenav (typically 1000-2000)
+
+  &.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.popup-content {
+  background-color: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  animation: slideDown 0.3s ease;
+
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #333;
+    }
+  }
+
+  .success-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #4caf50;
+    margin: 0 auto 20px;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    color: #333;
+    margin: 0 0 15px 0;
+  }
+
+  p {
+    font-size: 1rem;
+    color: #666;
+    line-height: 1.6;
+    margin: 10px 0;
+  }
+
+  button {
+    margin-top: 20px;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Dark mode popup styles
+:host-context(.dark-theme) {
+  .popup-content {
+    background-color: #2d2d2d;
+
+    .close {
+      color: rgba(255, 255, 255, 0.5);
+
+      &:hover {
+        color: rgba(255, 255, 255, 0.87);
+      }
+    }
+
+    h2 {
+      color: rgba(255, 255, 255, 0.87);
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.7);
+    }
+  }
+}

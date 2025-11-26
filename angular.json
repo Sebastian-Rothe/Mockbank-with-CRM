@@ -29,6 +29,7 @@
             ],
             "scripts": [],
             "allowedCommonJsDependencies": [
+              "@canvasjs/charts",
               "core-js/modules/es.promise.js",
               "core-js/modules/es.string.match.js",
               "core-js/modules/es.string.replace.js",

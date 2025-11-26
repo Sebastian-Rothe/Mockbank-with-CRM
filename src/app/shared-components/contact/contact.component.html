@@ -1,0 +1,139 @@
+<div class="contact-container">
+  <h1>Contact Us</h1>
+
+  <div class="contact-content">
+    <!-- Contact Information -->
+    <mat-card appearance="outlined" class="contact-info-card">
+      <h2>Get in Touch</h2>
+      <div class="contact-details">
+        <div class="contact-item">
+          <mat-icon>email</mat-icon>
+          <div>
+            <h3>Email</h3>
+            <p>support&#64;mockbank.com</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <mat-icon>phone</mat-icon>
+          <div>
+            <h3>Phone</h3>
+            <p>+49 123 456 7890</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <mat-icon>location_on</mat-icon>
+          <div>
+            <h3>Address</h3>
+            <p>123 Banking Street<br>Berlin, 10115<br>Germany</p>
+          </div>
+        </div>
+        <div class="contact-item">
+          <mat-icon>schedule</mat-icon>
+          <div>
+            <h3>Business Hours</h3>
+            <p>Monday - Friday: 9:00 - 18:00<br>Saturday: 10:00 - 14:00<br>Sunday: Closed</p>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+
+    <!-- Contact Form -->
+    <mat-card appearance="outlined" class="contact-form-card">
+      <h2>Send us a Message</h2>
+      <form (ngSubmit)="onSubmit(contactForm)" #contactForm="ngForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Your Name</mat-label>
+          <input 
+            matInput 
+            #name="ngModel"
+            [(ngModel)]="contactData.name"
+            name="name"
+            type="text"
+            placeholder="John Doe"
+            required
+            minlength="2"
+          />
+          <mat-icon matPrefix>person</mat-icon>
+          @if(name.invalid && name.touched) {
+            <mat-error>Name is required (min. 2 characters)</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Your Email</mat-label>
+          <input 
+            matInput 
+            #email="ngModel"
+            [(ngModel)]="contactData.email"
+            name="email"
+            type="email"
+            placeholder="john@example.com"
+            required
+            pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+          />
+          <mat-icon matPrefix>email</mat-icon>
+          @if(email.invalid && email.touched) {
+            <mat-error>Valid email is required</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Subject</mat-label>
+          <input 
+            matInput 
+            #subject="ngModel"
+            [(ngModel)]="contactData.subject"
+            name="subject"
+            type="text"
+            placeholder="How can we help?"
+            required
+            minlength="3"
+          />
+          <mat-icon matPrefix>subject</mat-icon>
+          @if(subject.invalid && subject.touched) {
+            <mat-error>Subject is required (min. 3 characters)</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Message</mat-label>
+          <textarea 
+            matInput 
+            #message="ngModel"
+            [(ngModel)]="contactData.message"
+            name="message"
+            rows="6"
+            placeholder="Tell us more about your inquiry..."
+            required
+            minlength="10"
+          ></textarea>
+          <mat-icon matPrefix>message</mat-icon>
+          @if(message.invalid && message.touched) {
+            <mat-error>Message is required (min. 10 characters)</mat-error>
+          }
+        </mat-form-field>
+
+        <button 
+          mat-raised-button 
+          color="primary" 
+          type="submit" 
+          [disabled]="isSubmitting">
+          <mat-icon>send</mat-icon>
+          {{ isSubmitting ? 'Sending...' : 'Send Message' }}
+        </button>
+      </form>
+    </mat-card>
+  </div>
+
+  <!-- Success Popup -->
+  <div class="popup" [class.visible]="showPopup" (click)="closePopup()">
+    <div class="popup-content" (click)="$event.stopPropagation()">
+      <span class="close" (click)="closePopup()">&times;</span>
+      <mat-icon class="success-icon">check_circle</mat-icon>
+      <h2>Message Sent Successfully!</h2>
+      <p>Thank you for contacting us.</p>
+      <p>We'll get back to you as soon as possible.</p>
+      <button mat-raised-button color="primary" (click)="closePopup()">Close</button>
+    </div>
+  </div>
+</div>

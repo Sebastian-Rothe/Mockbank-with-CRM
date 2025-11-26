@@ -12,6 +12,7 @@ import { ChangeRoleComponent } from './main-content/change-role/change-role.comp
 import { PrivacyPolicyComponent } from './shared-components/privacy-policy/privacy-policy.component';
 import { StatisticsComponent } from './main-content/statistics/statistics.component';
 import { HelpCenterComponent } from './shared-components/help-center/help-center.component';
+import { ContactComponent } from './shared-components/contact/contact.component';
 
 // Guards
 import { authGuard } from './guards/auth.guard';
@@ -28,6 +29,7 @@ export const routes: Routes = [
       { path: 'open-account', component: OpenNewAccountComponent },
       { path: 'privacy-policy', component: PrivacyPolicyComponent },
       { path: 'help-center', component: HelpCenterComponent },
+      { path: 'contact', component: ContactComponent },
     ],
   },
   {
@@ -39,6 +41,7 @@ export const routes: Routes = [
       { path: 'imprint', component: ImprintComponent },
       { path: 'privacy-policy', component: PrivacyPolicyComponent },
       { path: 'help-center', component: HelpCenterComponent },
+      { path: 'contact', component: ContactComponent },
       { path: 'dashboard', component: DashboardComponent },
       { 
         path: 'user', 
