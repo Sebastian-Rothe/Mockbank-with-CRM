@@ -40,4 +40,35 @@
       padding: 5px;
     }
   }
+
+// Dark Mode Styles
+:host-context(.dark-theme) {
+  .help-container {
+    background-color: #1e1e1e;
+    color: rgba(255, 255, 255, 0.87);
+
+    h1, h2 {
+      color: rgba(255, 255, 255, 0.95);
+    }
+  }
+
+  .QandA {
+    mat-accordion {
+      mat-expansion-panel {
+        background-color: #2d2d2d;
+        color: rgba(255, 255, 255, 0.87);
+
+        mat-expansion-panel-header {
+          mat-panel-title {
+            color: rgba(255, 255, 255, 0.87);
+          }
+        }
+
+        p {
+          color: rgba(255, 255, 255, 0.7);
+        }
+      }
+    }
+  }
+}
   

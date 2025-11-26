@@ -172,3 +172,56 @@
     }
   }
 }
+
+// Dark Mode Styles
+:host-context(.dark-theme) {
+  .summary-container {
+    background-color: #1e1e1e;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+
+    h1, h2 {
+      color: #64b5f6;
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.87);
+    }
+
+    ul li {
+      color: rgba(255, 255, 255, 0.87);
+
+      strong {
+        color: rgba(255, 255, 255, 0.95);
+      }
+    }
+  }
+
+  .summary-dialog {
+    background-color: #1e1e1e;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+
+    .summary-message {
+      color: #64b5f6;
+    }
+
+    .summary-container {
+      background-color: #1e1e1e;
+
+      h1, h2 {
+        color: #64b5f6;
+      }
+
+      p {
+        color: rgba(255, 255, 255, 0.87);
+      }
+
+      ul li {
+        color: rgba(255, 255, 255, 0.87);
+
+        strong {
+          color: rgba(255, 255, 255, 0.95);
+        }
+      }
+    }
+  }
+}
