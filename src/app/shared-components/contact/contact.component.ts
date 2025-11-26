@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
+import { FirebaseAuthService } from '../../services/firebase-auth.service';
 
 @Component({
   selector: 'app-contact',
@@ -23,8 +24,9 @@ import { MatCardModule } from '@angular/material/card';
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.scss'
 })
-export class ContactComponent {
+export class ContactComponent implements OnInit {
   http = inject(HttpClient);
+  authService = inject(FirebaseAuthService);
 
   contactData = {
     name: '',
@@ -47,6 +49,16 @@ export class ContactComponent {
       responseType: 'text' as 'json'
     },
   };
+
+  ngOnInit() {
+    // Auto-fill name and email if user is logged in
+    this.authService.user$.subscribe(user => {
+      if (user) {
+        this.contactData.name = `${user.firstName || ''} ${user.lastName || ''}`.trim();
+        this.contactData.email = user.email || '';
+      }
+    });
+  }
 
   onSubmit(ngForm: NgForm) {
     if (ngForm.submitted && ngForm.form.valid && !this.mailTest) {
